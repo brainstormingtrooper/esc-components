@@ -1,0 +1,82 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+
+<dom-module id="esc-compoundtext">
+
+  <template>
+    <style>
+        :host {
+            width: calc(100% - 45px);
+            height: 90%;
+            display: block;
+            margin-top: 0px;
+            float: left;
+        }
+        .text{
+            font-size: 1.1em;
+            padding-top: 13px;
+            color: var(--primary-text, #212121);
+        }
+        .text-only{
+            padding-top: 25px;
+        }
+        .subtext{
+            font-size: 0.9em;
+            padding-top: 5px;
+            color: var(--secondary-text, #424242);
+        }
+        .baseText{
+            text-indent: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .overflow{
+            text-indent: 10px;
+            white-space: nowrap;
+            overflow-x: auto;
+        }
+    </style>
+
+    <div class="text baseText" id="text">[[text]]</div>
+    <div id='subtext' class="subtext baseText">[[subtext]]</div>
+
+  </template>
+  <script>
+    class PictureFrame extends Polymer.Element {
+      static get is() { return "esc-compoundtext"; }
+      static get properties() {
+          return {
+              text: {
+                  type: String
+              },
+              subtext: {
+                  type: String
+              },
+              overflow:{
+                  type: Boolean,
+                  value: false,
+                  observer: '_overflow'
+              }
+          }
+      }
+
+      ready(){
+          super.ready();
+
+          if (!this.subtext) {
+              this.$.text.classList.add('text-only');
+          }
+
+      }
+
+      _overflow(){
+          this.$.subtext.classList.remove('baseText');
+          this.$.subtext.classList.add('overflow');
+
+      }
+    }
+    customElements.define(PictureFrame.is, PictureFrame);
+  </script>
+
+</dom-module>

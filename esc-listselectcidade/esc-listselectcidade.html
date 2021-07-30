@@ -1,0 +1,236 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-listselectcidade">
+
+  <template>
+    <style>
+        :host {
+            display: block;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .invalid{
+            border-bottom: 2px solid red;
+        }
+
+        .errorMessage{
+            color: red;
+            font-size: 0.9em;
+            display: none;
+        }
+        .containerResponse{
+            /* position: absolute; */
+            width: calc(100% - 102px);
+            transform: translateY(-6px);
+            z-index: 20;
+            padding: 15px;
+            border-radius: 0x 10px 10px 10px;
+            background-color: #FFF;
+            border: 1px solid #CECECE;
+        }
+
+        .containerResponse > .item{
+            font: 1.1em;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #CECECE;
+        }
+
+        .containerResponse > .item:nth-last-child(2){
+            border-bottom: 0px;
+        }
+
+    </style>
+
+    <paper-input id="inputSearch" data-keyboard="text" label="Selecione a cidade" on-focus="_onfocusSearch"
+    on-blur="_onblurSearch" on-change="_filterChanged" on-keydown="_filterChanged"
+    value="{{inputSearch}}"></paper-input>
+
+    <template is="dom-if" if={{showResponse}}>
+
+        <div class="containerResponse">
+
+            <template is="dom-repeat" items={{_dataFilter}}>
+                <div class="item" on-click="_setSelect">{{item.NomeExibicao}}</div>
+            </template>
+
+        </div>
+
+    </template>
+
+
+    <div id="errorMessage" class="errorMessage">{{errorMessage}}</div>
+
+
+  </template>
+  <script>
+    class EscListselectcidade extends Polymer.Element {
+      static get is() {
+          return "esc-listselectcidade";
+      }
+      static get properties() {
+          return {
+                  required:{
+                      type: Boolean,
+                      value: false
+                  },
+                  label: {
+                      type: String,
+                      value: 'Selecione a cidade'
+                  },
+                  selectedItem: {
+                      type: Object,
+                      notify: true,
+                      observer: '_setResponseFieldSearch'
+                  },
+                  showResponse: {
+                      type: Boolean,
+                      value: false
+                  },
+                  alternatives: {
+                      type: Array
+                  },
+                  _dataFilter: {
+                      type: Array,
+                      value: []
+                  },
+                  response:{
+            type: Object,
+            notify: true
+          },
+          required: {
+            type: Boolean,
+            value: false
+          },
+          tipoResposta: {
+                      type: String
+                  },
+                  tipoLista: {
+                      type: String
+                  },
+                  dadoCadastral:{
+                      type: String
+                  },
+                  errorMessage:{
+                      type: String
+                  },
+                  inputSearch:{
+                      type: String,
+                      value: ''
+                  }
+          }
+      }
+      ready(){
+        super.ready();
+
+          this.inputElement = this.$.inputSearch.inputElement;
+
+          console.log(this.selectedItem);
+
+          if(this.selectedItem){
+              this.inputSearch = this.selectedItem.Nome + " - " + this.selectedItem.Estado.Uf;
+          }
+      }
+
+          _setResponseFieldSearch(){
+              if(this.selectedItem){
+                  this.inputSearch = this.selectedItem.Nome + " - " + this.selectedItem.Estado.Uf;
+              }
+
+          }
+
+          Response (id, selectedItemId, tipoResposta, tipoLista, dadoCadastral) {
+              this.id = parseInt(id);
+              this.response = selectedItemId;
+              this.tipoResposta = tipoResposta;
+              this.tipoLista = tipoLista;
+
+              if(dadoCadastral)
+                  this.dadoCadastral = dadoCadastral;
+          }
+
+          _onblurSearch(){
+              // setTimeout(()=> {
+              //     this.showResponse = false;
+              // }, 600);
+          }
+
+          _onfocusSearch(){
+
+              if(this._dataFilter.length > 0){
+                  this.showResponse = true;
+              }
+
+
+          }
+
+          _setSelect(event){
+
+              console.log(event.model.item);
+
+              this.selectedItem = event.model.item;
+              this.showResponse = false
+
+
+
+          }
+
+          _filterChanged(e) {
+
+              if (!this.alternatives) {
+                  return;
+              }
+
+              try{
+                  var filter = this.inputSearch.toLowerCase();
+              }catch(e){
+                  var filter = this.inputSearch.toLowerCase();
+              }
+
+
+              if(filter.length > 3){
+
+                  this.showResponse = true;
+
+                  this.alternatives = this._dataFilter = this.alternatives;
+
+                  this._dataFilter = this.alternatives.filter(function(pokemon) {
+                      return pokemon.Nome.toLowerCase().indexOf(filter) === 0;
+                  });
+
+
+                  console.log(this._dataFilter)
+              }
+
+          }
+
+          validate(){
+
+              console.log("*************")
+
+              console.log(this.selectedItem.NomeExibicao);
+              console.log(this.selectedItem)
+
+              console.log("*************")
+
+              if(!this.selectedItem.Id){
+                  this.$.errorMessage.style.display = 'block';
+                  this.$.inputSearch.classList.add('invalid');
+                  return false;
+              }else{
+                  this.$.errorMessage.style.display = 'none';
+                  this.$.inputSearch.classList.remove('invalid');
+                  return true;
+              }
+          }
+
+          focus(){
+              this.$.inputSearch.focus();
+          }
+
+    }
+    customElements.define(EscListselectcidade.is, EscListselectcidade);
+  </script>
+
+</dom-module>

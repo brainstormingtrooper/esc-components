@@ -1,0 +1,197 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-lang">
+
+  <template>
+    <style>
+        :host {
+            display: block;
+        }
+        ul{
+            list-style-type: none;
+        }
+        li{
+            display: block;
+            background-color: #888888;
+            padding: 10px;
+            border-radius: 7px;
+            margin-bottom: 5px;
+            font-size: 0.8em;
+            text-align: center;
+            color: #FFF;
+            display: none;
+        }
+        #idiomas{
+            position: absolute;
+            margin: 0px;
+            top: -4px;
+            right: 7px;
+            padding: 0;
+        }
+        .ativo{
+            display: block;
+            animation-name: fadein;
+            animation-duration: 1.5s;
+        }
+
+        @-webkit-keyframes fadein {
+            from {
+                opacity: 0
+            }
+            to {
+                opacity: 1
+            }
+        }
+        @keyframes fadein {
+            from {
+                opacity: 0
+            }
+            to {
+                opacity: 1
+            }
+        }
+    </style>
+
+    <ul id="idiomas" on-click="_moreLangs">
+        <li on-click="_selectLang">PT</li>
+        <li on-click="_selectLang">EN</li>
+        <li on-click="_selectLang">ES</li>
+    </ul>
+
+  </template>
+  <script>
+    class EscLang extends Polymer.Element {
+      static get is() { return "esc-lang"; }
+      static get properties() {
+          return {
+              ativo: {
+                  type: Boolean,
+                  value: false
+              },
+              value: {
+                  type: String,
+                  notify: true
+              }
+          }
+      }
+      ready(){
+          super.ready();
+
+          let idioma = this._getCookie('lang');
+
+          if(idioma){
+              this._ativadoLinguagemSalva(idioma);
+          }else{
+              this._ativadoLinguagemPadrao();
+          }
+      }
+
+      _moreLangs(){
+
+          if(this.ativo === false){
+
+              this.ativo = true;
+
+              for (let i = 0; i < this.$.idiomas.childNodes.length; i++) {
+
+                  if(this.$.idiomas.childNodes[i].classList){
+                      this._ativeElement(this.$.idiomas.childNodes[i]);
+                  }
+              }
+          }
+      }
+
+      _selectLang(event){
+          if(this.ativo){
+
+            this.value = event.target.innerHTML.toLowerCase();
+
+            for (let i = 0; i < this.$.idiomas.childNodes.length; i++) {
+                if(this.$.idiomas.childNodes[i].classList && this.value !== this.$.idiomas.childNodes[i].innerHTML.toLowerCase()){
+                  this._inativeElement(this.$.idiomas.childNodes[i]);
+                }
+            }
+
+            if(this._getCookie('lang') == this.value){
+
+              setTimeout(()=>{
+                this.ativo = false;
+              }, 100)
+
+              return;
+            }
+
+            this._setCookie('lang', this.value);
+
+            let path = `/${this.value}/`;
+
+            this._gotoPath(path);
+          }
+      }
+
+      _gotoPath(path){
+        window.location.pathname = path;
+      }
+
+      _ativeElement(element){
+          element.classList.add("ativo");
+      }
+
+      _inativeElement(element){
+          element.classList.remove('ativo');
+      }
+
+      _ativadoLinguagemSalva(idioma){
+
+          for (let i = 0; i < this.$.idiomas.childNodes.length; i++) {
+
+              let element = this.$.idiomas.childNodes[i];
+
+              if(element.classList && idioma === element.innerHTML.toLowerCase()){
+                  this.value = idioma;
+                  this._ativeElement(element);
+              }
+          }
+
+          if(this.value === undefined){
+              this.value = this.$.idiomas.children[0].innerHTML.toLowerCase();
+              this._ativadoLinguagemPadrao();
+          }
+      }
+
+      _ativadoLinguagemPadrao(){
+          this._ativeElement(this.$.idiomas.children[0]);
+          this.value = this.$.idiomas.children[0].innerHTML.toLowerCase();
+          this._setCookie('lang', 'pt');
+      }
+
+      _getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
+
+      _setCookie(cname, cvalue) {
+        var d = new Date();
+        d.setTime(d.getTime() + (365*24*60*60*1000));
+        var expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+      }
+
+
+    }
+
+    customElements.define(EscLang.is, EscLang);
+  </script>
+
+</dom-module>

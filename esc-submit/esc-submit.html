@@ -1,0 +1,45 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-submit">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+			input{
+				-webkit-appearance: none;
+				width: 100%;
+				height: 35px;
+				border: 0px;
+				font-size: 1em;
+				outline: 0;
+				color: var(--text-white, #FFFFFF);
+				background-color: var(--primary-color, #1976D2);
+				position: relative;
+			}
+			input:disabled{
+				opacity: 0.3;
+			}
+		</style>
+
+		<input type="submit" value="[[name]]" disabled="{{disabled}}">
+
+	</template>
+	<script>
+	    class EscSubmit extends Polymer.Element {
+	      	static get is() { return "esc-submit"; }
+	      	static get properties() {
+	          	return {
+	          		name: {
+	          			type:String,
+	          			value: "Enviar"
+	          		},
+	          		disabled: {
+	          			type: Boolean
+	          		}
+	          	}
+	      	}
+	    }
+	    window.customElements.define(EscSubmit.is, EscSubmit);
+	</script>
+</dom-module>

@@ -1,0 +1,86 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-ajax/iron-ajax.html">
+
+<dom-module id="esc-statusconnection">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}			
+		</style>
+
+		<iron-ajax
+			auto
+	       	id="ajax"
+	       	loading="{{loading}}"
+	       	url="[[url]]"
+	       	method="[[method]]"
+	       	timeout="10000"
+	       	on-response="_hresponse"
+	       	on-error="_handleErrorResponse"></iron-ajax>
+
+	</template>
+	<script>
+	    class EscStatusconnection extends Polymer.Element {
+	      	static get is() { return "esc-statusconnection"; }
+	      	static get properties() {
+	          	return {
+	          		url: {
+	          			type:String
+	          		},
+	          		status: {
+	          			type: Boolean,
+	          			notify: true
+	          		},
+	          		default:{
+						type: String
+					},
+					method:{
+						type: String,
+						value: "HEAD"
+					},
+					loading:{
+						type: Boolean,
+						notify: true
+					}
+	          	}
+	        }
+          	ready(){
+          		super.ready();
+          		this._parsePropertieDefault();
+				this.status = this.default;
+
+				if(this.url === "" || this.url === null || this.url === undefined){
+					this.status = undefined;
+				}
+          	}
+          	_parsePropertieDefault(){
+				switch(this.default) {
+				    case "true":
+				        this.default = true;
+				        break;
+				    case "false":
+				        this.default = false;
+				        break;
+				    default:
+				        this.default = undefined;
+				}
+			}
+			_hresponse() {
+	            this.status = true;
+	        }
+	        _handleErrorResponse() {
+	         	this.status = false;	        
+	        }
+	        request() {
+            	this.$.ajax.generateRequest();
+        	}
+	      	
+	    }
+
+	    window.customElements.define(EscStatusconnection.is, EscStatusconnection);
+
+	</script>
+	
+</dom-module>
+

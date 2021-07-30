@@ -1,0 +1,279 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../paper-input/paper-input.html">
+<link rel="import" href="../../paper-checkbox/paper-checkbox.html">
+
+<dom-module id="esc-listphonewz">
+
+  <template>
+    <style>
+        :host {
+            display: block;
+        }
+        .form{
+            display: flex;
+            justify-content: center;
+        }
+        paper-input{
+            width: 90%;
+            margin: auto;
+            float: left;
+        }
+        .inputSubmit{
+            float: left;
+            width: 10%;
+            margin-right: 10px;
+            height: 62px;
+            line-height: 62px;
+            position: relative;
+        }
+        .input{
+            -webkit-appearance: none;
+            width: 40px;
+            height: 40px;
+            border: 0px;
+            border-radius: 100%;
+            margin: auto;
+            padding: 0px;
+            font-size: 1.2em;
+            outline: 0;
+            position: relative;
+            color: var(--text-white, #FFFFFF);
+            background-color: var(--primary-color, #1976D2);
+        }
+        .input:disabled{
+            background-color: var(--disabled-button, #9E9E9E);
+        }
+        .clear{
+            clear: both;
+        }
+        .lista{
+            width: 100%;
+            box-sizing: border-box;
+            padding-left: 25px;
+            padding-top: 10px;
+        }
+        .itens{
+            float: left;
+            width: 70%;
+            height: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-bottom: 20px;
+        }
+        .itens::before{
+            font-size: 1em;
+            content: "";
+            padding-right: 10px;
+        }
+        .iconClose{
+            float: left;
+            text-align: left;
+            color: red;
+            height: 20px;
+            padding-bottom: 10px;
+        }
+        .icon{
+            width: 20px;
+            height: 20px;
+        }
+        .notItems{
+            width: 70%;
+            padding: 10px 0px 10px 0px;
+        }
+    </style>
+
+    <esc-headerquestion number="[[number]]" questionpt="[[questionpt]]"
+    questionen="[[questionen]]" required="[[required]]"></esc-headerquestion>
+
+    <form id="formList" on-submit="_formList">
+        <div class="form">
+            <paper-input maxlength="15" id="input" data-keyboard="numberEspecial" label="[[label]]" value="{{value}}"></paper-input>
+            <div class="inputSubmit">
+                <input class="input" id="submit" type="submit" name="Add" value="+">
+            </div>
+
+            <div class="clear"></div>
+        </div>
+
+    </form>
+
+    <div class="lista" id="lista">
+
+        <template is="dom-repeat" items="{{telefones}}">
+            <div class="iconClose" id="{{index}}" >
+                <iron-icon on-click="_removeItem" icon="close" class="icon"></iron-icon>
+            </div>
+            <div class="itens">{{item.Numero}}</div>
+            <paper-checkbox checked="{{item.Whatsapp}}">Whatsapp</paper-checkbox>
+            <div class="clear"></div>
+        </template>
+
+        <template is="dom-if" if="{{_notHaveValores(telefones)}}">
+            <div class="notItems">{{mensagemNenhumItem}}</div>
+            <div class="clear"></div>
+        </template>
+
+    </div>
+
+  </template>
+  <script>
+    class EscListphonewz extends Polymer.Element {
+      static get is() { return "esc-listphonewz"; }
+      static get properties() {
+          return {
+          id: {
+            type: Number
+          },
+          type: {
+            type: String,
+            value: "text"
+          },
+          number: {
+            type: Number,
+            value: "#"
+          },
+          questionpt: {
+            type: String
+          },
+          questionen: {
+            type: String
+          },
+          label:{
+            type: String,
+            value: "Adicionar telefone"
+          },
+          maxselected:{
+            type: Number
+          },
+          minselected:{
+            type: Number,
+            value: 1
+          },
+          value:{
+            type: String,
+            value: ""
+          },
+          response:{
+            type: String,
+            notify: true
+          },
+          telefones:{
+            type: Array,
+            value: [],
+            notify: true
+          },
+          mensagemNenhumItem:{
+            type: String
+          },
+          disabled:{
+            type: Boolean,
+            observer: '_disabledChanged',
+            value: false
+          },
+          required: {
+            type: Boolean,
+            observer: '_requiredChanged',
+            value: false
+          },
+          tipoResposta:{
+            type: String
+          },
+          dadoCadastral:{
+                      type: String
+                  }
+          }
+      }
+
+      connectedCallback() {
+          super.connectedCallback();
+
+          this._addMaskInput();
+
+          this.inputElement = this.$.input.inputElement;
+
+      }
+
+      _addMaskInput(){
+          let telMask = '(99) 9999-9999';
+          VMasker(this.$.input).maskPattern(telMask);
+          this.$.input.addEventListener('keyup', this._inputMaskChanged.bind(undefined, 14, this.$.input));
+      }
+      
+      _inputMaskChanged(max, item){
+          let valor = item.value.replace(/\D/g, '');
+
+          if(item.value.length > max){
+
+              VMasker(item).unMask();
+              item.value = VMasker.toPattern(valor, '(99) 99999-9999');
+              VMasker(item).maskPattern('(99) 99999-9999');
+
+          } else if(item.value.length <= max){
+              VMasker(item).unMask();
+              item.value = VMasker.toPattern(valor, '(99) 9999-9999');
+              VMasker(item).maskPattern('(99) 9999-9999');
+          }
+      }
+
+      _notHaveValores(telefones){
+          return telefones.length === 0 ? true : false;
+      }
+
+      _disabledChanged(){
+          this.$.input.disabled = this.disabled;
+      }
+
+      _requiredChanged(){
+          this.$.input.required = this.required;
+
+          if(this.required)
+              this.mensagemNenhumItem = "Adicione no mínimo " + this.minselected + " item";
+          else
+              this.mensagemNenhumItem = "Nenhum item adicionado";
+      }
+
+      _formList(e){
+
+          this._addValores();
+
+          e.preventDefault();
+      }
+
+      _addValores(){
+
+          this.telefones.push({
+              Id: 0,
+              Numero: this.$.input.value,
+              Preferencial: "N",
+              Whatsapp: false,
+              Tipo: "RESIDENCIAL"
+          })
+
+
+          this.telefones = clone(this.telefones);
+
+          console.log(this.telefones);
+
+          this.$.input.value = "";
+
+
+          if(this.maxselected && this.telefones.length >= this.maxselected)
+              this.$.submit.disabled = true;
+      }
+
+      _removeItem(e){
+
+          let id = e.target.parentElement.id;
+
+          this.telefones.splice(id, 1);
+
+          this.$.submit.disabled = false;
+          console.log(this.telefones)
+          this.telefones = clone(this.telefones);
+
+      }
+    }
+    customElements.define(EscListphonewz.is, EscListphonewz);
+  </script>
+
+</dom-module>

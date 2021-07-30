@@ -1,0 +1,765 @@
+[  
+   {  
+      "nome":"Opte Hoteis e Serviços Ltda",
+      "codigo":1061,
+      "cidade":"Padre Bernardo",
+      "latitude":"-15.802384",
+      "longitude": "-47.957293"
+   },
+   {  
+      "nome":"Hotel Fazenda Rancho dos Canários Ltda-Me",
+      "codigo":65,
+      "cidade":"Padre Bernardo",
+      "latitude":"-15.300558",
+      "longitude": "-48.232313"
+   },
+   {  
+      "nome":"Mestre Darmas",
+      "codigo":21,
+      "cidade":"Padre Bernardo",
+      "latitude":"-15.400122",
+      "longitude": "-48.461560"
+   },
+   {  
+      "nome":"Dream Park",
+      "codigo":1201,
+      "cidade":"Hidrolândia",
+      "latitude":"-16.965633",
+      "longitude": "-49.226586"
+   },
+   {  
+      "nome":"Santa Branca",
+      "codigo":92,
+      "cidade":"Terezópolis de Goiás",
+      "latitude":"-16.418858",
+      "longitude": "-49.094220"
+   },
+   {  
+      "nome":"Beira Lago Palace Hotel",
+      "codigo":29,
+      "cidade":"Morrinhos",
+      "latitude":"-17.730579",
+      "longitude": "-49.099147"
+   },
+   {  
+      "nome":"Cooperativa Mista dos Produtores de Leite de Morrinhos",
+      "codigo":48,
+      "cidade":"Morrinhos",
+      "latitude":"-17.734523",
+      "longitude": "-49.115007"
+   },
+   {  
+      "nome":"Hotel Renascer Ltda",
+      "codigo":70,
+      "cidade":"Morrinhos",
+      "latitude":"-17.734709",
+      "longitude": "-49.126949"
+   },
+   {  
+      "nome":"Senne e Couto Hoteis Empreendimentos Ltda-me",
+      "codigo":1601,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.693278",
+      "longitude": "-48.584908"
+   },
+   {  
+      "nome":"Lagoa Quente Empreendimentos Imobiliários Ltda",
+      "codigo":77,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.726425",
+      "longitude": "-48.628099"
+   },
+   {  
+      "nome":"Nautico Praia Clube",
+      "codigo":1241,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.775691",
+      "longitude": "-48.569756"
+   },
+   {  
+      "nome":"Nova Gestão Turismo Ltda",
+      "codigo":1181,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.739181",
+      "longitude": "-48.630962"
+   },
+   {  
+      "nome":"Riviera Park Thermas Flat Service",
+      "codigo":96,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.739181",
+      "longitude": "-48.630962"
+   },
+   {  
+      "nome":"Condominio Encontro das Aguas Thermas Resort",
+      "codigo":1441,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.775468",
+      "longitude": "-48.599753"
+   },
+   {  
+      "nome":"Administradora Lagoa Quente Flat Service - SCP",
+      "codigo":1143,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.726415",
+      "longitude": "-48.628174"
+   },
+   {  
+      "nome":"Itatiaia ",
+      "codigo":1142,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.738937",
+      "longitude": "-48.624014"
+   },
+   {  
+      "nome":"Atrium Thermas Residence Service",
+      "codigo":762,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.740726",
+      "longitude": "-48.632247"
+   },
+   {  
+      "nome":"Grupo Lagoa Quente",
+      "codigo":381,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.726384",
+      "longitude": "-48.627770"
+   },
+   {  
+      "nome":"Frota e Rodrigues Eventos e Produções Ltda-me",
+      "codigo":482,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.745432",
+      "longitude": "-48.641694"
+   },
+   {  
+      "nome":"WPM Viagens e Turismo Ltda",
+      "codigo":261,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.737609",
+      "longitude": "-48.629956"
+   },
+   {  
+      "nome":"Dodys comercio de Alimentos Ltda",
+      "codigo":902,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.741186",
+      "longitude": "-48.624987"
+   },
+   {  
+      "nome":"Hotel Triangulo LTDA",
+      "codigo":461,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.734331",
+      "longitude": "-48.623945"
+   },
+   {  
+      "nome":"MGN Hotelaria Ltda",
+      "codigo":421,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.744744",
+      "longitude": "-48.619593"
+   },
+   {  
+      "nome":"Nova Gestão Turismo Ltda",
+      "codigo":802,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.739181",
+      "longitude": "-48.630919"
+   },
+   {  
+      "nome":"NAUTICO HOTEIS E PARQUES LTDA ",
+      "codigo":113,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.774608",
+      "longitude": "-48.569085"
+   },
+   {  
+      "nome":"Marina Flat e Naútica",
+      "codigo":85,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.774588",
+      "longitude": "-48.569085"
+   },
+   {  
+      "nome":"Lujerrau Serviços Hoteleiros Ltda-Me",
+      "codigo":82,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.738881",
+      "longitude": "-48.632036"
+   },
+   {  
+      "nome":"Eldorado Empreendimentos Turistícos Ltda ",
+      "codigo":54,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.739230",
+      "longitude": "-48.628131"
+   },
+   {  
+      "nome":"Bougainville Parque Hotel Ltda",
+      "codigo":32,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.737320",
+      "longitude": "-48.651106"
+   },
+   {  
+      "nome":"Prime",
+      "codigo":26,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.736051",
+      "longitude": "-48.625647"
+   },
+   {  
+      "nome":"Hotel Aguas do Paranoá",
+      "codigo":64,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.734350",
+      "longitude": "-48.635117"
+   },
+   {  
+      "nome":"Condominio Pontal do Lago Flat Service",
+      "codigo":43,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.735718",
+      "longitude": "-48.625076"
+   },
+   {  
+      "nome":"Hotel Morada das Aguas",
+      "codigo":null,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.735667",
+      "longitude": "-48.625129"
+   },
+   {  
+      "nome":"Hotel Morada do Sol",
+      "codigo":33,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.734991",
+      "longitude": "-48.624092"
+   },
+   {  
+      "nome":"Acqua Bella Thermas Hotel",
+      "codigo":25,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.736889",
+      "longitude": "-48.626875"
+   },
+   {  
+      "nome":"Golden Dolphin",
+      "codigo":103,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.734611",
+      "longitude": "-48.636020"
+   },
+   {  
+      "nome":"Spe Mirante Investimentos Imobiliarios S/A",
+      "codigo":102,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.773472",
+      "longitude": "-48.578234"
+   },
+   {  
+      "nome":"Nova Caldas Adm e Serv Hoteleiros Ltda",
+      "codigo":90,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.737562",
+      "longitude": "-48.629676"
+   },
+   {  
+      "nome":"Lagoa Quente Bar e Restaurante",
+      "codigo":76,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.691170",
+      "longitude": "-48.584827"
+   },
+   {  
+      "nome":"Hm Hotéis e Parque Ltda",
+      "codigo":62,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.736061",
+      "longitude": "-48.625540"
+   },
+   {  
+      "nome":"Condominio Thermas Boulevard",
+      "codigo":47,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.737572",
+      "longitude": "-48.629644"
+   },
+   {  
+      "nome":"Hotel Pousada do Ipe",
+      "codigo":107,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.743394",
+      "longitude": "-48.632108"
+   },
+   {  
+      "nome":"Tropical Thermas Clube",
+      "codigo":106,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.745499",
+      "longitude": "-48.621989"
+   },
+   {  
+      "nome":"Marina Administradora e Serviços Hoteleiros Ltda.",
+      "codigo":84,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.774639",
+      "longitude": "-48.569095"
+   },
+   {  
+      "nome":"Eldorado Water Park",
+      "codigo":55,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.738532",
+      "longitude": "-48.629888"
+   },
+   {  
+      "nome":"Eldorado Empreendimentos Turistícos Ltda",
+      "codigo":53,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.737593",
+      "longitude": "-48.629655"
+   },
+   {  
+      "nome":"Hotel Parque das Primaveras",
+      "codigo":104,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.739339",
+      "longitude": "-48.627953"
+   },
+   {  
+      "nome":"San Marthan Thermas Hotel Ltda-Me",
+      "codigo":99,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.738562",
+      "longitude": "-48.627892"
+   },
+   {  
+      "nome":"Nova Gestão Hotelaria Ltda",
+      "codigo":91,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.737879",
+      "longitude": "-48.629279"
+   },
+   {  
+      "nome":"Farol Hotelaria e Turismo Ltda",
+      "codigo":57,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.739285",
+      "longitude": "-48.623607"
+   },
+   {  
+      "nome":"Condominio Le Jardin Suites",
+      "codigo":42,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.744550",
+      "longitude": "-48.631342"
+   },
+   {  
+      "nome":"Condominio Lagoa Quente Flat Hotel",
+      "codigo":41,
+      "cidade":"Caldas Novas",
+      "latitude":"-17.694511",
+      "longitude": "-48.585868"
+   },
+   {  
+      "nome":"Eldorado Hotelaria e Turismo Ltda.",
+      "codigo":1581,
+      "cidade":"Anápolis",
+      "latitude":"-16.337961",
+      "longitude": "-48.941718"
+   },
+   {  
+      "nome":"Estância Park Hotel",
+      "codigo":56,
+      "cidade":"Anápolis",
+      "latitude":"-16.328299",
+      "longitude": "-48.953457"
+   },
+   {  
+      "nome":"Itamaraty Hotéis Ltda",
+      "codigo":73,
+      "cidade":"Anápolis",
+      "latitude":"-16.327407",
+      "longitude": "-48.953653"
+   },
+   {  
+      "nome":"Hplus Administração e Hotelaria Ltda (Filial)",
+      "codigo":61,
+      "cidade":"Brasília",
+      "latitude":"-15.789755",
+      "longitude": "-47.884570"
+   },
+   {  
+      "nome":"Condomínio do Edifício Vision Work & Live",
+      "codigo":481,
+      "cidade":"Brasília",
+      "latitude":"-15.790011",
+      "longitude": "-47.883796"
+   },
+   {  
+      "nome":"Itasun Administração de Condominios Ltda",
+      "codigo":721,
+      "cidade":"Brasília",
+      "latitude":"-15.786599",
+      "longitude": "-47.850954"
+   },
+   {  
+      "nome":"Condominio do edificio Fusion Work e Live",
+      "codigo":581,
+      "cidade":"Brasília",
+      "latitude":"-15.789703",
+      "longitude": "-47.884753"
+   },
+   {  
+      "nome":"Condomínio SPOT",
+      "codigo":441,
+      "cidade":"Brasília",
+      "latitude":"-15.788011",
+      "longitude": "-47.888805"
+   },
+   {  
+      "nome":"Condominio do Edificio Athos Bulcão",
+      "codigo":38,
+      "cidade":"Brasília",
+      "latitude":"-15.787970",
+      "longitude": "-47.889197"
+   },
+   {  
+      "nome":"Irfatur Turismo e Hotelaria Ltda S/A",
+      "codigo":71,
+      "cidade":"Brasília",
+      "latitude":"-15.787981",
+      "longitude": "-47.888930"
+   },
+   {  
+      "nome":"Cullinan Luxury Hotel e Convention",
+      "codigo":49,
+      "cidade":"Brasília",
+      "latitude":"-15.787981",
+      "longitude": "-47.888930"
+   },
+   {  
+      "nome":"Hplus Administração e Hotelaria Ltda",
+      "codigo":24,
+      "cidade":"Brasília",
+      "latitude":"-15.789688",
+      "longitude": "-47.884429"
+   },
+   {  
+      "nome":"Free Time Turismo Ltda",
+      "codigo":341,
+      "cidade":"Belo Horizonte",
+      "latitude":"-19.765617",
+      "longitude": "-43.643070"
+   },
+   {  
+      "nome":"Eco Park Porto da Ilha Ltda-Epp",
+      "codigo":52,
+      "cidade":"Bonito",
+      "latitude":"-21.114867",
+      "longitude": "-56.381936"
+   },
+   {  
+      "nome":"Hotel Praia Parque Ltda Filial",
+      "codigo":903,
+      "cidade":"Bonito",
+      "latitude":"-21.125462",
+      "longitude": "-56.469712"
+   },
+   {  
+      "nome":"Wetiga Hotel Ltda",
+      "codigo":114,
+      "cidade":"Bonito",
+      "latitude":"-21.120556",
+      "longitude": "-56.499078"
+   },
+   {  
+      "nome":"Hotel Pousada Arizona Ltda-Me",
+      "codigo":67,
+      "cidade":"Bonito",
+      "latitude":"-21.113487",
+      "longitude": "-56.479546"
+   },
+   {  
+      "nome":"Hotel Praia Parque Ltda-Me",
+      "codigo":69,
+      "cidade":"Bonito",
+      "latitude":"-21.126867",
+      "longitude": "-56.490951"
+   },
+   {  
+      "nome":"Pousada Gira Sol Ltda-Me",
+      "codigo":93,
+      "cidade":"Bonito",
+      "latitude":"-21.130743",
+      "longitude": "-56.486229"
+   },
+   {  
+      "nome":"Bar e Restaurante Águas Quentes Ltda - ME",
+      "codigo":148,
+      "cidade":"Barra do Garças",
+      "latitude":"-15.891446",
+      "longitude": "-52.264271"
+   },
+   {  
+      "nome":"Reserva Inn Hotel Ltda",
+      "codigo":981,
+      "cidade":"Canaã dos Carajás",
+      "latitude":"-6.529361",
+      "longitude": "-49.859404"
+   },
+   {  
+      "nome":"Cajueiro Hotelaria e Restaurante Ltda",
+      "codigo":301,
+      "cidade":"Floriano",
+      "latitude":"-6.789054",
+      "longitude": "-42.990435"
+   },
+   {  
+      "nome":"Tayaya Administração e Participações LTDA",
+      "codigo":1122,
+      "cidade":"Ribeirão Claro",
+      "latitude":"-23.196193",
+      "longitude": "-49.680802"
+   },
+   {  
+      "nome":"Eder Hotel",
+      "codigo":901,
+      "cidade":"Cacoal",
+      "latitude":"-11.441502",
+      "longitude": "-61.449234"
+   },
+   {  
+      "nome":"Cacoal Selva Parque",
+      "codigo":402,
+      "cidade":"Cacoal",
+      "latitude":"-11.441376",
+      "longitude": "-61.445395"
+   },
+   {  
+      "nome":"Bianchini e Travain Ecoturismo Ltda",
+      "codigo":30,
+      "cidade":"Cacoal",
+      "latitude":"-11.487502",
+      "longitude": "-61.438371"
+   },
+   {  
+      "nome":"Mak Park Empreendimentos Turísticos LTDA",
+      "codigo":153,
+      "cidade":"Boa Vista",
+      "latitude":"2.615769", 
+      "longitude": "-60.809605"
+   },
+   {  
+      "nome":"Prestige Incorporações e Administração de Bens Ltda",
+      "codigo":801,
+      "cidade":"Foz do Iguaçu",
+      "latitude":"-25.553228",
+      "longitude": "-54.519845"
+   },
+   {  
+      "nome":"Empresa Hoteleira Mabu Ltda.",
+      "codigo":744,
+      "cidade":"Foz do Iguaçu",
+      "latitude":"-25.553228",
+      "longitude": "-54.519845"
+   },
+   {  
+      "nome":"Le Canton Empreendimentos Hoteleiros Ltda",
+      "codigo":79,
+      "cidade":"Teresópolis",
+      "latitude":"-22.385269",
+      "longitude": "-42.856440"
+   },
+   {  
+      "nome":"Clube de Campo Santa Clara do Lago",
+      "codigo":241,
+      "cidade":"Campinas",
+      "latitude":"-22.939717",
+      "longitude": "-47.205306"
+   },
+   {  
+      "nome":"Magic City",
+      "codigo":35,
+      "cidade":"Suzano",
+      "latitude":"-23.708635",
+      "longitude": "-46.310407"
+   },
+   {  
+      "nome":"GRANDES LAGOS INTERNACIONAL TURISMO LTDA ME",
+      "codigo":1561,
+      "cidade":"Santa Clara d'Oeste",
+      "latitude":"-20.104039",
+      "longitude": "-50.973799"
+   },
+   {  
+      "nome":"Mirante Praia Hotel",
+      "codigo":1141,
+      "cidade":"São Paulo",
+      "latitude":"-20.799721",
+      "longitude": "-48.955686"
+   },
+   {  
+      "nome":"Thermas de São Pedro",
+      "codigo":105,
+      "cidade":"São Pedro",
+      "latitude":"-22.642057",
+      "longitude": "-47.855965"
+   },
+   {  
+      "nome":"Acquathermas",
+      "codigo":1401,
+      "cidade":"Olímpia",
+      "latitude":"-20.743179",
+      "longitude": "-48.906557"
+   },
+   {  
+      "nome":"Royal Olimpia Administradora Hoteleira e Participações Ltda",
+      "codigo":97,
+      "cidade":"Olímpia",
+      "latitude":"-20.717558",
+      "longitude": "-48.916546"
+   },
+   {  
+      "nome":"Vale das Águas Country Clube de Tupi",
+      "codigo":110,
+      "cidade":"Piracicaba",
+      "latitude":"-22.749423",
+      "longitude": "-47.514024"
+   },
+   {  
+      "nome":"BARRETOS COUNTRY HOTEL LTDA - EPP",
+      "codigo":1541,
+      "cidade":"Barretos",
+      "latitude":"-20.575053",
+      "longitude": "-48.583906"
+   },
+   {  
+      "nome":"Pousada Paraiso dos Sonhos",
+      "codigo":94,
+      "cidade":"Corumbá de Goiás",
+      "latitude":"-15.899426",
+      "longitude": "-48.796592"
+   },
+   {  
+      "nome":"Condominio Recanto das Águas Quentes III",
+      "codigo":44,
+      "cidade":"Rio Quente",
+      "latitude":"-17.772372",
+      "longitude": "-48.756243"
+   },
+   {  
+      "nome":"Veredas do Rio Quente Flat Service",
+      "codigo":112,
+      "cidade":"Rio Quente",
+      "latitude":"-17.768851",
+      "longitude": "-48.755316"
+   },
+   {  
+      "nome":"Camping Esplanada",
+      "codigo":74,
+      "cidade":"Rio Quente",
+      "latitude":"-17.774399",
+      "longitude": "-48.754559"
+   },
+   {  
+      "nome":"Cia Thermas do Rio Quente",
+      "codigo":1,
+      "cidade":"Rio Quente",
+      "latitude":"-17.764057",
+      "longitude": "-48.750313"
+   },
+   {  
+      "nome":"Dream Park",
+      "codigo":1161,
+      "cidade":"Aparecida de Goiânia",
+      "latitude":"-16.965756",
+      "longitude": "-49.226082"
+   },
+   {  
+      "nome":"Quinta do Sol Praia Hotel ",
+      "codigo":1361,
+      "cidade":"Porto Seguro",
+      "latitude":"-16.426644",
+      "longitude": "-39.059206"
+   },
+   {  
+      "nome":"Hotel Brisa do Mar Empreendimentos Turisticos Ltda",
+      "codigo":681,
+      "cidade":"Porto Seguro",
+      "latitude":"-16.404490",
+      "longitude": "-39.045881"
+   },
+   {  
+      "nome":"Silvestre Park",
+      "codigo":111,
+      "cidade":"Rio Verde",
+      "latitude":"-17.772233",
+      "longitude": "-50.930940"
+   },
+   {  
+      "nome":"Castro Hoteis e Turismo Ltda",
+      "codigo":821,
+      "cidade":"Goiânia",
+      "latitude":"-16.679339",
+      "longitude": "-49.267109"
+   },
+   {  
+      "nome":"AlphaPark Hotel Ltda.",
+      "codigo":881,
+      "cidade":"Goiânia",
+      "latitude":"-16.708805",
+      "longitude": "-49.220007"
+   },
+   {  
+      "nome":"Hotel Tamandaré",
+      "codigo":1021,
+      "cidade":"Goiânia",
+      "latitude":"-16.687599",
+      "longitude": "-49.264736"
+   },
+   {  
+      "nome":"Biss Inn Hotéis Empreendimentos Ltda",
+      "codigo":31,
+      "cidade":"Goiânia",
+      "latitude":"-16.670741",
+      "longitude": "-49.237807"
+   },
+   {  
+      "nome":"Affego Associação dos Funcionários do Fisco do Estado de Goiás",
+      "codigo":23,
+      "cidade":"Goiânia",
+      "latitude":"-16.682808",
+      "longitude": "-49.252426"
+   },
+   {  
+      "nome":"S.P.E Resort do Lago Caldas Novas Ltda",
+      "codigo":98,
+      "cidade":"Goiânia",
+      "latitude":"-17.773748",
+      "longitude": "-48.577762"
+   },
+   {  
+      "nome":"Hotel Fazenda Thermas Bonsucesso Ltda",
+      "codigo":66,
+      "cidade":"Jataí",
+      "latitude":"-17.817493",
+      "longitude": "-51.771114"
+   },
+   {  
+      "nome":"Arca Parque Diversões Ltda.",
+      "codigo":1101,
+      "cidade":"Trindade",
+      "latitude":"-16.656174",
+      "longitude": "-49.491002"
+   },
+   {  
+      "nome":"Pousada Penhasco Eirelli-Epp",
+      "codigo":95,
+      "cidade":"Chapada dos Guimarães",
+      "latitude":"-15.475069",
+      "longitude": "-55.756532"
+   }
+]

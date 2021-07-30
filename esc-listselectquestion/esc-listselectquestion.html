@@ -1,0 +1,159 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../vaadin-combo-box/vaadin-combo-box.html">
+
+<link rel="import" href="../esc-headerquestion/esc-headerquestion.html">
+
+<dom-module id="esc-listselectquestion">
+
+  <template>
+    <style>
+        :host {
+            display: block;
+        }
+        vaadin-combo-box{
+            width: 90%;
+            margin: auto;
+            display: block;
+        }
+    </style>
+
+    <esc-headerquestion number="[[number]]" questionpt="[[questionpt]]"
+    questionen="[[questionen]]" required="[[required]]"></esc-headerquestion>
+
+    <vaadin-combo-box id="vaadin" label="[[label]]" item-label-path="Descricao" filtered-items="[[_dataFilter]]"
+    on-filter-changed="_filterChanged" value="{{value}}" selected-item="{{selectedItem}}">
+
+    </vaadin-combo-box>
+
+  </template>
+  <script>
+    class EscListselectquestion extends Polymer.Element {
+      static get is() { return "esc-listselectquestion"; }
+      static get properties() {
+          return {
+              id: {
+                  type: Number
+              },
+              questionpt:{
+                  type: String
+              },
+              questionen:{
+                  type: String
+              },
+              number:{
+                  type: String,
+                  value: "#"
+              },
+              required:{
+                  type: Boolean,
+                  value: false
+              },
+              label: {
+                  type: String,
+                  value: 'Selecione'
+              },
+              selectedItem: {
+                  type: Object,
+                  notify: true,
+                  observer: '_createResponse'
+              },
+              alternatives: {
+                  type: Array
+              },
+              _dataFilter: {
+                  type: Array
+              },
+              response:{
+                  type: Object,
+                  notify: true,
+                  value: {}
+              },
+              required: {
+                  type: Boolean,
+                  value: false
+              },
+              tipoResposta: {
+                  type: String
+              },
+              tipoLista: {
+                  type: String
+              },
+              dadoCadastral:{
+                  type: String
+              }
+          }
+      }
+
+      ready(){
+          super.ready();
+
+          this.alternatives = this._dataFilter = this.alternatives;
+
+      }
+
+      setResponse(response){
+
+          this.response = response;
+
+          let filter = this.alternatives.filter((element)=>{
+              if(element.Id === response.response[0]){
+                  return element;
+              }
+          });
+
+          if(filter[0]){
+              this.selectedItem = filter[0];
+
+              let vladim = this.$.vaadin.shadowRoot || this.shadowRoot.querySelector('#vaadin').shadowRoot;
+
+              let input = vladim.querySelector('#input').shadowRoot.querySelector('input');
+
+              input.value = filter[0].Descricao;
+              input.focus();
+              input.blur();
+          }
+      }
+
+      _createResponse(){
+          if(!(this.selectedItem === undefined)){
+              if(this.selectedItem){
+                  let temp = [this.selectedItem.Id];
+                  this.response = this._getResponse(this.id, temp, this.tipoResposta, this.tipoLista, this.dadoCadastral);
+              }else{
+                  this.response = this._getResponse(this.id, "", this.tipoResposta, this.tipoLista, this.dadoCadastral);
+              }
+          }
+      }
+
+      _getResponse (id, selectedItemId, tipoResposta, tipoLista, dadoCadastral) {
+          
+        return {
+            id: parseInt(id),
+            response: selectedItemId,
+            tipoResposta: tipoResposta,
+            tipoLista: tipoLista,
+            dadoCadastral: dadoCadastral
+        }
+          
+          
+          
+      }
+
+      _filterChanged(e) {
+
+          if (!this.alternatives) {
+              return;
+          }
+
+          var filter = e.detail.value;
+
+
+          this._dataFilter = this.alternatives.filter(function(pokemon) {
+              return pokemon.Descricao.toLowerCase().indexOf(filter.toLowerCase()) === 0 || pokemon.Codigo.toString().indexOf(filter) === 0;
+          });
+      }
+    }
+    customElements.define(EscListselectquestion.is, EscListselectquestion);
+  </script>
+
+</dom-module>

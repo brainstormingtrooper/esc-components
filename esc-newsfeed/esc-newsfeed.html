@@ -1,0 +1,300 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-form/iron-form.html">
+<link rel="import" href="../../iron-ajax/iron-ajax.html">
+
+
+<dom-module id="esc-newsfeed" >
+    <template>
+        <style>
+            .newsfeed{
+                background-color: #ab1d40;
+                display: flex;       
+                flex-direction: column;                               
+                justify-content: center;
+                align-items: center;
+                min-height: 275px
+            }
+
+            .title{  
+                text-align: center;
+                font-size: 1.4em;
+                color: white;
+                font-family: 'Roboto-Light';
+                margin: 20px 5px 10px 5px;
+            }
+            .subscribe {
+                display: grid;   
+                grid-template-rows: auto;
+                grid-template-columns: 2fr 1fr minmax(300px, 2fr);
+                grid-gap: 10px;
+                grid-auto-flow: row;
+                margin: 10px;
+                min-height: 200px;
+            }
+
+            .image{
+                grid-column: 1;
+                justify-self: center;
+
+                padding: 10px;
+                box-sizing: border-box;
+                max-width: 300px;
+                display: flex;                
+                align-items: center;
+                flex-direction: column;
+            }
+
+            .image ::slotted(img) {
+                max-width: 250px;
+                padding: 10px;
+                box-sizing: border-box;
+            }
+
+            .message{
+                font-size: 1.2em;
+                color: white;
+                font-family: 'Roboto-Light';
+                text-align: center;
+            }
+
+            .phrasesubmit{   
+                grid-column: 3; 
+                justify-self: center;
+                max-width: 300px;
+                padding: 10px;
+                box-sizing: border-box;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #Form{
+                width: 100%;
+            }
+            input[type=text],[type=email] {
+                width: 100%;
+                padding: 12px 20px;
+                margin: 8px 0;
+                display: inline-block;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+                box-sizing: border-box;
+            }
+
+            input[type=submit] {
+                width: 100%;
+                background-color: #ab1d40;
+                color: white;
+                padding: 14px 20px;
+                margin: 8px 0;
+                border: 1px solid;
+                border-radius: 1px;
+                cursor: pointer;
+                font-size: 1em;
+                transition-duration: 0.6s;
+            }
+            
+
+            input[type=submit]:hover {
+                background-color: #FFF;
+                color: #ab1d40;
+            }
+
+
+            @media only screen and (max-width: 589px){
+                .newsfeed{
+                    /* height: 520px; */
+                }
+                .subscribe{
+                    display: flex;
+                    flex-flow: row wrap;
+                    justify-content: center;
+                    align-items: center;                    
+                }
+                .phrasesubmit{
+                    max-width: 330px;                    
+                    min-height: 200px;
+                }
+            }
+
+
+            #preloader{
+                display: none;
+            }
+
+            #preloader > img{
+                width: 100px;
+            }
+
+            #submitForm{
+                display: block;
+            }
+
+            #requestSubscribeSuccess{
+                display: none ;
+            }
+
+            #requestSubscribeErro{
+                display: none ;
+            }
+
+
+            #requestSubscribeConflict{
+                display: none ;
+            }
+
+            .requestSubscribe > .imagem{
+                width: 100px;
+                margin-bottom: 20px;
+            }
+
+            .requestSubscribe > .mensagem{
+                color: #FFFFFF;
+                font-size: 1.2em;
+                text-align: center;
+            }
+
+        </style>
+        
+        <div class="newsfeed">
+
+                <div class="title"> 
+                    <slot name="title"></slot>
+                </div>
+                <div class="subscribe">
+                    <div class="image">
+                        <slot name="image"></slot>
+                        <slot name="message" class="message"></slot>
+                    </div>
+                    
+                    <div id="submitForm" class="phrasesubmit">
+                            <iron-form id="Form" onsubmit="submitFormNewsFeed()">
+                                <form>
+                                    <div class="containerLetter">
+                                        <div class="inputName">                                    
+                                                <input id="namefeed" type="text"   placeholder='[[textoNome]]' required></input>
+                                        </div>
+                                        <div class="inputEmail">                                    
+                                                <input id="emailfeed" type="email"   placeholder='[[textoEmail]]' required></input>
+                                        </div>
+                                    </div>
+                                    <div class="submit">
+                                        <input class="send" type="submit" value="[[textoAssinarNewsletter]]">
+                                    </div>
+                                </form>
+                            </iron-form>
+                    </div>
+
+                    
+                    <div id="preloader" class="phrasesubmit">
+                        <img src="https://pages.devex.com/rs/685-KBL-765/images/load-spinner.gif">
+                    </div>
+
+                    <div id="requestSubscribeSuccess" class="requestSubscribe phrasesubmit">
+                        <img class="imagem" src="[[imagemSucesso]]">
+                        <div class="mensagem">[[mensagemSucessEnviar]]</div>
+                    </div>
+
+                    <div id="requestSubscribeErro" class="requestSubscribe phrasesubmit">
+                        <img class="imagem" src="[[imagemErro]]">
+                        <div class="mensagem">[[mensagemErroEnviar]]</div>
+                    </div>
+
+                    <div id="requestSubscribeConflict" class="requestSubscribe phrasesubmit">
+                        <img class="imagem" src="[[imagemErro]]">
+                        <div class="mensagem">[[mensagemConflict]]</div>
+                    </div>
+                    
+                </div>
+
+        </div>
+
+    </template>
+
+    <script>
+        class Escnewsfeed extends Polymer.Element {
+            static get is() { return  'esc-newsfeed'; }
+
+            static get properties() {
+                return {
+                    mensagemSucessEnviar:{
+                        type: String,
+                        value: "Sucesso ao Assinar a Newsletter"
+                    },
+                    mensagemErroEnviar:{
+                        type: String,
+                        value: "Erro ao assinar a Newsletter"
+                    },
+                    mensagemConflict:{
+                        type: String,
+                        value: "Email Já resgistrado"
+                    },
+                    textoNome:{
+                        type: String,
+                        value: "Nome"
+                    },
+                    textoEmail:{
+                        type: String,
+                        value: "E-mail"
+                    },
+                    textoAssinarNewsletter:{
+                        type: String,
+                        value: "Assinar a Newsletter"
+                    },
+                    imagemSucesso:{
+                        type: String
+                    },
+                    imagemErro:{
+                        type: String
+                    }
+                }
+            }          
+
+            initSubmitAnimation(){
+                this.$.submitForm.style.display = "none";
+                this.$.preloader.style.display = "flex";
+            }
+
+            clearNewsletter(){
+                this.limpar();
+                this.$.preloader.style.display = "none";
+                this.$.requestSubscribeSuccess.style.display = "none";
+                this.$.requestSubscribeErro.style.display = "none";
+                this.$.requestSubscribeConflict.style.display="none";
+                this.$.submitForm.style.display = "block";
+            }
+
+            successStatus(){                
+                this.$.preloader.style.display = "none";
+                this.$.requestSubscribeSuccess.style.display = "flex";
+            
+                setTimeout(()=>{this.clearNewsletter()}, 2000)
+            }
+
+            failStatus(){                
+                this.$.preloader.style.display = "none";
+                this.$.requestSubscribeErro.style.display = "flex";
+
+                setTimeout(()=>{this.clearNewsletter()}, 3000)
+            }
+           
+            conflictStatus(){
+                this.$.preloader.style.display = "none";
+                this.$.requestSubscribeConflict.style.display = "flex";
+
+                setTimeout(()=>{this.clearNewsletter()}, 3000)
+            }
+
+            limpar(){
+                this.$.namefeed.value = '';
+                 this.$.emailfeed.value = '';
+            }
+           
+        }
+        
+        customElements.define(Escnewsfeed.is, Escnewsfeed);
+    </script>
+
+</dom-module>

@@ -1,0 +1,171 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+
+<dom-module id="esc-newfade">
+
+  <template>
+    <style>
+    :host > *{
+        display: block;
+    }
+
+    #newfade{
+        background-color: #e0e0e0;
+        position: fixed;
+        top: 0;
+        z-index: 11;
+        width: 100%;
+        height: 100vh;
+
+    }
+    #newfade > .content{
+        height: calc(100vh - 50px);
+        padding-top: 10px;
+        bottom: 40px;
+        padding-bottom: 60px;
+        overflow-y: scroll;
+        display: block;
+        margin: auto;
+        box-sizing: border-box;
+        margin-top: 43px;
+
+    }
+
+    @media screen and (max-width: 799px) {
+        #newfade > .content{
+            width: 97%;
+        }
+    }
+    @media screen and (min-width: 800px) {
+        #newfade > .content{
+            width: 790px;
+        }
+    }
+
+    iron-icon{
+        top:0px;
+        right: 0px;
+        width: 23px;
+        height: 23px;
+        display: block;
+        margin: auto;
+        border-radius: 50%;
+        position: absolute;
+        -webkit-transition-duration: 0.4s;
+        transition-duration: 0.4s;
+        padding: 10px;
+    }
+    .topbar{
+        background-color: #cecece;
+        position: fixed;
+        width: 100%;
+        height: 43px;
+    }
+    .topbar > .title{
+        width: calc(100% - 43px);
+        box-sizing: border-box;
+        text-align: center;
+        white-space: nowrap;
+        overflow-y: hidden;
+        overflow-x: scroll;
+        height: 43px;
+        line-height: 43px;
+        text-indent: 10px;
+        text-transform: uppercase;
+    }
+
+    .titleGrandao{
+        width: 100% !important;
+    }
+
+    .content ::slotted(.iconActions){
+        position: absolute;
+        top: 0;
+        right: 0;
+
+    }
+    </style>
+
+    <div id="newfade">
+
+            <div id="topbar" class="topbar">
+                <div id="title" class="title">[[title]]</div>
+                <template is="dom-if" if="{{!withoutX}}">
+                    <iron-icon id="fabicon" class="icon" icon="{{iconButton}}" on-tap="_hidden"></iron-icon>
+                </template>
+            </div>
+
+
+        <div class="content">
+            <slot></slot>
+        </div>
+    </div>
+
+  </template>
+  <script>
+    class EscNewfade extends Polymer.Element {
+      static get is() { return "esc-newfade"; }
+      static get properties() {
+          return {
+              icon: {
+                  type: String,
+                  value: "add"
+              },
+              iconButton: {
+                  type: String,
+                  value: "close"
+              },
+              action: {
+                  type: Boolean,
+                  value: false
+              },
+              withoutX:{
+                  type: Boolean,
+                  value: false
+              },
+              opened:{
+                  type: Boolean,
+                  value: false,
+                  notify: true
+              },
+              title:{
+                  type: String
+              }
+          }
+      }
+      ready(){
+          super.ready();
+
+          if(this.withoutX){
+              this.$.title.classList.add('titleGrandao');
+          }
+
+          if(this.opened){
+              this.setVisible(true);
+          }else{
+              this.setVisible(false);
+          }
+
+      }
+
+      _hidden(){
+          this.setVisible(false);
+          var eventOpened = new Event('opened');
+          this.dispatchEvent(eventOpened);
+      }
+
+      setVisible(visible){
+          this.hidden = !visible;
+          var eventOpened = new Event('opened');
+          this.dispatchEvent(eventOpened);
+      }
+
+      getVisible(){
+          return !this.hidden;
+      }
+
+    }
+    customElements.define(EscNewfade.is, EscNewfade);
+  </script>
+
+</dom-module>

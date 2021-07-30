@@ -1,0 +1,90 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-count">
+
+  <template>
+    <style>
+    :host {
+        display: block;
+    }
+    .ball{
+        margin-left: 5px;
+        width: 10px;
+        height: 10px;
+        border-radius: 100px;
+        float: left;
+        background-color: #FFF;
+        opacity: 0.3;
+        color: #666;
+        font-size: 0.8em;
+        font-weight: bold;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .full{
+        background-color: #FFF;
+        opacity: 1;
+    }
+    .clear{
+        clear: both;
+    }
+    </style>
+  </template>
+  <script>
+
+    class EscCount extends Polymer.Element {
+      static get is() { return "esc-count"; }
+      static get properties() {
+          return {
+              balls: {
+                  type: Number,
+                  value: 0,
+                  observer: '_addBalls'
+              },
+              maxballs: {
+                  type: Number,
+                  observer: '_addBalls'
+              }
+          }
+      }
+
+      _addBalls(){
+          if(!(this.maxballs === undefined)){
+              this._removeBalls();
+
+              for(var i = 0; i < this.maxballs; i++){
+                  var balls = document.createElement('div');
+                  balls.classList.add('ball');
+
+                  if(i < this.balls){
+                      balls.classList.add('full');
+                  }
+
+                  Polymer.dom(this.root).appendChild(balls);
+              }
+
+              var clear = document.createElement('div');
+              clear.classList.add('clear');
+
+              Polymer.dom(this.root).appendChild(clear);
+          }
+
+      }
+
+      _removeBalls(){
+
+          if(this.shadowRoot.children.length > 0){
+              for (var i = this.shadowRoot.children.length -1; i >= 0; i--) {
+                if(this.shadowRoot.children[i].localName !== 'style'){
+                  Polymer.dom(this.root).removeChild(this.shadowRoot.children[i]);
+                }
+              }
+          }
+      }
+    }
+    customElements.define(EscCount.is, EscCount);
+  </script>
+
+</dom-module>

@@ -1,0 +1,82 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-mapclient">
+
+  <template>
+    <style>
+        :host {
+            display: block;
+            width: 100%;
+            margin: auto;
+            box-sizing: border-box;
+        }
+        .title{
+            text-align: center;
+            font-size: 1.6em;
+            font-family: Roboto-Light;
+            color: #164AAF;
+            width: 100%;
+            z-index: 1;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        #googlemap{
+            min-width: 100%;
+            min-height: 70vh;
+            width: auto;
+            height: auto;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            border-top: 3px solid #021A2D;
+            border-bottom: 3px solid #021A2D;
+        }
+
+        @media screen and (min-width: 730px){
+            #googlemap{
+                background-image: url('./img/staticmapG.webp');
+            }
+        }
+
+        @media screen and (min-width: 400px) and (max-width: 729px){
+            #googlemap{
+                min-height: 60vh;
+                background-image: url('./img/staticmapM.webp');
+            }
+        }
+
+        @media screen and (max-width: 399px){
+            #googlemap{
+                min-height: 60vh;
+                background-image: url('./img/staticmapP.webp');
+            }
+        }
+
+        @media screen and (max-width: 599px){
+            .title{
+                padding-top: 15px;
+                padding-bottom: 15px;
+            }
+        }
+        .bold{
+            font-weight: bold;
+        }
+
+    </style>
+
+    <div class="title">
+        <slot name=title></slot>
+    </div>
+
+    <div id="googlemap"></div>
+
+  </template>
+  <script>
+    class EscMapclient extends Polymer.Element {
+      static get is() { return "esc-mapclient"; }
+
+    }
+    customElements.define(EscMapclient.is, EscMapclient);
+  </script>
+
+</dom-module>

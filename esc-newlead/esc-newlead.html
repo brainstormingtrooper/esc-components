@@ -1,0 +1,150 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+
+<dom-module id="esc-newlead">
+
+  <template>
+    <style>
+        :host {
+            display: block;
+        }
+        .newlead{
+            bottom: 0;
+            right: 0;
+            position: absolute;
+            background-color: var(--grey-background, #ECEFF1);
+            z-index: 8;
+
+        }
+        .newlead-open{
+            width: 100%;
+            height: 100vh;
+            border-radius: 0;
+            color: var(--icon, #263238);
+        }
+        .newlead-close{
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            -webkit-transition-duration: 0.2s;
+            right: 15px;
+            bottom: 10px;
+            transition-duration: 0.2s;
+            box-shadow: 0px 1px 1px 1px rgba(0,0,0,0.2);
+            color: var(--icon-white, #FFFFFF);
+            background-color: var(--primary-color, #1976D2);
+
+        }
+        iron-icon{
+            top:0px;
+            right: 0px;
+            width: 35px;
+            height: 35px;
+            display: block;
+            margin: auto;
+            border-radius: 50%;
+            position: absolute;
+            -webkit-transition-duration: 0.4s;
+            transition-duration: 0.4s;
+            padding: 13px;
+        }
+        .fabicon-open{
+            -webkit-transform: rotate(135deg);
+            transform: rotate(135deg);
+            width: 27px;
+            top: 13px;
+            right: 13px;
+            padding: 0;
+            height: 27px;
+        }
+        #content{
+            height: calc(100vh - 40px);
+            margin: auto;
+            margin-top: 40px;
+            overflow: scroll;
+            -webkit-transition-duration: 0.3s;
+            transition-duration: 0.3s;
+        }
+        @media screen and (max-width: 399px){
+            #content{
+                width: 95%;
+            }
+        }
+        @media screen and (min-width: 400px) and (max-width: 549px) {
+            #content{
+                width: 85%;
+            }
+        }
+        @media screen and (min-width: 550px) {
+            #content{
+                width: 450px;
+            }
+        }
+    </style>
+
+    <div class="newlead newlead-close" id="newlead">
+        <iron-icon id="fabicon" class="icon" icon="{{icon}}" on-click="changedLead"></iron-icon>
+        <div id="content">
+            <slot></slot>
+        </div>
+    </div>
+
+  </template>
+  <script>
+    class EscNewlead extends Polymer.Element {
+      static get is() { return "esc-newlead"; }
+      static get properties() {
+          return {
+              icon: {
+                  type: String,
+                  value: "add"
+              }
+          }
+      }
+      ready(){
+          super.ready();
+
+          this.$.content.style.display = "none";
+          this.$.content.style.opacity = 0;
+          window.leadIsClosed = true;
+      }
+
+      changedLead(){
+          this.changeStatus();
+
+          if(window.leadIsClosed){
+              window.leadIsClosed = false;
+          } else {
+              window.leadIsClosed = true;
+          }
+
+      }
+
+      changeStatus(){
+          if (this.$.newlead.classList.contains("newlead-close")) {
+              this.$.newlead.style.transitionDuration = "0.3s";
+              this.$.fabicon.classList.add('fabicon-open');
+              this.$.newlead.classList.add('newlead-open');
+              this.$.newlead.classList.remove('newlead-close');
+              this.$.content.style.opacity = 0;
+              this.$.content.style.display = "block";
+              setTimeout(()=> {
+                  this.$.newlead.style.transitionDuration = "0s";
+                  this.$.content.style.opacity = 1;
+              }, 500);
+
+          }else{
+              this.$.newlead.style.transitionDuration = "0.3s";
+              this.$.fabicon.classList.remove('fabicon-open');
+              this.$.newlead.classList.add('newlead-close');
+              this.$.newlead.classList.remove('newlead-open');
+              this.$.content.classList.remove('content-efect');
+              this.$.content.style.display = "none";
+              this.$.content.style.opacity = 0;
+          }
+      }
+    }
+    customElements.define(EscNewlead.is, EscNewlead);
+  </script>
+
+</dom-module>

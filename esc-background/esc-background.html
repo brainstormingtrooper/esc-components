@@ -1,0 +1,60 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-background">
+  <template>
+    <style>
+    	:host {
+				display: block;
+				-webkit-user-select: none;
+	      -moz-user-select: none;
+	      -ms-user-select: none;
+	      user-select: none;
+	      overflow:hidden;
+	    }
+  		video {
+		  	position: absolute;
+		    left: 50%;
+		    min-width: 100%;
+		    min-height: 100%;
+		    width: auto;
+		    height: auto;
+		    transform: translateX(-50%);
+		 		background: no-repeat;
+		  	opacity: 0.7;
+		  	background-size: 100% 100%;
+		  	z-index: -100;
+			}
+    </style>
+
+    <video id="bgvid" playsinline autoplay muted loop src="{{video}}"></video>
+		<slot></slot>
+
+  </template>
+
+  <script>
+    class EscBackground extends Polymer.Element {
+      static get is() { return 'esc-background'; }
+
+      static get properties() {
+	      return {
+	        image: {
+						type: String,
+						observer: '_setBackgroundImage'
+					},
+					video: {
+						type: String
+					}
+	      };
+      }
+
+	    _setBackgroundImage(){
+        if(!(this.image === undefined)){
+            this.$.bgvid.style.backgroundImage = "url(" +  this.image + ")";
+        }
+
+	    }
+    }
+
+    window.customElements.define(EscBackground.is, EscBackground);
+  </script>
+</dom-module>

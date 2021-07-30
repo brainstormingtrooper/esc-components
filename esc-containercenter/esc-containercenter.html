@@ -1,0 +1,43 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="picture-frame">
+
+  <template>
+    <style>
+        :host {
+            display: block;
+            width: 100%;
+        }
+
+        .itens{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        content{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+    </style>
+
+    <slot></slot>
+
+  </template>
+  <script>
+    class PictureFrame extends Polymer.Element {
+      static get is() { return "picture-frame"; }
+      static get properties() {
+          return {
+
+          }
+      }
+    }
+    customElements.define(PictureFrame.is, PictureFrame);
+  </script>
+
+</dom-module>

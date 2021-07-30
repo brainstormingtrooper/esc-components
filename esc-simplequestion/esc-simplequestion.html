@@ -1,0 +1,135 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../paper-input/paper-input.html">
+
+<link rel="import" href="../esc-headerquestion/esc-headerquestion.html">
+
+<dom-module id="esc-simplequestion">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+			paper-input{
+				width: 90%;
+				margin: auto;
+			}
+		</style>
+
+		<esc-headerquestion number="[[number]]" questionpt="[[questionpt]]" questionen="[[questionen]]" required="[[required]]"></esc-headerquestion>
+		<paper-input id="input" type="[[type]]" label="[[label]]" value="{{value}}"></paper-input>
+
+	</template>
+	<script>
+	    class EscSimplequestion extends Polymer.Element {
+		    static get is() { return "esc-simplequestion"; }
+		    static get properties() {
+	          	return {
+	          		type: {
+						type: String,
+						value: "text"
+					},
+					id: {
+						type: Number
+					},
+					number: {
+						type: Number,
+						value: "#"
+					},
+					questionpt: {
+						type: String
+					},
+					questionen: {
+						type: String
+					},
+					label:{
+						type: String,
+						value: "Resposta"
+					},
+					value:{
+						type: String,
+						value: "",
+						observer: '_createResponse'
+					},
+					response:{
+						type: Object,
+						notify: true,
+						value: ""
+					},
+					disabled:{
+						type: Boolean,
+						observer: '_disabledChanged',
+						value: false
+					},
+					required: {
+						type: Boolean,
+						observer: '_requiredChanged',
+						value: false
+					},
+					tipoResposta: {
+						type: String
+					},
+					dadoCadastral:{
+	                    type: String
+	                }
+	          	}
+	      	}
+
+	  		connectedCallback(){
+	  			super.connectedCallback();
+
+	            this._createResponse();
+
+	            if(this.type === "number"){
+	            	this.label = "Resposta númerica"
+	            }
+	        }
+
+	        setResponse(response){
+	        	this.response = response;
+	        	this.$.input.value = response.response;
+	        }
+
+			_createResponse(){
+				if(!(this.value === undefined)){
+					if(this.type === "date" && this.value === ""){
+						this.value = resolveBugDateIOS();
+					}
+
+					if(this.type === "number"){
+						this.response = this.Response(this.id, parseFloat(this.value), this.tipoResposta, this.dadoCadastral);
+					}else{
+						this.response = this.Response(this.id, this.value, this.tipoResposta, this.dadoCadastral);
+					}
+				}
+			}
+
+			Response (id, response, tipoResposta, dadoCadastral) {
+				let resposta = {
+					id: parseInt(id),
+					response: response,
+					tipoResposta: tipoResposta
+				}
+
+			    if(dadoCadastral)
+			    	resposta.dadoCadastral = dadoCadastral;
+
+				return resposta
+			}
+
+			_disabledChanged(){
+				if(!(this.disabled === undefined)){
+					this.$.input.disabled = this.disabled;
+				}
+			}
+
+			_requiredChanged(){
+				if(!(this.required === undefined)){
+					this.$.input.required = this.required;
+				}
+			}
+
+	    }
+	    window.customElements.define(EscSimplequestion.is, EscSimplequestion);
+  	</script>
+
+</dom-module>

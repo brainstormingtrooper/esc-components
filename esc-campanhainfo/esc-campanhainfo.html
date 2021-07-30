@@ -1,0 +1,116 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-campanhainfo">
+
+  <template>
+    <style>
+        :host {
+            width: 100%;
+            display: block;
+        }
+        .topbar{
+            width: 100%;
+            height: 30px;
+            border-bottom: 1px solid var(--border-color, #BDBDBD);
+            padding-bottom: 5px;
+        }
+        .nomeCampanha{
+            width: calc(100% - 30px);
+            height: 30px;
+            float: left;
+            text-align: center;
+            line-height: 30px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .campanha{
+            width: 100%;
+            padding-top: 10px;
+        }
+        .campanha > .info{
+            margin-bottom: 8px;
+            color: var(--third-text, #616161);
+        }
+        .info > .dado{
+            color: var(--secondary-text, #424242);
+        }
+    </style>
+
+    <div class="topbar">
+        <div class="nomeCampanha">{{nome}}</div>
+    </div>
+
+    <div class="campanha">
+
+        <div class="info">Código: <span class="dado">{{codigo}}</span></div>
+
+        <template is="dom-if" if="{{descricao}}">
+            <div class="info">Descrição: <span class="dado">{{descricao}}</span></div>
+        </template>
+
+        <template is="dom-if" if="{{inicio}}">
+            <div class="info">Início da campanha: <span class="dado">{{inicio}}</span></div>
+        </template>
+
+        <template is="dom-if" if="{{fim}}">
+            <div class="info">Fim da campanha: <span class="dado">{{fim}}</span></div>
+        </template>
+
+        <template is="dom-if" if="{{responsavel}}">
+            <div class="info">Responsável: <span class="dado">{{responsavel}}</span></div>
+        </template>
+
+        <div class="info">Exige Cliente: <span class="dado">{{cliente}}</span></div>
+
+        <div class="info">Exige Fazenda: <span class="dado">{{fazenda}}</span></div>
+
+        <div class="info">Exige NFC: <span class="dado">{{nfc}}</span></div>
+
+    </div>
+
+  </template>
+  <script>
+    class EscCampanhainfo extends Polymer.Element {
+      static get is() {
+          return "esc-campanhainfo";
+      }
+      static get properties() {
+          return {
+  				idCampanha: {
+  					type: Number,
+  				},
+  				codigo: {
+  					type: String,
+  				},
+  				nome: {
+  					type: String,
+  				},
+  				descricao: {
+  					type: String,
+  				},
+  				inicio: {
+  					type: String,
+  				},
+  				fim: {
+  					type: String,
+  				},
+  				responsavel: {
+  					type: String,
+  				},
+  				cliente: {
+  					type: String,
+  				},
+  				fazenda: {
+  					type: String,
+  				},
+  				nfc: {
+  					type: String,
+  				}
+          }
+      }
+    }
+    customElements.define(EscCampanhainfo.is, EscCampanhainfo);
+  </script>
+
+</dom-module>

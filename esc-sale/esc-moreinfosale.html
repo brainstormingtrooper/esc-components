@@ -1,0 +1,37 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+
+<dom-module id="esc-moreinfosale">
+	<template>
+		<style>
+			:host {
+				display: block;
+				width: 40px;
+				height: 40px;
+				text-align: right;
+			}
+
+			iron-icon{
+				width: 30px;
+				height: 30px;
+			}
+		</style>
+
+		<iron-icon icon="{{icon}}"></iron-icon>
+		
+	</template>
+	<script>
+	    class EscMoreinfosale extends Polymer.Element {
+	      	static get is() { return "esc-moreinfosale"; }
+	      	static get properties() {
+	          	return {
+	          		icon: {
+						type: String 
+					}
+	          	}
+	      	}
+	    }
+	    window.customElements.define(EscMoreinfosale.is, EscMoreinfosale);
+  	</script>
+	
+</dom-module>

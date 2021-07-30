@@ -1,0 +1,130 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../paper-slider/paper-slider.html">
+
+<link rel="import" href="../esc-headerquestion/esc-headerquestion.html">
+
+<dom-module id="esc-sliderquestion">
+    <template>
+		<style>
+            :host{
+                display: block;
+            }
+            paper-slider{
+                width: 80%;
+                margin:auto;
+            }
+            .value{
+                width: 80%;
+                font-size: 0.9em;
+                transform: translateY(-5px);
+                margin: auto;
+                text-align: center;
+                color: var(--secondary-text, #424242);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        </style>
+
+        <esc-headerquestion number="[[number]]" questionpt="[[questionpt]]" questionen="[[questionen]]" required="[[required]]"></esc-headerquestion>
+
+        <paper-slider id="input" min="[[minvalue]]" max="[[maxvalue]]" value="{{value}}" step="[[range]]" pin snaps max-markers="10" on-change="_createResponse"></paper-slider>
+
+        <div class="value">[[value]] / [[maxvalue]]</div>
+
+    </template>
+
+    <script>
+        class EscSliderquestion extends Polymer.Element {
+            static get is() { return "esc-sliderquestion"; }
+            static get properties() {
+                return {
+                    id: {
+                        type: Number
+                    },
+                    minvalue: {
+                        type: Number
+                    },
+                    maxvalue: {
+                        type: Number
+                    },
+                    range: {
+                        type: Number,
+                        value: 1
+                    },
+                    number: {
+                        type: String,
+                        value: "#"
+                    },
+                    questionpt: {
+                        type: String
+                    },
+                    questionen: {
+                        type: String
+                    },
+                    disabled:{
+                        type: Boolean,
+                        observer: '_disabledChanged',
+                        value: false
+                    },
+                    required: {
+                        type: Boolean,
+                        observer: '_requiredChanged',
+                        value: false
+                    },
+                    value:{
+                        type: Number,
+                        value: this.minvalue
+                    },
+                    response:{
+                        type: Object,
+                        notify: true
+                    },
+                    tipoResposta: {
+                        type: String
+                    }
+                }
+            }
+
+            connectedCallback(){
+                super.connectedCallback();
+
+                this._createResponse();
+            }
+
+            setResponse(response){
+                this.response = response;
+                this.value = response.response;
+
+            }
+
+            _createResponse(){
+                this.response = this.Response(this.id, this.value, this.tipoResposta);
+            }
+
+            Response (id, response, tipoResposta) {
+                let resposta = {
+                    id: parseInt(id),
+                    response: response,
+                    tipoResposta: tipoResposta,
+                }
+
+                return resposta;
+            }
+
+            _disabledChanged(){
+                if(!(this.disabled === undefined)){
+                    this.$.input.disabled = this.disabled;
+                }
+            }
+
+            _requiredChanged(){
+                if(!(this.required === undefined)){
+                    this.$.input.required = this.required;
+                }
+            }
+
+        }
+        window.customElements.define(EscSliderquestion.is, EscSliderquestion);
+    </script>
+</dom-module>

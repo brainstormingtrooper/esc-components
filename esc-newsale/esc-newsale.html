@@ -1,0 +1,246 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+
+<dom-module id="esc-newsale">
+  <template>
+    <style>
+        :host {
+            display: block;
+        }
+
+        .newsale{
+            bottom: 0;
+            right: 0;
+            position: fixed;
+            background-color: var(--grey-background, #ECEFF1);
+            z-index: 8;
+        }
+
+        .newsale-open{
+            width: 100%;
+            height: 100vh;
+            border-radius: 0;
+            color: var(--icon, #263238);
+        }
+
+        .newsale-close{
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            -webkit-transition-duration: 0.2s;
+            right: 15px;
+            bottom: 10px;
+            transition-duration: 0.2s;
+            box-shadow: 0px 1px 1px 1px rgba(0,0,0,0.2);
+            color: var(--icon-white, #FFFFFF);
+            background-color: var(--primary-color, #1976D2);
+        }
+
+        iron-icon{
+            top:0px;
+            right: 0px;
+            width: 35px;
+            height: 35px;
+            display: block;
+            margin: auto;
+            border-radius: 50%;
+            position: absolute;
+            -webkit-transition-duration: 0.4s;
+            transition-duration: 0.4s;
+            padding: 13px;
+        }
+
+        .fabicon-open{
+            -webkit-transform: rotate(135deg);
+            transform: rotate(135deg);
+            width: 27px;
+            top: 13px;
+            right: 13px;
+            padding: 0;
+            height: 27px;
+        }
+
+        #content{
+            height: calc(100vh - 40px);
+            margin: auto;
+            margin-top: 40px;
+            padding-bottom: 65px;
+            box-sizing: border-box;
+            overflow: scroll;
+            -webkit-transition-duration: 0.3s;
+            transition-duration: 0.3s;
+        }
+
+        @media screen and (max-width: 799px) {
+            #content{
+                width: 97%;
+            }
+        }
+
+        @media screen and (min-width: 800px) {
+            #content{
+                width: 790px;
+            }
+        }
+
+        .action{
+            box-shadow: 0px 0px 0px 0px rgba(0,0,0,0);
+            top: 0px;
+            right: 0px;
+            position: fixed;
+        }
+
+        .actionClose{
+            width: 50px;
+            height: 50px;
+        }
+
+        .actionIcon {
+            width: 28px;
+            height: 28px;
+            margin-top: 5px;
+        }
+
+        @media screen and (max-width: 550px) {
+            .actionIcon {
+                margin-top: 2px;
+            }
+        }
+
+    </style>
+
+    <div class="newsale newsale-close" id="newsale">
+        <iron-icon id="fabicon" class="icon" icon="{{iconButton}}" on-click="changedSale"></iron-icon>
+        <div id="content">
+            <slot></slot>
+        </div>
+    </div>
+
+  </template>
+  <script>
+    class EscNewsale extends Polymer.Element {
+      static get is() { return "esc-newsale"; }
+      static get properties() {
+          return {
+              icon: {
+                  type: String,
+                  value: "add"
+              },
+              iconButton: {
+                  type: String,
+                  value: "add"
+              },
+              action: {
+                  type: Boolean,
+                  value: false
+              },
+              withoutX:{
+                  type: Boolean,
+                  value: false
+              },
+              opened:{
+                  type: Boolean,
+                  notify: true
+              }
+          }
+      }
+      ready(){
+          super.ready();
+
+          this.$.content.style.display = "none";
+          this.$.content.style.opacity = 0;
+          this.iconButton = this.icon
+          window.saleIsClosed = true;
+
+          if(this.action){
+              this.$.newsale.classList.add('actionClose');
+              this.$.newsale.classList.add('action');
+              this.$.fabicon.classList.add('actionIcon');
+          }
+      }
+
+      changedSale(){
+          this.changeStatus();
+
+          if(window.saleIsClosed){
+              window.saleIsClosed = false;
+          } else {
+              window.saleIsClosed = true;
+          }
+      }
+
+      changeStatus(){
+
+          if (this.$.newsale.classList.contains("newsale-close")) {
+              this.opened = true;
+
+              var event = new Event('opened');
+              this.dispatchEvent(event);
+
+              barDone(true);
+
+
+              this.$.newsale.style.transitionDuration = "0.3s";
+              this.$.fabicon.classList.add('fabicon-open');
+              this.$.newsale.classList.add('newsale-open');
+              this.$.newsale.classList.remove('newsale-close');
+              this.$.content.style.opacity = 0;
+              this.$.content.style.display = "block";
+              this.iconButton = 'add';
+
+              setTimeout(()=> {
+                  this.$.newsale.style.transitionDuration = "0s";
+                  this.$.content.style.opacity = 1;
+              }, 500);
+
+              if(this.action){
+                  this.$.newsale.classList.remove('actionClose');
+                  this.$.fabicon.classList.remove('actionIcon');
+              }
+
+              if(this.withoutX){
+                  this.$.fabicon.hidden = true;
+              }
+
+          }else{
+              this.opened = false;
+              var event = new Event('opened');
+              this.dispatchEvent(event);
+
+              barDone(false);
+
+
+              this.$.newsale.style.transitionDuration = "0.3s";
+              this.$.fabicon.classList.remove('fabicon-open');
+              this.$.newsale.classList.add('newsale-close');
+              this.$.newsale.classList.remove('newsale-open');
+              this.$.content.classList.remove('content-efect');
+              this.$.content.style.display = "none";
+              this.$.content.style.opacity = 0;
+              this.iconButton = this.icon;
+
+              this._closeMoreInfoClient();
+
+              if(this.action){
+                  this.$.newsale.classList.add('actionClose');
+                  this.$.fabicon.classList.add('actionIcon');
+              }
+
+              if(this.withoutX){
+                  this.$.fabicon.hidden = false;
+              }
+          }
+      }
+
+      _closeMoreInfoClient(){
+          let element = this.querySelector('#newsaleform').shadowRoot.querySelector('#iconCloseInfoClient');
+
+          if(element) {
+              element.click();
+          }
+      }
+    }
+    customElements.define(EscNewsale.is, EscNewsale);
+  </script>
+
+</dom-module>

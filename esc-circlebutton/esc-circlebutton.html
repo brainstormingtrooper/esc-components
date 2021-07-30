@@ -1,0 +1,68 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+
+<dom-module id="esc-circlebutton">
+    <template>
+        <style>
+            :host{
+                --paper-icon-button {
+                    background-color: #FFF;
+                    color: #F00;
+                }
+            }
+            paper-icon-button {
+                background-color: #FFF;
+                color: #000;
+                border-radius: 50%;
+                padding: 2px;
+            -webkit-box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.25);
+                -moz-box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.25);
+                box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.25);
+            }
+            .rotate{
+                transform: rotate(180deg);
+            }
+        </style>
+
+        <paper-icon-button id="icon" icon="{{icon}}"></paper-icon-button>
+
+      </template>
+
+    <script>
+        class EscCircleButton extends Polymer.Element {
+
+            static get is() {
+                return 'esc-circlebutton';
+            }
+
+            static get properties() {
+                return {
+                    rotate: {
+                        type: Boolean,
+                        value: false
+                    },
+                    icon: {
+                        type: String,
+                        value: 'icons:expand-less'
+                    }
+                }
+            }
+
+            ready() {
+                super.ready();
+
+                this._rotate()
+            }
+
+            _rotate() {
+                if (this.rotate) {
+                    this.$.icon.className = "rotate";
+                }
+            }
+
+        }
+
+        customElements.define(EscCircleButton.is, EscCircleButton);
+    </script>
+
+</dom-module>

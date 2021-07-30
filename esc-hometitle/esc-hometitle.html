@@ -1,0 +1,126 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../../iron-icons/maps-icons.html">
+
+<dom-module id="esc-hometitle">
+    <template>
+        <style>
+
+           :host {
+                display: flex;
+                flex-direction: column;
+                height: 150px;
+                margin: 5px;
+                box-sizing: border-box;
+                border-radius: 5px;
+                align-items: center;
+                justify-content: center;
+                -webkit-box-shadow: -1px 3px 9px 0px rgba(0,0,0,0.35);
+                -moz-box-shadow: -1px 3px 9px 0px rgba(0,0,0,0.35);
+                box-shadow: -1px 3px 9px 0px rgba(0,0,0,0.35);
+                position: relative;
+                transition-duration: 0.1s;
+            }
+
+            .container{
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+                z-index: 0;
+                opacity: 0.2;
+            }
+            .text{
+                width: 95%;
+                height: 30px;
+                display: block;
+                margin: 2px 0px 2px 0px;
+                text-align: center;
+                font-size: 1.2em;
+                line-height: 30px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                z-index: 1;
+            }
+            iron-icon{
+                width: 35px;
+                height: 35px;
+                color: #FFF;
+                z-index: 1;
+            }
+            #host{
+                background-color: #FF0000;
+                height: 100%;
+                width: 100%;
+                position: absolute;
+                opacity: 0.2;
+            }
+            #subtext{
+                position: absolute;
+                bottom: 10px;
+                font-size: 0.9em;
+            }
+        </style>
+
+            <iron-icon id="icon" icon="{{icon}}"></iron-icon>
+            <div id="text" class="text">{{text}}</div>
+            <div id="subtext" class="text">{{subtext}}</div>
+            <div id="background" class="container"></div>
+            <div id="host"></div>
+
+    </template>
+
+  <script>
+    class EscHometitle extends Polymer.Element {
+        static get is() { return 'esc-hometitle'; }
+
+        static get properties() {
+            return {
+                imagem: {
+                    type: String,
+                    observer: '_setImagem'
+                },
+                fontColor: {
+                    type: String,
+                    value: '#FFF'
+                },
+                icon: {
+                    type: String,
+                    value: 'home'
+                },
+                text: {
+                    type: String,
+                    value: 'Home'
+                },
+                subtext: {
+                    type: String
+                }
+            }
+        }
+
+        ready(){
+            super.ready();
+
+            this.$.text.style.color = this.fontColor;
+            this.$.subtext.style.color = this.fontColor;
+            this.$.icon.style.color = this.fontColor;
+            this.$.host.style.backgroundImage = `url(${this.imagem})`;
+
+
+            if(!this.subtext)
+                this.$.subtext.style.display = "none"
+
+        }
+        _setImagem(){
+            this.$.host.style.backgroundImage = `url(${this.imagem})`;
+            this.$.host.style.backgroundPosition = 'center';
+            this.$.host.style.backgroundRepeat = 'no-repeat';
+            this.$.host.style.backgroundSize = 'cover';
+        }
+    }
+    window.customElements.define(EscHometitle.is, EscHometitle);
+  </script>
+</dom-module>

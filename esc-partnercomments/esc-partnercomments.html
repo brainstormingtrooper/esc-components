@@ -1,0 +1,194 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-ajax/iron-ajax.html">
+<link rel="import" href="../../iron-pages/iron-pages.html">
+
+
+<dom-module id="esc-partnercomments">
+	<template>
+		<style>
+			:host{
+				display: block;
+				padding-top: 50px;
+				background-color: #053052;
+				border-top: 4px solid #cecece;
+    			border-bottom: 4px solid #cecece;				
+			}
+			.content-coment {
+				display: block;
+				font-family: Roboto-Light;
+				padding: 0px 20px 30px 20px ;
+				box-sizing: border-box;
+				margin: auto;
+			}	
+			.comment{
+				text-align: justify;
+			    vertical-align: middle;
+			    display: table-cell;
+			    color: #FFF;				
+				box-sizing: border-box;
+			}
+
+			.name{
+				font-size: 1.1em;
+				font-weight: bold;				
+				padding-left: 20px;
+				color: #FFF;
+			}
+			.company{
+				padding-left: 20px;
+				color: #FFF;
+			}
+            @media screen and (max-width: 699px)  {
+				.content-coment {
+					width: 100%;										
+				}
+				.comment{
+					height: 100%;
+					font-size: 1.1em;
+				}
+			}
+			@media screen and (min-width: 700px)  {
+				
+				.content-coment {
+					width: 700px;					
+				}
+				.comment{
+					height: 100%;
+					font-size: 1.3em;
+				}
+			}
+			@media screen and (min-width: 401px)  {
+				:host{
+					height: 320px;
+				}
+			}
+
+			@media screen and (max-width: 400px)  {
+				:host{
+					min-height: 390px;
+				}
+			}
+
+			.thisTitle{
+				display: flex;
+				justify-content: center;
+				align-items: center;				
+				padding: 0px 10px 30px 10px;
+				box-sizing: border-box;
+				color: #FFF;
+				
+			}
+			.title{								
+				font-size: 1.6em;	
+				text-align: center;										
+			}			
+			iron-pages{
+				background-color: #053052;
+			}
+
+			.contentPerfil{
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+				box-sizing: border-box;
+				margin-bottom: 20px;
+			}
+
+			.imgcharacter > img{
+				height: 50px;
+				width: 50px;
+				border-radius: 50%;
+				vertical-align: middle;					
+			}
+
+			.iron-selected{
+				animation-name: fadein;
+				animation-delay: 0s;
+				animation-duration: 0.6s;
+				-webkit-animation-fill-mode: forwards;
+				animation-fill-mode: forwards;
+			}
+
+			@-webkit-keyframes fadein {
+				from {
+					opacity: 0
+				}
+				to {
+					opacity: 1
+				}
+			}
+			@keyframes fadein {
+				from {
+					opacity: 0
+				}
+				to {
+					opacity: 1
+				}
+			}
+		</style>
+	
+		<iron-ajax
+			auto
+			id="ajaxFileCompanies"
+			url="./assets/depoimentos/partnercomments.json"
+			method="GET"
+			content-type="application/x-www-form-urlencoded"
+			handle-as="json"
+			on-response="_handleResponseFileComments"></iron-ajax>		
+			
+		<div class="thisTitle">			
+				<slot name=title class="title"></slot>		
+		</div>
+		<iron-pages id="ironpage" selected="0">
+			<template is="dom-repeat" items="{{comments}}">
+				<div class="content-coment">
+					<div class="contentPerfil">
+						<template is="dom-if" if="{{item.avatar}}">
+							<div class="imgcharacter"><img src="{{item.avatar}}" alt=""></div>
+						</template>
+						<div>
+							<div class="name">{{item.name}}</div>
+							<div class="company">{{item.company}}</div>
+						</div>
+					</div>
+					<div class="comment">"{{item.comment}}"</div>			
+				</div>
+			</template>
+		</iron-pages>
+
+	</template>
+	<script>
+		
+		class EscPartnercomments extends Polymer.Element {
+			static get is() { return "esc-partnercomments"; }
+			static get properties() {
+			return {
+					comments:{
+						type: Array
+					}
+				}
+			}
+
+			ready(){
+				super.ready();
+				this._autoScroll();
+			}
+			_autoScroll(){				
+				setTimeout(()=> {
+					this.$.ironpage.selectNext();
+					this._autoScroll();
+				}, 6000);
+			}
+
+			_handleResponseFileComments(){
+				
+				this.comments = this.$.ajaxFileCompanies.lastResponse;
+			}
+		}
+		window.customElements.define(EscPartnercomments.is, EscPartnercomments);
+	</script>
+	
+</dom-module>
+
+
+

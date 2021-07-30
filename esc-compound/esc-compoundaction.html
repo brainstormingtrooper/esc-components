@@ -1,0 +1,66 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-icons/maps-icons.html">
+
+<dom-module id="esc-compoundaction">
+
+  <template>
+    <style>
+    :host {
+        width: 40px;
+        height: 90%;
+        margin-top: 0px;
+        display: block;
+        float: left;
+    }
+    iron-icon{
+        width: 30px;
+        height: 60px;
+        top: 5px;
+        margin: 0;
+        padding-left: 5px;
+        padding-right: 5px;
+        border-left: 1px solid var(--border-color, #BDBDBD);
+        color: var(--icon, #263238);
+    }
+    </style>
+
+    <iron-icon id='icon' icon="[[icon]]"></iron-icon>
+
+    <iron-icon id='src' src='[[src]]'></iron-icon>
+
+
+  </template>
+  <script>
+    class EscCompoundaction extends Polymer.Element {
+      static get is() {
+          return "esc-compoundaction";
+      }
+      static get properties() {
+          return {
+              icon: {
+                  type: String,
+                  value: "add"
+              },
+              src:{
+                  type: String
+              }
+          }
+
+      }
+      ready(){
+          super.ready();
+
+          if(this.src){
+              this.$.src.hidden = false;
+              this.$.icon.hidden = true;
+          }else{
+              this.$.src.hidden = true;
+              this.$.icon.hidden = false;
+          }
+      }
+
+    }
+    customElements.define(EscCompoundaction.is, EscCompoundaction);
+  </script>
+
+</dom-module>

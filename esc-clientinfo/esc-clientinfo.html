@@ -1,0 +1,334 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-ajax/iron-ajax.html">
+
+<dom-module id="esc-clientinfo">
+
+  <template>
+    <style>
+        :host {
+            width: 100%;
+            display: block;
+        }
+        .topbar{
+            width: 100%;
+            height: 40px;
+            border-bottom: 1px solid var(--border-color, #BDBDBD);
+        }
+        .tituloInfo{
+            width: calc(100% - 30px);
+            height: 40px;
+            float: left;
+            text-align: center;
+            line-height: 40px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 1.1em;
+            color: var(--third-text, #616161);
+        }
+        .preloader{
+            text-align: center;
+            position: relative;
+            padding: 10px;
+            display: none;
+        }
+        .preloader > img{
+            padding: 20px;
+            width: 30px;
+            height: 30px;
+
+        }
+        .informacoes{
+            width: 100%;
+            padding-top: 10px;
+        }
+
+        .informacoes > .info{
+            margin-bottom: 8px;
+            color: var(--third-text, #616161);
+        }
+        .info > .dado, .limites > .dado{
+            color: var(--secondary-text, #424242);
+        }
+
+        .limites{
+            padding-left: 20px;
+            padding-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .limites > .info{
+            margin-bottom: 0px;
+            color: var(--third-text, #616161);
+        }
+    </style>
+
+    <iron-ajax
+        id="ajaxConsultarLimite"
+        url="{{urlConsultarLimite}}"
+        method="GET"
+        content-type="application/x-www-form-urlencoded"
+        handle-as="json"
+        loading="{{isLoading}}"
+        on-response="_handleResponseConsultarLimite"
+        on-error="_handleErrorResponseConsultarLimite"></iron-ajax>
+
+    <div class="topbar">
+        <div class="tituloInfo">Informações do cliente</div>
+    </div>
+
+    <div class="informacoes" id="informacoes">
+
+
+        <template is="dom-if" if="{{cliente.Pessoa.NomeExibicao}}">
+            <div class="info">Cliente: <span class="dado">{{cliente.Pessoa.NomeExibicao}}</span></div>
+        </template>
+
+        <template is="dom-if" if="{{cliente.Codigo}}">
+            <div class="info">Codigo: <span class="dado">{{cliente.Codigo}}</span></div>
+        </template>
+
+        <template is="dom-if" if="{{cliente.Pessoa.CPF}}">
+            <div class="info">CPF: <span class="dado">{{cliente.Pessoa.CPF}}</span></div>
+        </template>
+
+        <template is="dom-if" if="{{cliente.Pessoa.CNPJ}}">
+            <div class="info">CNPJ: <span class="dado">{{cliente.Pessoa.CNPJ}}</span></div>
+        </template>
+
+        <template is="dom-if" if="{{cliente.Pessoa.InscricaoEstadual}}">
+            <div class="info">Inscrição Estadual: <span class="dado">{{cliente.Pessoa.InscricaoEstadual}}</span></div>
+        </template>
+
+        <template is="dom-if" if="{{lastSync}}">
+            <div class="info">Última Sincronização: <span class="dado">{{lastSync}}</span></div>
+        </template>
+
+
+        <template is="dom-if" if="{{permiteUsuarioAcessarLimiteCliente}}">
+
+            <template is="dom-if" if="{{haveLimite}}">
+
+                <div class="info">Limites do Cliente:</div>
+
+                <template is="dom-repeat" items="{{limites}}">
+
+                    <div class="limites">
+                        <div class="info">Nome: <span class="dado">{{item.Nome}}</span></div>
+                        <div class="info">Valor do limite: <span class="dado">R$ {{_formatarPreco(item.ValorLimite)}}</span></div>
+                        <div class="info">Valor do saldo: <span class="dado">R$ {{_formatarPreco(item.ValorSaldo)}}</span></div>
+                    </div>
+
+                </template>
+
+            </template>
+
+
+            <template is="dom-if" if="{{!haveLimite}}">
+                <div class="info">Limites do Cliente: <span class="dado">Nenhuma informação disponível</span></div>
+            </template>
+
+        </template>
+
+
+    </div>
+
+    <div class="preloader" id="preloader">
+        <img id="img" src="../../img/preloader/ring-alt.svg">
+    </div>
+
+  </template>
+  <script>
+    class EscClientinfo extends Polymer.Element {
+      static get is() {
+          return "esc-clientinfo";
+      }
+      static get properties() {
+          return {
+              cliente: {
+                  type: Object,
+                  observer: '_changeClient'
+              },
+              lastSync:{
+                  type: Date
+              },
+              haveLimite:{
+                  type: Boolean
+              },
+              permiteUsuarioAcessarLimiteCliente:{
+                  type: Boolean
+              },
+              urlConsultarLimite: {
+                  type: String
+              },
+              token:{
+                  type: String
+              },
+              isLoading:{
+                  type: Boolean,
+                  observer: '_isLoadingRequest'
+              },
+              limites:{
+                  type: Array
+              }
+          }
+      }
+
+      ready() {
+          super.ready();
+
+          this.permiteUsuarioAcessarLimiteCliente = window.doc.document.GrupoEmpresa.Empresas[$state.params.empresa].PermiteConsultarLimite;
+
+          let server = localStorage.getItem('serverLocal');
+          let usuario = localStorage.getItem('usuario');
+
+          if(server && usuario){
+              this.token = this._getToken();
+              this._setUrlConsultarLimite(server);
+          }
+      }
+
+      requestLimiteCliente() {
+          if(this.permiteUsuarioAcessarLimiteCliente){
+
+              if(this.$.ajaxConsultarLimite.lastRequest){
+                  this.$.ajaxConsultarLimite.lastRequest.xhr.abort();
+              }
+
+              if(this.token && this.urlConsultarLimite && this.cliente){
+
+                  if(window.lastClientRequestId !== this.cliente.Id){
+                      this.$.ajaxConsultarLimite.headers['token'] = this.token;
+                      this.$.ajaxConsultarLimite.headers['id'] = this.cliente.Id;
+                      window.lastClientRequestId = this.cliente.Id;
+                      this.$.ajaxConsultarLimite.generateRequest();
+                  } else {
+                      this.lastSync = this.cliente.lastSync ? this._convertDate(this.cliente.lastSync) : this._convertDate(localStorage.getItem('lastSync'));
+                      this.limites = this.cliente.Limites;
+                  }
+
+              }
+          }
+      }
+
+      _isLoadingRequest() {
+          if(!(this.isLoading === undefined)){
+              if(this.isLoading){
+                  console.log('is Loading')
+                  this.$.preloader.style.display = 'block';
+                  this.$.informacoes.style.display = 'none';
+              } else {
+                  console.log('is Not Loading')
+                  this.$.preloader.style.display = 'none';
+                  this.$.informacoes.style.display = 'block';
+              }
+          }
+
+      }
+
+      _handleResponseConsultarLimite() {
+
+          let limitesCliente = JSON.parse(this.$.ajaxConsultarLimite.lastResponse.replace(new RegExp("'", 'g'), "\""));
+          console.log(limitesCliente);
+          window.doc.document.GrupoEmpresa.Empresas[$state.params.empresa].Clientes.forEach((item)=>{
+              if(item.Id === this.cliente.Id){
+
+                  item.Limites = limitesCliente.Limites;
+                  item.lastSync = new Date();
+                  this.cliente = item;
+                  console.log(item);
+              }
+          })
+
+          this._isHaveLimite();
+
+          this.lastSync = this.cliente.lastSync ? this._convertDate(this.cliente.lastSync) : this._convertDate(localStorage.getItem('lastSync'));
+          this.limites = this.cliente.Limites;
+
+          this._saveData(window.doc.document);
+
+      }
+
+      _handleErrorResponseConsultarLimite() {
+
+          console.log('error request');
+          this.lastSync = this.cliente.lastSync ? this._convertDate(this.cliente.lastSync) : this._convertDate(localStorage.getItem('lastSync'));
+          this.limites = this.cliente.Limites;
+
+      }
+
+      _setUrlConsultarLimite(server){
+          this.urlConsultarLimite = server + '/EsAccessCenterService/Invoke/1/LimiteCliente/ConsultarLimite';
+      }
+
+      _getToken() {
+          return localStorage.getItem('token');
+      }
+
+      _changeClient(){
+          if(!(this.cliente === undefined)){
+              this._isHaveLimite();
+          }
+      }
+
+      _isHaveLimite(){
+          if(this.permiteUsuarioAcessarLimiteCliente && this.cliente && this.cliente.Limites){
+              this.haveLimite = true;
+          } else {
+              this.haveLimite =  false;
+          }
+
+      }
+
+      _convertDate(date){
+          let data = new Date(date);
+          return data.toLocaleTimeString('pt-br') + " - " + data.toLocaleDateString('pt-br');
+      }
+
+      _formatarPreco(valor){
+
+          if(typeof valor === 'string')
+              valor = valor.replace(',','.');
+
+          let valorNumber = parseFloat(valor);
+
+          return VMasker.toMoney(valorNumber.toFixed(2));
+      }
+
+      _saveData(response){
+
+          console.log("Salvando dados obtidos");
+
+          let db = getConnectionPouchDB();
+
+          db.get('data').then((doc)=> {
+
+              return db.put({
+                      _id: 'data',
+                      _rev: doc._rev,
+                      document: response
+                  });
+
+          }).then((response)=> {
+
+              console.log('Dados salvos');
+
+          }).catch((err)=> {
+
+              db.put({
+                  _id: 'data',
+                  document: response
+              });
+
+              console.log('error ao salvar dados');
+
+
+          });
+
+      }
+
+    }
+    customElements.define(EscClientinfo.is, EscClientinfo);
+  </script>
+
+</dom-module>

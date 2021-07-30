@@ -1,0 +1,46 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-item">
+  <template>
+    <style include="shared-styles">
+
+      :host {
+        display: block;
+        width: 100%;
+        padding: 10px 5px 10px 5px;
+        box-sizing: border-box;
+      }
+
+      @media screen and (min-width: 650px){
+      	:host{
+      		width: 600px;
+      	}
+      }
+
+    </style>
+
+    <slot></slot>
+
+
+  </template>
+
+  <script>
+    class EscItem extends Polymer.Element {
+      static get is() { return 'esc-item'; }
+      static get properties() {
+        return {
+
+        }
+      }
+
+      ready(){
+        super.ready();
+      }
+
+
+    }
+
+    window.customElements.define(EscItem.is, EscItem);
+
+  </script>
+</dom-module>

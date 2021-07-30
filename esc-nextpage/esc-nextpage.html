@@ -1,0 +1,105 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-icons/maps-icons.html">
+
+<dom-module id="esc-nextpage">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+			.action {
+				width: 60px;
+				height: 60px;
+				right: 15px;
+				bottom: 10px;
+				border: 0;
+				border-radius: 50%;
+				z-index: 10;
+				position: fixed;
+				outline: none;
+				background-color: var(--primary-color, #1976D2);
+				-webkit-box-shadow: 0px 1px 1px 1px rgba(0,0,0,0.2);
+                -moz-box-shadow: 0px 1px 1px 1px rgba(0,0,0,0.2);
+                box-shadow: 0px 1px 1px 1px rgba(0,0,0,0.2);
+			}
+			.action:active{
+				-webkit-box-shadow: 0px 1px 1px 1px rgba(0,0,0,0.4);
+                -moz-box-shadow: 0px 1px 1px 1px rgba(0,0,0,0.4);
+                box-shadow: 0px 1px 1px 1px rgba(0,0,0,0.4);
+			}
+			.action:disabled{
+				background-color: var(--disabled-button, #9E9E9E);
+			}
+			iron-icon{
+				width: 35px;
+                height: 35px;
+                color: var(--icon-white, #FFFFFF);
+                display: block;
+                margin: auto;
+			}
+			.loader{
+				width: 70px;
+				height: 70px;
+				right: 15px;
+				bottom: 10px;
+				border: 0;
+				border-radius: 50%;
+				z-index: 10;
+				position: fixed;
+				outline: none;
+			}
+			.loader > img{
+				width: 80px;
+				height: 80px;
+			}
+		</style>
+
+
+		<template is="dom-if" if="[[loader]]">
+			<div class="loader">
+				<img src="./bower_components/esc-components/esc-nextpage/img/ring-alt.svg">
+			</div>
+		</template>
+
+		<button class="action actionLarge" id="action" disabled="[[disabled]]">
+			<iron-icon id="fabicon" class="icon" icon="[[icon]]"></iron-icon>
+		</button>
+
+	</template>
+	<script>
+	    class EscNextpage extends Polymer.Element {
+	      	static get is() { return "esc-nextpage"; }
+	      	static get properties() {
+	          	return {
+	          		icon: {
+						type: String,
+						value: "arrow-forward"
+					},
+					disabled:{
+						type: Boolean,
+						value: false,
+						observer: "_iconDisabled"
+					},
+					loader:{
+						type: Boolean,
+						value: false
+					}
+	          	}
+	      	}
+
+	      	_iconDisabled() {
+				if(!(this.disabled === undefined)){
+					if(this.disabled){
+						this.style.pointerEvents = "none";
+					}else{
+						this.style.pointerEvents = "auto";
+						}
+					}
+				}
+
+
+	    }
+	    window.customElements.define(EscNextpage.is, EscNextpage);
+  	</script>
+
+</dom-module>

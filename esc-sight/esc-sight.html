@@ -1,0 +1,334 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-sight">
+	<template>
+		<style>
+			:host {
+				display: block;
+				-webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                overflow:hidden;
+                width: 100%;
+                height: 100vh;
+				-webkit-animation: AnimationName 20s ease infinite;
+				-moz-animation: AnimationName 20s ease infinite;
+				-o-animation: AnimationName 20s ease infinite;
+				animation: AnimationName 20s ease infinite;
+			}
+			@-webkit-keyframes AnimationName {
+			    0%{background-position:0% 91%}
+			    50%{background-position:100% 10%}
+			    100%{background-position:0% 91%}
+			}
+			@-moz-keyframes AnimationName {
+			    0%{background-position:0% 91%}
+			    50%{background-position:100% 10%}
+			    100%{background-position:0% 91%}
+			}
+			@-o-keyframes AnimationName {
+			    0%{background-position:0% 91%}
+			    50%{background-position:100% 10%}
+			    100%{background-position:0% 91%}
+			}
+			@keyframes AnimationName {
+			    0%{background-position:0% 91%}
+			    50%{background-position:100% 10%}
+			    100%{background-position:0% 91%}
+			}
+			.container ::slotted(.title){
+				width: 100%;
+				position: absolute;
+                margin: auto;
+                text-align: center;
+                color: #FFF;
+                font-family: Roboto-Light;
+                animation-name: fadein;
+                animation-delay: 1s;
+   				animation-duration: 2s;
+   				-webkit-animation-fill-mode: forwards;
+    			animation-fill-mode: forwards;
+    			font-weight: 100;
+ 			}
+ 			.content{
+				width: 100%;
+				height: 100px;
+				position: absolute;
+                margin: auto;
+                opacity: 0;
+                animation-name: fadein;
+                animation-delay: 2s;
+   				animation-duration: 1s;
+   				-webkit-animation-fill-mode: forwards;
+    			animation-fill-mode: forwards;
+			}
+			.container{
+				height: 100%;
+				width: 100%;
+				position: absolute;
+				top: 0;
+				opacity: 0;
+				animation-name: fadein;
+				animation-delay: 1s;
+				animation-duration: 2s;
+				-webkit-animation-fill-mode: forwards;
+				animation-fill-mode: forwards;
+			}
+			.sight-countImpetus {
+                width: 80%;
+                align-items: center;
+                margin: auto;
+                padding: 25px 0px 15px 0px;
+                align-items: center;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+			.container ::slotted(.arrow-down){
+				width: 25px;
+				position: absolute;
+				bottom: 5px;
+				display: block !important;
+				left: calc(50% - 10px);
+				-webkit-animation: arrowanimate 0.4s infinite;
+				-webkit-animation-direction: alternate;
+				animation: arrowanimate 0.4s infinite;
+				animation-direction: alternate;
+			}
+			@-webkit-keyframes arrowanimate {
+			    from {
+			    	bottom: 5px;
+			    }
+			    to {
+			    	bottom: 0px;
+			    }
+			}
+			@keyframes arrowanimate {
+			    from {
+			    	bottom: 5px;
+			    }
+			    to {
+			    	bottom: 0px;
+			    }
+			}
+ 			@media screen and (max-width: 600px)  {
+ 				.container ::slotted(.title){
+	 				font-size: 1.6em;
+	 				transform: translateY(35vh);
+	 			}
+	 			.content{
+	 				transform: translateY(50vh);
+	 			}
+ 			}
+ 			@media screen and (min-width: 600px) and (max-width: 800px)  {
+ 				.container ::slotted(.title){
+	 				font-size: 2em;
+	 				transform: translateY(40vh);
+	 			}
+	 			.content{
+	 				transform: translateY(55vh);
+	 			}
+ 			}
+ 			@media screen and (min-width: 800px)  {
+ 				.container ::slotted(.title){
+	 				font-size: 2.2em;
+	 				transform: translateY(40vh);
+	 			}
+	 			.content{
+	 				transform: translateY(55vh);
+	 			}
+ 			}
+ 			@-webkit-keyframes fadein {
+			    from {
+			    	opacity: 0
+			    }
+			    to {
+			    	opacity: 1
+			    }
+			}
+			@keyframes fadein {
+			    from {
+			    	opacity: 0
+			    }
+			    to {
+			    	opacity: 1
+			    }
+			}
+			video {
+
+			    background-repeat: no-repeat;
+			    background-position: center center;
+			    background-size: cover;
+			    background-attachment: fixed;
+			    opacity: 0.5;
+			  	background-image: url('../../../images/sight/backgroundSight.jpg');
+
+			}
+
+			@media screen and (max-height: 649px)  {
+ 				video{
+ 					height: 300%;
+	 			}
+ 			}
+ 			@media screen and (min-height: 650px)  {
+ 				video{
+ 					height: 130%;
+	 			}
+ 			}
+			::slotted(.teste){
+				background-color: blue;
+			}
+		</style>
+
+		<video id="bgvid" playsinline autoplay muted loop></video>
+
+		<div class="container">
+
+			<slot name='title'></slot>
+
+			<div class="content">
+				<slot name='scroller'></slot>
+				<esc-count class="sight-countImpetus" balls="{{numeroProdutosSightVisualizados}}" maxballs="{{numeroProdutosSight}}"></esc-count>
+			</div>
+
+			<slot name='ancora'></slot>
+
+		</div>
+
+
+
+	</template>
+	<script>
+	    class EscSight extends Polymer.Element {
+	      	static get is() { return "esc-sight"; }
+	      	static get properties() {
+	          	return {
+	          		text: {
+						type: String
+					},
+					numeroProdutosSight: {
+		                type: Number
+		            },
+		            numeroProdutosSightVisualizados: {
+		                type: Number
+		            },
+		            count:{
+		            	type: Number,
+		            	value: 0
+		            },
+		            trocarVideo:{
+		            	type: Boolean,
+		            	value: false
+		            },
+		            image:{
+		            	type: String
+		            },
+					href:{
+						type: String
+					}
+	          	}
+	      	}
+
+	      	ready(){
+	      		super.ready();
+
+				this._addCountVideoLocalStorage();
+
+	         	this.numeroProdutosSight = this.querySelector('#scroller').children.length;
+
+	         	this._recursiveSightSee();
+				this._changeBackgroundColor();
+
+	         	// this._setVideo();
+
+	         	window.addEventListener('scroll', this._userScroll.bind(this));
+
+	        }
+			_changeBackgroundColor(){
+				let cores = [
+					 ['#164AAF','#158582','#324B4A'],
+					 ['#158582','#164AAF'],
+					 ['#164AAF','#158582','#5C3566'],
+					 ['#F57900','#164AAF'],
+					 ['#204A87','#5C3566','#158582','#324B4A']
+				];
+				let i = Math.floor((Math.random() * 5));
+				let angulo = '0deg';
+
+				this.style.background =  'linear-gradient(' + angulo + ',' + cores[i] + ')';
+				this.style.backgroundSize = '200% 200%'
+
+			}
+
+	        _addCountVideoLocalStorage(){
+	        	if(localStorage.getItem('posVid')){
+					this.count = parseInt(localStorage.getItem('posVid')) + 1;
+				}
+
+				localStorage.setItem('posVid', this.count);
+	        }
+
+	        _userScroll(){
+
+	        	var top = (window.pageYOffset || document.documentElement.scrollTop)  - (document.documentElement.clientTop || 0);
+	        	let scroll = top + 120;
+
+	        	if(scroll >= this.offsetHeight && !this.trocarVideo){
+	        		this.trocarVideo = true;
+	        		this._addCountVideoLocalStorage();
+	        		// this._setVideo();
+	        	}
+
+	        	if(scroll < this.offsetHeight){
+	        		this.trocarVideo = false;
+	        	}
+
+
+	        }
+
+	        _setVideo(){
+	        	let videos =[
+	        		"http://media.istockphoto.com/videos/businessman-with-suitcase-walking-to-reception-desk-video-id671678538",
+	        		"http://media.istockphoto.com/videos/flying-around-big-extreme-water-park-with-waterslides-toboggans-and-video-id509222242"
+	        	]
+
+	        	let posVideo = localStorage.getItem('posVid') % 2;
+
+	        	this.$.bgvid.setAttribute('src', videos[posVideo]);
+	        	let playPromise = this.$.bgvid.play();
+
+	        	if (playPromise !== undefined) {
+				    playPromise.catch(error => {
+				     	//console.warn("Requisição do video anterior cancelada");
+				    });
+				}
+
+	        }
+
+	        _selectedIndexChanged(){
+	            let documentWidth = document.documentElement.clientWidth || window.innerWidth || 0;
+
+	            let numeroProdutosMostrados = 1;
+
+	            if (documentWidth >= 620) {
+	                numeroProdutosMostrados = 2;
+	            }
+
+	            this.numeroProdutosSightVisualizados = parseInt(Math.abs(this.querySelector('#scroller').x/290)) + numeroProdutosMostrados;
+
+	        }
+
+	        _recursiveSightSee(){
+
+	        	setTimeout(()=> {
+	        		this._selectedIndexChanged();
+	        		this._recursiveSightSee();
+	        	}, 200);
+	        }
+	    }
+	    window.customElements.define(EscSight.is, EscSight);
+  	</script>
+
+</dom-module>

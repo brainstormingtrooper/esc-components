@@ -1,0 +1,114 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../../iron-icons/maps-icons.html">
+
+<dom-module id="esc-infotag">
+    <template>
+        <style>
+
+            :host {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                margin: 5px;
+                box-sizing: border-box;
+                border-radius: 5px;
+                align-items: center;
+                justify-content: center;
+                -webkit-box-shadow: -1px 3px 9px 0px rgba(0,0,0,0.35);
+                -moz-box-shadow: -1px 3px 9px 0px rgba(0,0,0,0.35);
+                box-shadow: -1px 3px 9px 0px rgba(0,0,0,0.35);
+                position: relative;
+                transition-duration: 0.1s;
+            }
+
+            #host{
+                height: 100%;
+                width: 100%;
+                position: absolute;
+                opacity: 0;
+            }
+            .icon{
+                padding: 0px 10px 0px 10px;
+            }
+            .content{
+                padding: 10px 10px 10px 0px;
+                display: flex;
+                flex-direction: column;
+            }
+            .content ::slotted(.title){
+                padding-bottom: 5px;
+                transform: translateY(4px);
+            }
+            .content ::slotted(.subtitle){
+                margin-top: 4px;
+            }
+
+
+        </style>
+
+        <div class="icon">
+            <iron-icon id="icon" ></iron-icon>
+        </div>
+        <div id="content" class="content">
+            <slot name='title'></slot>
+            <slot name='subtitle'></slot>
+        </div>
+        <div id="host"></div>
+
+    </template>
+
+  <script>
+    class EscInfotag extends Polymer.Element {
+        static get is() { return 'esc-infotag'; }
+        static get properties() {
+            return {
+                backgroundColor:{
+                    type: String,
+                    observer: '_setBackgroud'
+                },
+                fontColor:{
+                    type: String,
+                    value: '#FFF'
+                },
+                icon:{
+                    type: String
+                },
+                height:{
+                    type: String
+                }
+
+            }
+        }
+
+        ready(){
+            super.ready();
+
+
+
+            this._setStyle();
+            this._setIcon();
+        }
+        _setBackgroud(){
+            this.style.backgroundColor = this.backgroundColor;
+        }
+        _setStyle(){
+            this.$.content.style.color = this.fontColor;
+            this.$.icon.style.color = this.fontColor;
+            this.style.backgroundColor = this.backgroundColor;
+            this.style.color = this.fontColor;
+            this.style.height = this.height + 'px';
+        }
+
+        _setIcon(){
+            if(this.icon){
+                this.$.icon.src = this.icon;
+            } else {
+                this.$.icon.icon = 'icons:info'
+            }
+        }
+    }
+    window.customElements.define(EscInfotag.is, EscInfotag);
+  </script>
+</dom-module>

@@ -1,0 +1,74 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../../iron-icons/notification-icons.html">
+<link rel="import" href="../../paper-ripple/paper-ripple.html">
+
+
+<dom-module id="paper-morphitem">
+  <template>
+    <style>
+        :host{
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: -6px;
+        }
+        .morphitem{
+            height: 75px;
+            max-width: 150px;
+            color: var(--second-icon-color, #FFF);
+            position: relative;
+        }
+        .icone{
+            height: 42px;
+            line-height: 42px;
+            width: 100%;
+            padding-top: 3px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        iron-icon{
+            width: 30px;
+            height: 30px;
+        }
+        .descricao{
+            height: 20px;
+            width: 100%;
+            font-size: 0.9em;
+            line-height: 20px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+     </style>
+
+     <div class="morphitem" id="morphitem" >
+
+         <div class="icone">
+             <iron-icon icon="[[icon]]"></iron-icon>
+         </div>
+         <div class="descricao">[[description]]</div>
+         <paper-ripple></paper-ripple>
+     </div>
+
+  </template>
+
+  <script>
+
+      class PaperMorphitem extends Polymer.Element {
+      static get is() { return 'paper-morphitem'; }
+
+      static get properties() {
+        return {
+            icon:{
+                type: String
+            },
+            description:{
+                type: String
+            }
+        };
+      }
+    }
+    window.customElements.define(PaperMorphitem.is, PaperMorphitem);
+  </script>
+</dom-module>

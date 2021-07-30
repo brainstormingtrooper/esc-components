@@ -1,0 +1,127 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../paper-card/paper-card.html">
+
+<dom-module id="esc-sale">
+	<template>
+		<style>
+			:host {
+				display: block;
+				width: 100%;
+				min-height: 50px;
+				padding-top: 10px;
+				padding-bottom: 10px;
+				border-bottom: 1px solid var(--border-color, #BDBDBD);
+			}
+
+			:host:first-child{
+				padding-top: 0px;
+			}
+
+			:host:nth-last-child(4){
+				border: none;
+				padding-bottom: 0px;
+			}
+
+			.content{
+				max-width: 100%;
+				float: right;
+				padding: 0px 0px 10px 10px;
+			}
+
+			.text{
+				padding: 2px;
+				color: #616161;
+				
+			}
+
+			.value{
+				color: #333;
+			}
+			.money::before{
+				content: "R$ ";
+			}
+			.id{
+				display: none;
+			}
+
+		</style>
+
+		<div class="content">
+			
+			<slot></slot>
+
+		</div>
+
+		<template is="dom-if" if="true">
+			<div class="text">Cliente: <span class="value">{{sale.salePerson.cliente.Pessoa.NomeExibicao}}</span></div>
+		</template>
+
+		<template is="dom-if" if="true">
+			<div class="text">Vendedor: <span class="value">{{vendedor}}</span></div>
+		</template>
+
+		<template is="dom-if" if="true">
+			<div class="text">Início: <span class="value">{{_convertDate(sale.posicaoInicial.timestamp)}}</span></div>
+		</template>
+
+		<template is="dom-if" if="true">
+			<div class="text">Valor total: <span class="value money">{{_calcularValorTotal(sale.produtosVendidos)}}</span></div>
+		</template>
+		
+		<template is="dom-if" if="true">
+			<div class="text id">{{sale.id}}</div>
+		</template>
+
+	</template>
+	<script>
+	    class EscSale extends Polymer.Element {
+	      	static get is() { return "esc-sale"; }
+	      	static get properties() {
+	          	return {
+	          		sale: {
+						type: Object 
+					}, 
+					vendedor:{
+						type: String
+					}
+	          	}
+	      	}
+
+	      	ready(){
+	      		super.ready();
+
+				this.vendedor = localStorage.getItem('usuario')
+			}
+
+			_convertDate(timestamp){
+				var options = {weekday: "long", year: "numeric", month: "long", day: "numeric", hour: '2-digit', minute:'2-digit'};
+
+				return new Date(timestamp).toLocaleString('pt-BR', options);
+			}
+
+			_calcularValorTotal(produtos){
+				let valorTotal = 0;
+
+				if(produtos){
+					produtos.forEach(function(item){
+						
+						if(item.Venda.isManual){
+
+	           				if(!item.Venda.precoManual)
+	           					item.Venda.precoManual = 0
+
+	           				valorTotal += item.Venda.precoManual * item.Venda.quantidade;
+	           			}else{
+
+	           				valorTotal += item.Venda.preco * item.Venda.quantidade;
+	           			}
+					})
+				}
+				return VMasker.toMoney(valorTotal.toFixed(2)); 
+			}
+	    }
+	    
+	    window.customElements.define(EscSale.is, EscSale);
+  	</script>
+
+</dom-module>

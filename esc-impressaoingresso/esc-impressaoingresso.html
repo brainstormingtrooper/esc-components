@@ -1,0 +1,106 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-impressaoingresso">
+
+  <template>
+    <style>
+        :host {
+            display: block;
+            width: 100%;
+            padding: 10px 0 10px 0px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #666;
+        }
+
+        :host:nth-last-child(2){
+            border-bottom: 0;
+        }
+
+        .descricao{
+            width: calc(100% - 131px);
+            float: left;
+        }
+
+        .botao{
+            width: 130px;
+            float: right;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .botao > paper-button{
+            background-color: #4CAF50;
+            color: #fff;
+        }
+        .impresso{
+            background-color: #ff7700 !important;
+        }
+        .clear{
+            clear: both;
+        }
+
+        .info{
+            font-size: 1em;
+        }
+        .numeroIngresso{
+            color: #555;
+            font-size: 0.9em;
+        }
+    </style>
+
+    <div class="descricao">
+        <div class="info">{{empresa}}</div>
+        <div class="info">{{nome}}</div>
+        <div class="numeroIngresso">{{numero}}</div>
+    </div>
+    <div class="botao">
+        <paper-button id="buttonImprimir" raised on-click="_imprimir">{{textoImpressao}}</paper-button>
+    </div>
+
+    <div class="clear"></div>
+
+  </template>
+  <script>
+    class EscImpressaoingresso extends Polymer.Element {
+      static get is() { return "esc-impressaoingresso"; }
+      static get properties() {
+          return {
+              nome:{
+                  type: String
+              },
+              numero:{
+                  type: String
+              },
+              empresa:{
+                  type: String
+              },
+              impresso:{
+                  type: Boolean,
+                  value: false,
+                  observer: "_observerImpresso"
+              },
+              textoImpressao:{
+                  type: String,
+                  value: "Imprimir"
+              }
+          }
+      }
+      _imprimir(){
+          let evento = new Event('imprimir');
+          this.dispatchEvent(evento);
+      }
+
+      _observerImpresso(){
+          if(!(this.impresso === undefined)){
+              if(this.impresso){
+                  this.textoImpressao = "Reimprimir";
+                  this.$.buttonImprimir.classList.add('impresso');
+                 }
+             }
+          }
+
+    }
+    customElements.define(EscImpressaoingresso.is, EscImpressaoingresso);
+  </script>
+
+</dom-module>

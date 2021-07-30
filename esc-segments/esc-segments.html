@@ -1,0 +1,105 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-segments">
+	<template>
+		<style>
+			:host {
+				display: block;
+				box-sizing: border-box;
+				margin: 40px 10px 10px 10px;
+				display: inline-block;
+				width: 300px;
+			}
+
+			::slotted(.logo){
+				display: block;
+				margin: auto;
+			}
+
+			::slotted(.description){
+				box-sizing: border-box;
+				padding: 10px 15px 10px 15px;
+				text-align: center;
+				color: #2E3436;
+				font-size: 1em;
+			}
+
+			::slotted(.link){
+				text-decoration: none;
+			}
+
+			.more{
+				background-color: #164AAF;
+				width: calc(100% - 50px);
+				margin: auto;
+				padding: 10px;
+				border-radius: 1px;
+				text-align: center;
+				color: #fff;
+				font-size: 1em;
+				-webkit-transition-duration: 0.6s;
+                transition-duration: 0.6s;
+                border: 1px solid;
+                cursor: pointer;
+			}
+			.more:active{
+				background-color: #103882;
+			}
+			.more:hover{
+				background-color: #FFF;
+				color: #103882;
+				border: 1px solid #164AAF;
+			}
+
+			@media screen and (max-width: 299px)  {
+ 				:host{
+	 				width: 100%;
+	 			}
+	 			.title{
+	 				padding: 10px;
+	 			}
+	 			
+				::slotted(.logo){
+					width: 100%;
+					display: block;
+					margin: auto;
+				}
+ 			}
+
+ 			@media screen and (min-width: 300px) and (max-width: 499px)  {
+ 				::slotted(.logo){
+					width: 180px;
+					display: block;
+					margin: auto;
+				}
+ 			}
+
+ 			@media screen and (min-width: 500px) {
+ 				::slotted(.logo){
+					width: 200px;
+					display: block;
+					margin: auto;
+				}
+ 			}
+		
+		</style>
+
+		<slot></slot>
+
+		<div class="clear"></div>
+	</template>
+	<script>
+	    class EscSegments extends Polymer.Element {
+	      	static get is() { return "esc-segments"; }
+	      	static get properties() {
+	          	return {
+	          	}
+	      	}
+	    }
+	    window.customElements.define(EscSegments.is, EscSegments);
+  	</script>
+	
+</dom-module>
+
+
+

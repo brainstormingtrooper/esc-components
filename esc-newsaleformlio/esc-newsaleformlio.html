@@ -1,0 +1,1573 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../../iron-icons/notification-icons.html">
+<link rel="import" href="../../paper-toast/paper-toast.html">
+
+<link rel="import" href="../esc-clientinfolio/esc-clientinfolio.html">
+
+<dom-module id="esc-newsaleformlio">
+
+  <template>
+    <style>
+        :host {
+            display: block;
+        }
+        .pesquisa{
+            background-color: var(--primary-background, #FFFFFF);
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-bottom: 5px;
+            border-radius: 4px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            -webkit-box-shadow: 0px 3px 6px -2px rgba(0,0,0,0.35);
+            -moz-box-shadow: 0px 3px 6px -2px rgba(0,0,0,0.35);
+            box-shadow: 0px 3px 6px -2px rgba(0,0,0,0.35);
+        }
+        .textLabelInput{
+            color: var(--third-text, #616161);
+            text-align: center;
+            font-size: 1.1em;
+            padding-top: 10px;
+        }
+        .resposta{
+            background-color: #FFF;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color, #BDBDBD);
+        }
+        .resposta > .nomeResposta{
+            padding: 5px 10px 5px 10px;
+        }
+        .resposta > .codigoResposta{
+            font-size: 0.9;
+            padding: 5px 10px 5px 10px;
+        }
+        .resposta > .linhaResposta{
+            font-size: 0.9;
+            padding: 5px 10px 5px 10px;
+        }
+        .resposta > .inscricaoEstadual{
+            font-size: 0.9;
+            padding: 5px 10px 5px 10px;
+        }
+        .resposta > .nomeResposta:before{
+            content: "Nome: ";
+            color: var(--third-text, #616161);
+        }
+        .resposta > .codigoResposta:before{
+            font-size: 0.9;
+            content: "Código: ";
+            color: var(--third-text, #616161);
+        }
+        .resposta > .linhaResposta:before{
+            font-size: 0.9;
+            content: "Linha: ";
+            color: var(--third-text, #616161);
+        }
+        .resposta > .inscricaoEstadual:before{
+            font-size: 0.9;
+            content: "Inscrição Estadual: ";
+            color: var(--third-text, #616161);
+        }
+        .pessoaSelecionada{
+            background-color: var(--item-active, #ECEFF1);
+        }
+        .actionsNewSale{
+            max-width: 60%;
+            color: var(--icon, #263238);
+        }
+
+        .actionsNewSale > iron-icon{
+            display: inline-block;
+            margin-right: 15px;
+        }
+        .notfoundsearch{
+            padding: 10px;
+            text-align: center;
+            color: var(--secondary-text, #424242);
+        }
+
+        .moreInfoClientSale{
+            width: 27px;
+            height: 27px;
+            box-sizing: border-box;
+            float: right;
+            margin-top: 5px;
+        }
+
+        .closeClientInfo{
+            float: right;
+            margin-top: 5px;
+        }
+
+        .selectParcelamento{
+            width: 94%;
+            margin: auto;
+            height: 30px;
+            display: block;
+            background: #FFF;
+            border-radius: 3px;
+            margin-top: 3px;
+            margin-bottom: 12px;
+        }
+        .labelParcelas{
+            width: 94%;
+            margin: auto;
+            text-align: center;
+            font-size: 1em;
+            display: block;
+            margin-top: 6px;
+            margin-bottom: 6px;
+            color: #616161;
+        }
+    </style>
+    <form id="formNewSale">
+        <div class="actionsNewSale">
+            <iron-icon on-click="_limparTudo" icon="delete"></iron-icon>
+        </div>
+
+        <div class="pesquisa" id="clientes">
+            <template is="dom-if" if="{{clienteNewSale}}">
+                <iron-icon on-click="_showMoreInfoClient" class="moreInfoClientSale" icon="info"></iron-icon>
+            </template>
+
+            <div class="textLabelInput">Clientes</div>
+            <paper-input type="search" on-focus="_focusSearchPessoas" on-keydown="_lookingPersonEnter" value="{{searchPessoa}}"></paper-input>
+            <div id="searchPessoas"></div>
+            <div id="selectedPessoa"></div>
+        </div>
+
+        <div class="pesquisa" id="fazendas">
+            <div class="textLabelInput">Fazendas</div>
+            <paper-input type="search" on-focus="_focusSearchFazendas" on-keydown="_lookingFazendaEnter" value="{{searchFazenda}}"></paper-input>
+            <div id="searchFazendas"></div>
+            <div id="selectedFazenda"></div>
+        </div>
+
+        <div class="pesquisa" id="naturezaOperacao">
+            <div class="textLabelInput">Natureza Operação</div>
+            <paper-input type="search" on-focus="_focusSearchNaturezaOperacao" on-keydown="_lookingNaturezaOperacaoEnter" value="{{searchNaturezaOperacao}}"></paper-input>
+            <div id="searchNaturezaOperacao"></div>
+            <div id="selectedNaturezaOperacao"></div>
+        </div>
+
+        <div class="pesquisa" id="condicaoVenda">
+            <div class="textLabelInput">Condição de Venda</div>
+            <paper-input type="search" on-focus="_focusSearchCondicaoVenda" on-keydown="_lookingCondicaoVendaEnter" value="{{searchCondicaoVenda}}"></paper-input>
+            <div id="searchCondicaoVenda"></div>
+            <div id="selectedCondicaoVenda"></div>
+        </div>
+
+        <div class="pesquisa" id="parcelamento">
+            <div class="textLabelInput">Parcelamento</div>
+            <paper-input type="search" on-focus="_focusSearchParcelamento" on-keydown="_lookingParcelamentoEnter" value="{{searchParcelamento}}"></paper-input>
+            <div id="searchParcelamento"></div>
+            <div id="selectedParcelamento"></div>
+        </div>
+
+    </form>
+
+    <div id="moreInfoClient" class="pesquisa">
+        <iron-icon id="iconCloseInfoClient" class="closeClientInfo" icon="close" on-click="closeMoreInfoClient"></iron-icon>
+        <esc-clientinfolio id="clientInfo" cliente="{{clienteNewSale}}"></esc-clientinfolio>
+    </div>
+
+  </template>
+  <script>
+    class EscNewsaleformlio extends Polymer.Element {
+      static get is() { return "esc-newsaleformlio"; }
+      static get properties() {
+          return {
+              empresa: {
+                  type: Number
+              },
+              filial: {
+                  type: Number
+              },
+              pdv: {
+                  type: Number
+              },
+              clientesDoc: {
+                  type: Object
+              },
+              clienteNewSale: {
+                  type: Object,
+                  notify: true
+              },
+              fazendaNewSale: {
+                  type: Object,
+                  notify: true
+              },
+              codicaoVendaNewSale: {
+                  type: Object,
+                  notify: true
+              },
+              naturezaOperacaoNewSale: {
+                  type: Object,
+                  notify: true
+              },
+              parcelamentoNewSale: {
+                  type: Object,
+                  notify: true
+              },
+              quantidadeParcelasNewSale: {
+                  type: Number,
+                  notify: true
+              },
+              searchPessoa: {
+                  type: String
+              },
+              searchFazenda: {
+                  type: String
+              },
+              searchCondicaoVenda: {
+                  type: String
+              },
+              searchNaturezaOperacao: {
+                  type: String
+              },
+              searchParcelamento: {
+                  type: String
+              },
+              permiteConsultarLimite:{
+                  type: Boolean,
+                  value: false
+              },
+              fusePessoa: {
+                  type: Object
+              },
+              fuseFazenda: {
+                  type: Object
+              },
+              fuseCondicaoVenda: {
+                  type: Object
+              },
+              fuseNaturezaOperacao: {
+                  type: Object
+              },
+              fuseParcelamento: {
+                  type: Object
+              }
+          }
+      }
+      ready(){
+          super.ready();
+
+          let state = DNA.$State();
+
+          this.$.fazendas.hidden = true;
+          this.$.condicaoVenda.hidden = true;
+          this.$.naturezaOperacao.hidden = true;
+          this.$.moreInfoClient.hidden = true;
+          this.$.parcelamento.hidden = true;
+
+          this.empresa = state.params.empresa;
+          this.filial = state.params.filial;
+          this.pdv = state.params.pdv;
+
+
+          if(window.doc){
+
+              let clientesEmpresa = window.doc.document.GrupoEmpresa.Empresas[this.empresa].Clientes;
+              let tiposClientesPDV = window.doc.document.GrupoEmpresa.Empresas[this.empresa].Filiais[this.filial].PDVs[this.pdv].TiposCliente;
+
+              this.clientesDoc = clientesEmpresa.filter((item)=>{
+
+                  for(let i = 0; i < item.TiposCliente.length; i++){
+
+                      for(let j = 0; j < tiposClientesPDV.length; j++){
+
+                          if(item.TiposCliente[i].Id === tiposClientesPDV[j].Id){
+                              return item;
+                          }
+
+                      }
+
+                  }
+
+              });
+
+              this.permiteConsultarLimite = window.doc.document.GrupoEmpresa.Empresas[this.empresa].PermiteConsultarLimite;
+
+          }else{
+              toHash('/sincronizacao', 'right');
+          }
+
+      }
+
+      setResponse(clienteSale, fazendaSale, codicaoVendaSale, naturezaOperacaoSale, parcelamentoSale, quantidadeParcelasSale){
+
+
+          this.clienteNewSale = clienteSale;
+
+          this._setSelectedPessoa();
+
+          this.fazendaNewSale = fazendaSale;
+
+          this.codicaoVendaNewSale = codicaoVendaSale;
+
+          this._setSelectedCondicaoVenda();
+
+          this.naturezaOperacaoNewSale = naturezaOperacaoSale;
+
+          this._setSelectedNaturezaOperacao();
+
+          this.parcelamentoNewSale = parcelamentoSale;
+
+          this._setSelectedParcelamento();
+
+          this.quantidadeParcelasNewSale = quantidadeParcelasSale;
+
+          this._setSelectedParcelas();
+
+          if(fazendaSale){
+              this.$.fazendas.hidden = false;
+              this._setSelectedFazenda();
+              this.searchFazenda = fazendaSale.Nome;
+          }
+
+          this.$.condicaoVenda.hidden = false;
+          this.$.naturezaOperacao.hidden = false;
+          this.$.parcelamento.hidden = false;
+
+          this.searchPessoa = clienteSale.Pessoa.NomeExibicao;
+
+          this.searchNaturezaOperacao = naturezaOperacaoSale.Nome
+          this.searchCondicaoVenda = codicaoVendaSale.Nome
+          this.searchParcelamento = parcelamentoSale.Nome
+
+
+
+      }
+
+      _showMoreInfoClient(){
+          this.$.clientInfo.requestLimiteCliente();
+          this.$.moreInfoClient.hidden = false;
+          this.$.formNewSale.hidden = true;
+
+      }
+
+      closeMoreInfoClient(){
+          this.$.moreInfoClient.hidden = true;
+          this.$.formNewSale.hidden = false;
+      }
+
+      _focusSearchPessoas(){
+          this._limparTudo();
+          this.$.searchPessoas.hidden = false;
+          this.$.selectedPessoa.hidden = true;
+      }
+
+      _lookingPersonEnter (e) {
+          if (e.keyCode === 13) {
+              this._lookingPerson();
+          }
+      }
+
+      _lookingFazendaEnter (e) {
+          if (e.keyCode === 13) {
+              this._lookingFazenda();
+          }
+      }
+
+      _lookingCondicaoVendaEnter (e) {
+          if (e.keyCode === 13) {
+              this._lookingCondicaoVenda();
+          }
+      }
+
+      _lookingParcelamentoEnter (e) {
+          if (e.keyCode === 13) {
+              this._lookingParcelamento();
+          }
+      }
+
+      _lookingNaturezaOperacaoEnter (e) {
+          if (e.keyCode === 13) {
+              this._lookingNaturezaOperacao();
+          }
+      }
+
+      _lookingPerson(){
+
+          console.log(this.searchPessoa)
+
+          if(this.searchPessoa){
+              if(this.fusePessoa){
+
+                  let resultado = this.fusePessoa.search(this.searchPessoa);
+
+                  while (this.$.searchPessoas.firstChild) {
+                      this.$.searchPessoas.removeChild(this.$.searchPessoas.firstChild);
+                  }
+
+                  if(resultado.length === 0){
+
+                      let content = document.createElement("DIV");
+                      content.classList.add('resposta');
+
+                      let notfound = document.createElement("DIV");
+                      notfound.innerHTML = "Nenhuma Pessoa encontrada."
+                      notfound.classList.add("notfoundsearch");
+                      content.appendChild(notfound);
+
+                      Polymer.dom(this.$.searchPessoas).appendChild(content)
+                      Polymer.dom.flush();
+
+                  }else{
+                      for(let i = 0; i < 10;i++){
+                          if(resultado[i]){
+                              let content = this._createElementResposta(resultado[i]);
+
+                              content.addEventListener('click', (event)=>{
+                                  this._selectedPerson(event.target.parentElement);
+                              });
+
+                              Polymer.dom(this.$.searchPessoas).appendChild(content)
+                              Polymer.dom.flush();
+                          }else{
+                              break;
+                          }
+                      }
+                  }
+
+              }else{
+                  let data = this._prepareDataClientSelector();
+
+                  var options = {
+                      shouldSort: true,
+                      threshold: 0.3,
+                      location: 0,
+                      distance: 100,
+                      maxPatternLength: 100,
+                      minMatchCharLength: 0,
+                      keys: [
+                          "codigo",
+                          "nome",
+                          "cpf",
+                          "cnpj"
+                      ]
+                  };
+
+                  this.fusePessoa = new Fuse(data, options);
+                  this._lookingPerson();
+              }
+          }
+
+      }
+
+      _prepareDataClientSelector(){
+          let data = [];
+
+          for (let i = 0; i < this.clientesDoc.length; i++) {
+
+              let options = {
+                  id: this.clientesDoc[i].Id.toString(),
+                  nome: this.clientesDoc[i].Pessoa.NomeExibicao,
+                  cpf: this.clientesDoc[i].Pessoa.CPF.toString(),
+                  cnpj: this.clientesDoc[i].Pessoa.CNPJ.toString(),
+                  codigo: this.clientesDoc[i].Codigo
+              };
+
+              data.push(options);
+          }
+          return data;
+
+      }
+
+      _setSelectedPessoa(element){
+
+          let id = element ? element.getAttribute("data-id") : this.clienteNewSale.Id;
+          let codigo = element ? element.getAttribute("data-codigo") : this.clienteNewSale.Codigo;
+          let nome = element ? element.getAttribute("data-nome") : this.clienteNewSale.Pessoa.NomeExibicao;
+
+          while (this.$.selectedPessoa.firstChild) {
+              this.$.selectedPessoa.removeChild(this.$.selectedPessoa.firstChild);
+          }
+
+          let selectedPessoaObj = {
+              id: id,
+              codigo: codigo,
+              nome: nome
+          };
+
+          let elemento = this._createElementResposta(selectedPessoaObj);
+          elemento.classList.add('pessoaSelecionada');
+          Polymer.dom(this.$.selectedPessoa).appendChild(elemento);
+
+          this.$.searchPessoas.hidden= true;
+          this.$.selectedPessoa.hidden = false;
+
+
+      }
+
+      _selectedPerson(element){
+
+          let id = element.getAttribute("data-id");
+          let codigo = element.getAttribute("data-codigo");
+          let nome = element.getAttribute("data-nome");
+
+          if(id && codigo && nome){
+
+              this.searchPessoa = nome;
+              this.clienteNewSale = this._getPessoaFromId(id);
+
+              this._setSelectedPessoa(element);
+
+              console.log(this.clienteNewSale);
+
+              this._limparSelecaoFazenda();
+              this._limparNaturezaOperacao();
+              this._limparCondicaoVenda();
+
+              if(this.clienteNewSale.Fazendas.length){
+                  this.$.fazendas.hidden = false;
+                  setTimeout(()=>{
+                      this.$.fazendas.scrollIntoView();
+                  },30)
+              }else{
+                  this.$.condicaoVenda.hidden = false;
+                  this.$.naturezaOperacao.hidden = false;
+                  setTimeout(()=>{
+                      this.$.condicaoVenda.scrollIntoView();
+                  },30)
+              }
+
+
+          }
+
+      }
+
+      _getPessoaFromId(id){
+
+          let resultado = this.clientesDoc.filter((e)=>{
+              return e.Id === parseInt(id);
+          });
+
+          return resultado[0];
+
+      }
+
+      _getFazendaFromId(id){
+
+          let resultado = this.clientesDoc.filter((e)=>{
+              return e.Id === parseInt(this.clienteNewSale.Id);
+          });
+
+          let resultadoFazenda = resultado[0].Fazendas.filter((e)=>{
+              return e.Id === parseInt(id);
+          })
+
+          return resultadoFazenda[0];
+
+      }
+
+      _getCondicaoVendaFromId(id){
+
+          let resultado = window.doc.document.GrupoEmpresa.Empresas[this.empresa].CondicoesVenda.filter((e)=>{
+              return e.Id === parseInt(id);
+          });
+
+          return resultado[0];
+
+      }
+
+      _getNaturezaOperacaoFromId(id){
+
+          let resultado = window.doc.document.GrupoEmpresa.Empresas[this.empresa].Filiais[this.filial].NaturezasOperacao.filter((e)=>{
+              return e.Id === parseInt(id);
+          });
+
+          return resultado[0];
+
+      }
+
+      _getParcelamentoFromId(id){
+
+          let resultado = window.doc.document.GrupoEmpresa.Empresas[this.empresa].Parcelamentos.filter((e)=>{
+              return e.Id === parseInt(id);
+          });
+
+          return resultado[0];
+
+      }
+
+      _createElementResposta(entrada){
+
+          let content = document.createElement("DIV");
+          content.classList.add('resposta');
+
+          let nome = document.createElement("DIV");
+          nome.innerHTML = entrada.nome
+          nome.classList.add('nomeResposta');
+          content.appendChild(nome);
+
+          if(entrada.linha){
+              let linha = document.createElement("DIV");
+              linha.classList.add('linhaResposta');
+              linha.innerHTML = entrada.linha;
+              content.appendChild(linha);
+          }
+
+          if(entrada.inscricaoEstadual){
+              let inscricaoEstadual = document.createElement("DIV");
+              inscricaoEstadual.classList.add('inscricaoEstadual');
+              inscricaoEstadual.innerHTML = entrada.inscricaoEstadual;
+              content.appendChild(inscricaoEstadual);
+          }
+
+
+          let codigo = document.createElement("DIV");
+          codigo.innerHTML = entrada.codigo;
+          codigo.classList.add('codigoResposta');
+          content.appendChild(codigo);
+
+          content.setAttribute("data-id", entrada.id);
+          content.setAttribute("data-codigo", entrada.codigo);
+          content.setAttribute("data-nome", entrada.nome);
+
+          if(entrada.linha){
+              content.setAttribute("data-linha", entrada.linha);
+          }
+
+          return content
+      }
+
+      _limparSelecaoFazenda(){
+          this.$.fazendas.hidden = true;
+          this.fazendaNewSale = undefined;
+          this.searchFazenda = undefined;
+          this.fuseFazenda = undefined;
+
+          while (this.$.searchFazendas.firstChild) {
+              this.$.searchFazendas.removeChild(this.$.searchFazendas.firstChild);
+          }
+
+          while (this.$.selectedFazenda.firstChild) {
+              this.$.selectedFazenda.removeChild(this.$.selectedFazenda.firstChild);
+          }
+
+      }
+
+      _limparParcelamento(){
+
+          this.$.parcelamento.hidden = true;
+          this.parcelamentoNewSale = undefined;
+          this.quantidadeParcelasNewSale = undefined;
+          this.searchParcelamento = undefined;
+          this.fuseParcelamento = undefined;
+
+          while (this.$.searchParcelamento.firstChild) {
+              this.$.searchParcelamento.removeChild(this.$.searchParcelamento.firstChild);
+          }
+
+          while (this.$.selectedParcelamento.firstChild) {
+              this.$.selectedParcelamento.removeChild(this.$.selectedParcelamento.firstChild);
+          }
+
+      }
+
+      _limparCondicaoVenda(){
+
+          this.$.condicaoVenda.hidden = true;
+          this.codicaoVendaNewSale = undefined;
+          this.searchCondicaoVenda = undefined;
+          this.fuseCondicaoVenda = undefined;
+
+          while (this.$.searchCondicaoVenda.firstChild) {
+              this.$.searchCondicaoVenda.removeChild(this.$.searchCondicaoVenda.firstChild);
+          }
+
+          while (this.$.selectedCondicaoVenda.firstChild) {
+              this.$.selectedCondicaoVenda.removeChild(this.$.selectedCondicaoVenda.firstChild);
+          }
+
+          this._limparParcelamento();
+
+      }
+
+      _limparNaturezaOperacao(){
+          this.$.naturezaOperacao.hidden = true;
+          this.naturezaOperacaoNewSale = undefined;
+          this.searchNaturezaOperacao = undefined;
+          this.fuseNaturezaOperacao = undefined;
+
+          while (this.$.searchNaturezaOperacao.firstChild) {
+              this.$.searchNaturezaOperacao.removeChild(this.$.searchNaturezaOperacao.firstChild);
+          }
+
+          while (this.$.selectedNaturezaOperacao.firstChild) {
+              this.$.selectedNaturezaOperacao.removeChild(this.$.selectedNaturezaOperacao.firstChild);
+          }
+
+      }
+
+      _limparTudo(){
+
+          this.clienteNewSale = undefined;
+          this.searchPessoa = undefined;
+          this.fusePessoa = undefined;
+
+          this._limparSelecaoFazenda();
+          this._limparNaturezaOperacao();
+          this._limparCondicaoVenda();
+          this._limparParcelamento();
+
+          while(this.$.searchPessoas.firstChild){
+              this.$.searchPessoas.removeChild(this.$.searchPessoas.firstChild);
+          }
+
+          while (this.$.selectedPessoa.firstChild) {
+              this.$.selectedPessoa.removeChild(this.$.selectedPessoa.firstChild);
+          }
+      }
+
+      limparTudo(){
+          this._limparTudo();
+      }
+
+      _focusSearchFazendas(){
+          this._limparSelecaoFazenda();
+          this._limparNaturezaOperacao();
+          this._limparCondicaoVenda();
+          this._limparParcelamento();
+          this._lookingFazenda();
+          this.$.fazendas.hidden = false;
+          this.$.searchFazendas.hidden = false;
+          this.$.selectedFazenda.hidden = true;
+      }
+
+      _focusSearchCondicaoVenda(){
+          this._limparCondicaoVenda();
+          this._limparParcelamento();
+          this._lookingCondicaoVenda();
+          this.$.condicaoVenda.hidden = false;
+          this.$.searchCondicaoVenda.hidden = false;
+          this.$.selectedCondicaoVenda.hidden = true;
+      }
+
+      _focusSearchNaturezaOperacao(){
+          this._limparNaturezaOperacao();
+          this._lookingNaturezaOperacao();
+          this.$.naturezaOperacao.hidden = false;
+          this.$.searchNaturezaOperacao.hidden = false;
+          this.$.selectedNaturezaOperacao.hidden = true;
+      }
+
+      _focusSearchParcelamento(){
+          this._limparParcelamento();
+          this._lookingParcelamento();
+          this.$.parcelamento.hidden = false;
+          this.$.searchParcelamento.hidden = false;
+          this.$.selectedParcelamento.hidden = true;
+      }
+
+      _lookingFazenda(){
+
+
+          if(this.fuseFazenda){
+
+              let resultado;
+
+              if(this.searchFazenda){
+                  resultado = this.fuseFazenda.search(this.searchFazenda);
+              }else{
+                  resultado = this.fuseFazenda.list;
+              }
+
+              while (this.$.searchFazendas.firstChild) {
+                  this.$.searchFazendas.removeChild(this.$.searchFazendas.firstChild);
+              }
+
+              if(resultado.length === 0){
+
+                  let content = document.createElement("DIV");
+                  content.classList.add('resposta');
+
+                  let notfound = document.createElement("DIV");
+                  notfound.innerHTML = "Nenhuma Fazenda encontrada."
+                  notfound.classList.add("notfoundsearch");
+                  content.appendChild(notfound);
+
+                  Polymer.dom(this.$.searchFazendas).appendChild(content)
+                  Polymer.dom.flush();
+
+              }else{
+                  for(let i = 0; i < resultado.length;i++){
+
+                      let content = this._createElementResposta(resultado[i]);
+
+                      content.addEventListener('click', (event)=>{
+                          this._selectedFazenda(event.target.parentElement);
+                      });
+
+                      Polymer.dom(this.$.searchFazendas).appendChild(content)
+                      Polymer.dom.flush();
+
+                  }
+                  setTimeout(()=>{
+                      this.$.fazendas.scrollIntoView();
+                  },0)
+              }
+
+
+
+          }else{
+
+              let data = this._prepareDataFazendaClientSelector(this.clienteNewSale.Fazendas);
+
+              var options = {
+                  shouldSort: true,
+                  threshold: 0.5,
+                  location: 0,
+                  distance: 100,
+                  maxPatternLength: 100,
+                  minMatchCharLength: 0,
+                  keys: [
+                      "codigo",
+                      "nome",
+                      "linha"
+                  ]
+              };
+              this.fuseFazenda = new Fuse(data, options);
+              this._lookingFazenda();
+          }
+
+      }
+
+      _lookingCondicaoVenda(){
+
+          if(this.fuseCondicaoVenda){
+
+              let resultado;
+
+              if(this.searchCondicaoVenda){
+                  resultado = this.fuseCondicaoVenda.search(this.searchCondicaoVenda);
+              }else{
+                  resultado = this.fuseCondicaoVenda.list;
+              }
+
+              while (this.$.searchCondicaoVenda.firstChild) {
+                  this.$.searchCondicaoVenda.removeChild(this.$.searchCondicaoVenda.firstChild);
+              }
+
+              if(resultado.length === 0){
+
+                  let content = document.createElement("DIV");
+                  content.classList.add('resposta');
+
+                  let notfound = document.createElement("DIV");
+                  notfound.innerHTML = "Nenhuma Condição de Venda encontrada."
+                  notfound.classList.add("notfoundsearch");
+                  content.appendChild(notfound);
+
+                  Polymer.dom(this.$.searchCondicaoVenda).appendChild(content)
+                  Polymer.dom.flush();
+
+              }else{
+                  console.log(resultado)
+                  for(let i = 0; i < resultado.length;i++){
+
+                      let content = this._createElementResposta(resultado[i]);
+
+                      content.addEventListener('click', (event)=>{
+                          this._selectedCondicaoVenda(event.target.parentElement);
+                      });
+
+                      Polymer.dom(this.$.searchCondicaoVenda).appendChild(content)
+                      Polymer.dom.flush();
+                  }
+                  setTimeout(()=>{
+                      this.$.condicaoVenda.scrollIntoView();
+                  },30)
+              }
+
+
+
+          }else{
+
+              let data = this._prepareDataCondicaoVendaClientSelector(this.clienteNewSale);
+
+              console.log(data);
+
+              var options = {
+                  shouldSort: true,
+                  threshold: 0.3,
+                  location: 0,
+                  distance: 100,
+                  maxPatternLength: 100,
+                  minMatchCharLength: 0,
+                  keys: [
+                      "codigo",
+                      "nome"
+                  ]
+              };
+              this.fuseCondicaoVenda = new Fuse(data, options);
+              this._lookingCondicaoVenda();
+          }
+
+      }
+
+      _lookingNaturezaOperacao(){
+
+          if(this.fuseNaturezaOperacao){
+
+              let resultado;
+
+              if(this.searchNaturezaOperacao){
+                  resultado = this.fuseNaturezaOperacao.search(this.searchNaturezaOperacao);
+              }else{
+                  resultado = this.fuseNaturezaOperacao.list;
+              }
+
+              while (this.$.searchNaturezaOperacao.firstChild) {
+                  this.$.searchNaturezaOperacao.removeChild(this.$.searchNaturezaOperacao.firstChild);
+              }
+
+              if(resultado.length === 0){
+
+                  let content = document.createElement("DIV");
+                  content.classList.add('resposta');
+
+                  let notfound = document.createElement("DIV");
+                  notfound.innerHTML = "Nenhuma Natureza de Operação vinculada ao cliente."
+                  notfound.classList.add("notfoundsearch");
+                  content.appendChild(notfound);
+
+                  Polymer.dom(this.$.searchNaturezaOperacao).appendChild(content)
+                  Polymer.dom.flush();
+
+              }else{
+                  console.log(resultado)
+                  for(let i = 0; i < resultado.length;i++){
+
+                      let content = this._createElementResposta(resultado[i]);
+
+                      content.addEventListener('click', (event)=>{
+                          this._selectedNaturezaOperacao(event.target.parentElement);
+                      });
+
+                      Polymer.dom(this.$.searchNaturezaOperacao).appendChild(content)
+                      Polymer.dom.flush();
+
+
+                  }
+                  setTimeout(()=>{
+                      this.$.naturezaOperacao.scrollIntoView();
+                  }, 30)
+              }
+
+          }else{
+
+              let data = this._prepareDataNaturezaOperacaoClientSelector(this.clienteNewSale);
+
+              console.log(data);
+
+              var options = {
+                  shouldSort: true,
+                  threshold: 0.3,
+                  location: 0,
+                  distance: 100,
+                  maxPatternLength: 100,
+                  minMatchCharLength: 0,
+                  keys: [
+                      "codigo",
+                      "nome"
+                  ]
+              };
+              this.fuseNaturezaOperacao = new Fuse(data, options);
+              this._lookingNaturezaOperacao();
+          }
+
+      }
+
+      _lookingParcelamento(){
+
+          if(this.fuseParcelamento){
+
+              let resultado;
+
+              if(this.searchParcelamento){
+                  resultado = this.fuseParcelamento.search(this.searchParcelamento);
+              }else{
+                  resultado = this.fuseParcelamento.list;
+              }
+
+              while (this.$.searchParcelamento.firstChild) {
+                  this.$.searchParcelamento.removeChild(this.$.searchParcelamento.firstChild);
+              }
+
+              if(resultado.length === 0){
+
+                  let content = document.createElement("DIV");
+                  content.classList.add('resposta');
+
+                  let notfound = document.createElement("DIV");
+                  notfound.innerHTML = "Nenhuma forma de parcelamento disponível"
+                  notfound.classList.add("notfoundsearch");
+                  content.appendChild(notfound);
+
+                  Polymer.dom(this.$.searchParcelamento).appendChild(content)
+                  Polymer.dom.flush();
+
+              }else{
+                  console.log(resultado)
+                  for(let i = 0; i < resultado.length;i++){
+
+                      let content = this._createElementResposta(resultado[i]);
+
+                      content.addEventListener('click', (event)=>{
+                          this._selectedParcelamento(event.target.parentElement);
+                      });
+
+                      Polymer.dom(this.$.searchParcelamento).appendChild(content)
+                      Polymer.dom.flush();
+
+                  }
+                  setTimeout(()=>{
+                      this.$.parcelamento.scrollIntoView();
+                  },30)
+              }
+
+          }else{
+
+              let data = this._prepareDataParcelamentoClientSelector(this.clienteNewSale);
+
+              console.log(data);
+
+              var options = {
+                  shouldSort: true,
+                  threshold: 0.3,
+                  location: 0,
+                  distance: 100,
+                  maxPatternLength: 100,
+                  minMatchCharLength: 0,
+                  keys: [
+                      "codigo",
+                      "nome"
+                  ]
+              };
+              this.fuseParcelamento = new Fuse(data, options);
+              this._lookingParcelamento();
+          }
+
+      }
+
+      _prepareDataFazendaClientSelector(fazendas){
+
+          let data = [];
+
+          for (let i = 0; i < fazendas.length; i++) {
+              let options = {
+                  id: fazendas[i].Id,
+                  codigo: fazendas[i].Codigo,
+                  nome: fazendas[i].Nome,
+                  linha: fazendas[i].Linha,
+                  inscricaoEstadual: fazendas[i].InscricaoEstadual,
+              };
+
+              data.push(options);
+          }
+
+          return data;
+
+      }
+
+      _prepareDataCondicaoVendaClientSelector(cliente){
+
+          let data = [];
+          let resultado = [];
+          let idsCondicoesVendas = window.doc.document.GrupoEmpresa.Empresas[this.empresa].Filiais[this.filial].CondicoesVenda;
+          let condicoesVendasFiliais = window.doc.document.GrupoEmpresa.Empresas[this.empresa].CondicoesVenda;
+
+          let condicoesVendasFilial =  new jinqJs().from(idsCondicoesVendas).leftJoin(condicoesVendasFiliais).on('Id').select();
+
+          let idsCondicoesVendasPdvs = window.doc.document.GrupoEmpresa.Empresas[this.empresa].Filiais[this.filial].PDVs[this.pdv].CondicoesVenda;
+
+          if(idsCondicoesVendasPdvs && idsCondicoesVendasPdvs.length > 0){
+            condicoesVendasFilial =  new jinqJs().from(idsCondicoesVendasPdvs).leftJoin(condicoesVendasFiliais).on('Id').select();
+          }
+
+          condicoesVendasFilial = this._filtroTipoCliente(cliente, condicoesVendasFilial);
+
+
+          if(cliente.RestringeCondicaoVenda){
+              console.log("Restringe condicoesVendasFilial");
+
+              condicoesVendasFilial = this._filtroRestringeCondicaoVenda(cliente, condicoesVendasFilial);
+
+          }
+
+
+          if(cliente.RestringeTipoRecebimento){
+              console.log("Restringe RestringeTipoRecebimento");
+
+              condicoesVendasFilial = this._filtroRestringeTipoRecebimento(cliente, condicoesVendasFilial);
+          }
+
+
+          for (let i = 0; i < condicoesVendasFilial.length; i++) {
+
+              let options = {
+                  id: condicoesVendasFilial[i].Id,
+                  codigo: condicoesVendasFilial[i].Codigo,
+                  nome: condicoesVendasFilial[i].Nome
+              };
+
+              data.push(options);
+          }
+
+          console.log(data);
+
+
+          return data;
+
+      }
+
+      _filtroTipoCliente(cliente, condicoesVendasFilial){
+
+          let resultado = [];
+
+          for(let i=0; i < cliente.TiposCliente.length; i++){
+
+              for(let j=0; j < condicoesVendasFilial.length; j++){
+
+                  for(let x=0; x < condicoesVendasFilial[j].TiposCliente.length; x++){
+
+                      if(cliente.TiposCliente[i].Id === condicoesVendasFilial[j].TiposCliente[x].TipoCliente){
+
+                          if (resultado.indexOf(condicoesVendasFilial[j]) == -1) {
+                              resultado.push(condicoesVendasFilial[j]);
+                          }
+                          break
+
+                      }
+                  }
+              }
+          }
+
+          return resultado;
+
+      }
+
+      _filtroRestringeCondicaoVenda(cliente, condicoesVendasFilial){
+
+          let resultado = [];
+
+          for(let j=0; j < condicoesVendasFilial.length; j++){
+
+              if(condicoesVendasFilial[j].Irrestrito){
+
+                  if (resultado.indexOf(condicoesVendasFilial[j]) == -1) {
+                      resultado.push(condicoesVendasFilial[j]);
+                  }
+
+              }
+
+              for(let i=0; i < cliente.CondicoesVendaPermitidas.length; i++){
+
+                  if(cliente.CondicoesVendaPermitidas[i].Id === condicoesVendasFilial[j].Id){
+
+                      if (resultado.indexOf(condicoesVendasFilial[j]) == -1) {
+                          resultado.push(condicoesVendasFilial[j]);
+                      }
+                      break
+
+                  }
+
+              }
+          }
+
+          return resultado;
+
+      }
+
+      _filtroRestringeTipoRecebimento(cliente, condicoesVendasFilial){
+
+          let resultado = [];
+
+          for(let j=0; j < condicoesVendasFilial.length; j++){
+
+              if(condicoesVendasFilial[j].Irrestrito){
+
+                  if (resultado.indexOf(condicoesVendasFilial[j]) == -1) {
+                      resultado.push(condicoesVendasFilial[j]);
+                  }
+
+              }
+
+              for(let i=0; i < cliente.TiposRecebimentoPermitidos.length; i++){
+
+                  for(let x=0; x < condicoesVendasFilial[j].TiposContaReceber.length; x++){
+
+                      if(cliente.TiposRecebimentoPermitidos[i].Id === condicoesVendasFilial[j].TiposContaReceber[x].Id){
+
+                          if (resultado.indexOf(condicoesVendasFilial[j]) == -1) {
+                              resultado.push(condicoesVendasFilial[j]);
+                          }
+                          break
+
+                      }
+                  }
+              }
+          }
+
+          return resultado;
+
+      }
+
+      _prepareDataNaturezaOperacaoClientSelector(cliente){
+
+          let data = [];
+          let resultado = [];
+
+          let naturezasDeOperacoes = window.doc.document.GrupoEmpresa.Empresas[this.empresa].Filiais[this.filial].NaturezasOperacao;
+
+          if(cliente.RestringeNaturezaOperacao){
+              console.log("Restringe Natureza de operação");
+
+              naturezasDeOperacoes = this._filtroNaturezaOperacao(cliente, naturezasDeOperacoes);
+
+          }
+
+          for (let i = 0; i < naturezasDeOperacoes.length; i++) {
+
+              let options = {
+                  id: naturezasDeOperacoes[i].Id,
+                  codigo: naturezasDeOperacoes[i].Codigo,
+                  nome: naturezasDeOperacoes[i].Nome
+              };
+
+              data.push(options);
+          }
+
+          console.log(data);
+
+
+          return data;
+
+      }
+
+      _filtroNaturezaOperacao(cliente, naturezasDeOperacoes){
+
+          let resultado = [];
+
+          for(let i=0; i < cliente.NaturezasOperacaoBloqueadas.length; i++){
+
+              for(let j=0; j < naturezasDeOperacoes.length; j++){
+
+                  if(cliente.NaturezasOperacaoBloqueadas[i].Id !== naturezasDeOperacoes[j].Id){
+
+                      if (resultado.indexOf(naturezasDeOperacoes[j]) == -1) {
+                          resultado.push(naturezasDeOperacoes[j]);
+                      }
+                      break
+                  }
+
+              }
+          }
+
+          return resultado;
+
+      }
+
+      _prepareDataParcelamentoClientSelector(cliente){
+
+          let data = [];
+          let resultado = [];
+
+          let idsParcelamentos = window.doc.document.GrupoEmpresa.Empresas[this.empresa].Filiais[this.filial].Parcelamentos;
+          let parcelamentosFiliais = window.doc.document.GrupoEmpresa.Empresas[this.empresa].Parcelamentos;
+
+          let parcelamentosFilial =  new jinqJs().from(idsParcelamentos).leftJoin(parcelamentosFiliais).on('Id').select();
+
+          console.log(this.codicaoVendaNewSale);
+
+          console.log(parcelamentosFilial);
+
+
+
+          for(let i=0; i < this.codicaoVendaNewSale.Parcelamentos.length; i++){
+
+              for(let j=0; j < parcelamentosFilial.length; j++){
+
+                  if(this.codicaoVendaNewSale.Parcelamentos[i].Id === parcelamentosFilial[j].Id){
+
+                      if (resultado.indexOf(parcelamentosFilial[j]) == -1) {
+                          resultado.push(parcelamentosFilial[j]);
+                      }
+                      break
+
+                  }
+              }
+          }
+
+          for (let i = 0; i < resultado.length; i++) {
+
+              let options = {
+                  id: resultado[i].Id,
+                  codigo: resultado[i].Codigo,
+                  nome: resultado[i].Nome
+              };
+
+              data.push(options);
+          }
+
+          console.log(data);
+
+
+          return data;
+
+      }
+
+      _setSelectedFazenda(element){
+          let id = element ? element.getAttribute("data-id") : this.fazendaNewSale.Id;
+          let codigo = element ? element.getAttribute("data-codigo") : this.fazendaNewSale.Codigo;
+          let nome = element ? element.getAttribute("data-nome") : this.fazendaNewSale.Nome;
+          let linha = element ? element.getAttribute("data-linha") : this.fazendaNewSale.Linha;
+
+          while (this.$.selectedFazenda.firstChild) {
+              this.$.selectedFazenda.removeChild(this.$.selectedFazenda.firstChild);
+          }
+
+          let fazendaNewSale = {
+              id: id,
+              codigo: codigo,
+              nome: nome,
+              linha: linha
+          };
+
+          let elemento = this._createElementResposta(fazendaNewSale);
+
+          elemento.classList.add('pessoaSelecionada');
+          Polymer.dom(this.$.selectedFazenda).appendChild(elemento);
+
+          this.$.searchFazendas.hidden= true;
+          this.$.selectedFazenda.hidden = false;
+      }
+
+      _selectedFazenda(element){
+
+          this._limparNaturezaOperacao();
+          this._limparCondicaoVenda();
+
+          let id = element.getAttribute("data-id");
+          let codigo = element.getAttribute("data-codigo");
+          let nome = element.getAttribute("data-nome");
+          let linha = element.getAttribute("data-linha");
+
+          if(id && codigo && nome){
+              this.searchFazenda = nome;
+
+              this.fazendaNewSale = this._getFazendaFromId(id);
+
+              this._setSelectedFazenda(element);
+
+              console.log(this.fazendaNewSale);
+
+              this.$.condicaoVenda.hidden = false;
+              this.$.naturezaOperacao.hidden = false;
+              setTimeout(()=>{
+                  this.$.condicaoVenda.scrollIntoView();
+              },30)
+
+          }
+      }
+
+      _setSelectedCondicaoVenda(element){
+          let id = element ? element.getAttribute("data-id") : this.codicaoVendaNewSale.Id;
+          let codigo = element ? element.getAttribute("data-codigo") : this.codicaoVendaNewSale.Codigo;
+          let nome = element ? element.getAttribute("data-nome") : this.codicaoVendaNewSale.Nome;
+
+          while (this.$.selectedCondicaoVenda.firstChild) {
+              this.$.selectedCondicaoVenda.removeChild(this.$.selectedCondicaoVenda.firstChild);
+          }
+
+          let codicaoVendaNewSale = {
+              id: id,
+              codigo: codigo,
+              nome: nome
+          };
+
+          let elemento = this._createElementResposta(codicaoVendaNewSale);
+
+          elemento.classList.add('pessoaSelecionada');
+          Polymer.dom(this.$.selectedCondicaoVenda).appendChild(elemento);
+
+          this.$.searchCondicaoVenda.hidden= true;
+          this.$.selectedCondicaoVenda.hidden = false;
+
+
+      }
+
+      _selectedCondicaoVenda(element){
+
+          this._limparParcelamento();
+
+          let id = element.getAttribute("data-id");
+          let codigo = element.getAttribute("data-codigo");
+          let nome = element.getAttribute("data-nome");
+
+          if(id && codigo && nome){
+              this.searchCondicaoVenda = nome;
+
+              this.codicaoVendaNewSale = this._getCondicaoVendaFromId(id);
+
+              this._setSelectedCondicaoVenda(element);
+
+              console.log(this.codicaoVendaNewSale);
+
+              this.$.parcelamento.hidden = false;
+
+
+
+          }
+      }
+
+      _setSelectedNaturezaOperacao(element){
+          let id = element ? element.getAttribute("data-id") : this.naturezaOperacaoNewSale.Id;
+          let codigo = element ? element.getAttribute("data-codigo"):this.naturezaOperacaoNewSale.Codigo;
+          let nome = element ? element.getAttribute("data-nome"): this.naturezaOperacaoNewSale.Nome;
+
+          while (this.$.selectedNaturezaOperacao.firstChild) {
+              this.$.selectedNaturezaOperacao.removeChild(this.$.selectedNaturezaOperacao.firstChild);
+          }
+
+          let naturezaOperacaoNewSale = {
+              id: id,
+              codigo: codigo,
+              nome: nome
+          };
+
+          let elemento = this._createElementResposta(naturezaOperacaoNewSale);
+
+          elemento.classList.add('pessoaSelecionada');
+          Polymer.dom(this.$.selectedNaturezaOperacao).appendChild(elemento);
+
+          this.$.searchNaturezaOperacao.hidden= true;
+          this.$.selectedNaturezaOperacao.hidden = false;
+      }
+
+      _selectedNaturezaOperacao(element){
+
+          let id = element.getAttribute("data-id");
+          let codigo = element.getAttribute("data-codigo");
+          let nome = element.getAttribute("data-nome");
+
+          if(id && codigo && nome){
+              this.searchNaturezaOperacao = nome;
+
+              this.naturezaOperacaoNewSale = this._getNaturezaOperacaoFromId(id);
+
+              this._setSelectedNaturezaOperacao(element);
+
+              console.log(this.naturezaOperacaoNewSale);
+
+          }
+      }
+
+      _setSelectedParcelamento(element){
+          let id = element ? element.getAttribute("data-id") : this.parcelamentoNewSale.Id;
+          let codigo = element ? element.getAttribute("data-codigo"):this.parcelamentoNewSale.Codigo;
+          let nome = element ? element.getAttribute("data-nome"): this.parcelamentoNewSale.Nome;
+
+          while (this.$.selectedParcelamento.firstChild) {
+              this.$.selectedParcelamento.removeChild(this.$.selectedParcelamento.firstChild);
+          }
+
+          let parcelamentoNewSale = {
+              id: id,
+              codigo: codigo,
+              nome: nome
+          };
+
+          let elemento = this._createElementResposta(parcelamentoNewSale);
+          elemento.classList.add('pessoaSelecionada');
+
+          let select = this._createElementSelectParcelas(this.parcelamentoNewSale.Parcelas);
+          elemento.appendChild(select);
+
+          Polymer.dom(this.$.selectedParcelamento).appendChild(elemento);
+
+          this.$.searchParcelamento.hidden = true;
+          this.$.selectedParcelamento.hidden = false;
+      }
+
+      _selectedParcelamento(element){
+
+          let id = element.getAttribute("data-id");
+          let codigo = element.getAttribute("data-codigo");
+          let nome = element.getAttribute("data-nome");
+
+          if(id && codigo && nome){
+              this.searchParcelamento = nome;
+
+              this.parcelamentoNewSale = this._getParcelamentoFromId(id);
+
+              this._setSelectedParcelamento(element);
+
+              console.log(this.parcelamentoNewSale);
+
+          }
+
+      }
+
+      _setSelectedParcelas(){
+          this.shadowRoot.querySelector('#selectParcelas').value = this.quantidadeParcelasNewSale;
+      }
+
+      _createElementSelectParcelas(parcelas){
+
+          let div = document.createElement("DIV");
+
+          var label = document.createElement("LABEL");
+          let labelText = document.createTextNode("Selecione a quantidade de parcelas");
+          label.appendChild(labelText);
+          label.classList.add('labelParcelas');
+          div.appendChild(label);
+
+
+          let element = document.createElement("SELECT");
+          element.setAttribute("id", "selectParcelas");
+          element.classList.add('selectParcelamento');
+
+
+          element.addEventListener("change", (event)=>{
+              this.quantidadeParcelasNewSale = event.target.value
+          });
+          this.quantidadeParcelasNewSale = 1;
+
+          for (let i = 1; i <= parcelas; i++) {
+
+              let opcao = this._createOptionParcela(i, i);
+
+              element.appendChild(opcao);
+
+          }
+
+          div.appendChild(element);
+
+
+          return div
+      }
+
+      _createOptionParcela(value, text, description){
+
+          if(!description){
+              description = "";
+          }
+
+          let element = document.createElement("option");
+          element.setAttribute("value", value);
+          let nodeText = document.createTextNode(text + " " + description);
+          element.appendChild(nodeText);
+
+          return element
+
+      }
+    }
+    customElements.define(EscNewsaleformlio.is, EscNewsaleformlio);
+  </script>
+
+</dom-module>

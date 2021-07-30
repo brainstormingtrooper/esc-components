@@ -1,0 +1,54 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-nfc">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+		</style>
+
+		<slot></slot>
+	
+	</template>
+	<script>
+	    class EscNfc extends Polymer.Element {
+	      	static get is() { return "esc-nfc"; }
+	      	static get properties() {
+	          	return {
+	          		hash:{
+						type: String
+					},
+					response:{
+						type: String,
+						notify: true
+					}
+	          	}
+	      	}
+
+	      	ready(){
+	      		super.ready();
+
+				this.hash = window.location.hash;
+				try{					
+					if(nfc.addTagDiscoveredListener !== undefined){
+						nfc.addTagDiscoveredListener((nfcEvent)=>{
+							let tag = nfcEvent.tag.id;
+							this.response = null;	
+							if (tag && window.location.hash == this.hash) {
+								this.response = nfc.bytesToHexString(tag);
+								delete nfc.removeTagDiscoveredListener;
+							}			
+						});
+					}
+				}catch(e){
+					console.log("Não tem NFC no PC :)");
+				}	
+			}
+
+
+	    }
+	    window.customElements.define(EscNfc.is, EscNfc);
+  	</script>
+	
+</dom-module>

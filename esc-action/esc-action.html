@@ -1,0 +1,70 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<dom-module id="esc-action">
+    <template>
+         <style>
+         :host {
+             width: 32px;
+             height: 32px;
+             display: inline-block;
+             border-radius: 50%;
+             margin-left: 5px;
+         }
+
+         :host:active{
+             background-color: #d8d8d8;
+         }
+         .img{
+             width: 23px;
+             height: 23px;
+             display: block;
+             margin: auto;
+             margin-top: 6px;
+             color: #4d4d4d;
+         }
+         .pendente{
+             width: 13px;
+             height: 13px;
+             background-color: #B71C1C;
+             border-radius: 50%;
+             position: relative;
+             transform: translate(19px, -25px);
+             border: 1px solid #fff;
+         }
+         .filled{
+             width: 100%;
+             height: 2px;
+             background-color: #7cb342;
+         }
+         </style>
+
+         <img class="img" src="[[icon]]">
+         <template is="dom-if" if="{{pending}}">
+             <div class="pendente"></div>
+         </template>
+        <template is="dom-if" if="{{filled}}">
+             <div class="filled"></div>
+         </template>
+
+    </template>
+    <script>
+        class EscAction extends Polymer.Element {
+            static get is() {
+                return "esc-action";
+            }
+            static get properties() {
+                return {
+                    pending: {
+                        type: Boolean
+                    },
+                    filled: {
+                        type: Boolean
+                    },
+                    icon: {
+                        type: String
+                    }
+                }
+            }
+        }
+        customElements.define(EscAction.is, EscAction);
+    </script>
+</dom-module>

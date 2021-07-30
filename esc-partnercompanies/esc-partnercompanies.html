@@ -1,0 +1,216 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-ajax/iron-ajax.html">
+<link rel="import" href="../../iron-icons/hardware-icons.html">
+
+<dom-module id="esc-partnercompanies">
+	<template>
+		<style>
+			:host {
+				display: block;
+				width: 100%;
+				background-color: #FFF;
+				opacity: 1;
+				-ms-user-select: none;
+				-moz-user-select: none;
+				-webkit-user-select: none;
+				user-select: none;
+			}
+
+			@media screen and (max-width: 599px){
+				:host{
+					padding-top: 25px;
+				}
+			}
+			@media screen and (min-width: 600px) and (max-width: 899px) {
+				:host{
+					padding-top: 30px;
+				}
+			}
+			@media screen and (min-width: 900px) {
+				:host{
+					padding-top: 20px;
+				}
+			}
+
+			.title{
+				text-align: center;
+				font-size: 1.6em;
+				font-family: Roboto-Light;
+				color: #164AAF;
+				width: 100%;
+				z-index: 1;
+				padding-bottom: 20px;
+			}
+
+			.empresas{
+				display: block;
+				height: 140px;
+				box-sizing: border-box;
+				background-color: #FFF;
+				overflow: hidden;
+			}
+
+			.arrow{
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 40px;
+				box-sizing: border-box;
+			}
+			.arrow > .icon{
+				cursor: pointer;
+				width: 40px;
+				height: 40px;
+				box-sizing: border-box;
+				-webkit-tap-highlight-color: rgba(0,0,0,0);
+			}
+
+			@media screen and (min-width: 990px){
+				.empresas{
+					width: 903px;
+				}
+			}
+
+			@media screen and (min-width: 690px) and (max-width: 989px){
+				.empresas{
+					width: 600px;
+				}
+			}
+
+			@media screen and (min-width: 400px) and (max-width: 689px){
+				.empresas{
+					width: 301px;
+				}
+			}
+
+			@media screen and (max-width: 399px){
+				.empresas{
+					width: calc(100% - 80px);
+				}
+				.arrow{
+					width: 40px;
+				}
+				.arrow > .icon{
+					width: 40px;
+					height: 40px;
+				}
+			}
+
+			.container-center{
+	          display: flex;
+	          flex-direction: row;
+	          flex-wrap: wrap;
+	          justify-content: center;
+	          align-items: center;
+	        }
+
+		</style>
+
+		<div class="title">
+			<slot name='title'></slot>
+		</div>
+
+		<div class="container-center">
+
+			<div class="arrow" on-click="_prevLogos"><iron-icon class="icon" icon="hardware:keyboard-arrow-left"></iron-icon></div>
+			<div class="empresas">
+				<div class="container-center">
+					<slot id="content" name='ancora'></slot>
+				</div>
+			</div>
+			<div class="arrow" on-click="_nextLogos"><iron-icon class="icon" icon="hardware:keyboard-arrow-right"></iron-icon></div>
+		</div>
+
+	</template>
+	<script>
+	    class EscPartnercompanies extends Polymer.Element {
+	      	static get is() { return "esc-partnercompanies"; }
+	      	static get properties() {
+	          	return {
+					posicaoInicial:{
+						type: Number,
+						value: 0
+					},
+					companies:{
+						type:Array
+					},
+					intervalChangeLogos:{
+						type: Object
+					}
+	          	}
+	      	}
+
+	      	connectedCallback(){
+	      		super.connectedCallback();
+
+				this.companies = this._getCompanies();
+				this._changeLogos();
+			}
+
+			_changeLogos(){
+
+				clearTimeout(this.intervalChangeLogos);
+
+				let quantidadeShowItens = this._getQuantidadeShowItens();
+
+				let totalItens = this.companies.length;
+
+				if(this.posicaoInicial >= totalItens){
+					this.posicaoInicial = 0;
+				}
+
+				for(let index = 0; index < totalItens; index++){
+					this._showItem(quantidadeShowItens, index);
+				}
+
+				this.posicaoInicial += quantidadeShowItens;
+
+				this.intervalChangeLogos = setTimeout(()=>{
+					this._changeLogos();
+				}, 5000);
+			}
+
+			_prevLogos(){
+				this.posicaoInicial = this.posicaoInicial - (this._getQuantidadeShowItens()*2);
+				if(this.posicaoInicial < 0){
+					this.posicaoInicial = this.companies.length + this.posicaoInicial;
+				}
+				this._changeLogos();
+			}
+
+			_nextLogos(){
+				this._changeLogos();
+			}
+
+			_showItem(quantidadeShowItens, index){
+				if((index >= this.posicaoInicial && index < this.posicaoInicial+quantidadeShowItens)){
+					this.companies[index].style.display = 'block';
+					this.companies[index].style.animationName = "fadein";
+				} else {
+					this.companies[index].style.display = 'none';
+					this.companies[index].style.animationName = "fadeout";
+				}
+			}
+
+			_getQuantidadeShowItens(){
+				if(this.offsetWidth <= 619){
+					return 1
+				}
+				if(this.offsetWidth >= 620 && this.offsetWidth <= 919){
+					return 2
+				}
+				return 3;
+			}
+
+			_getCompanies(){
+
+				let childs = this.shadowRoot.querySelector('#content').assignedNodes({flatten: true});
+
+				return childs;
+			}
+
+	    }
+	    window.customElements.define(EscPartnercompanies.is, EscPartnercompanies);
+  	</script>
+
+</dom-module>

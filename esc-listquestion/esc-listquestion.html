@@ -1,0 +1,300 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../../paper-radio-group/paper-radio-group.html">
+
+<link rel="import" href="../esc-headerquestion/esc-headerquestion.html">
+
+<dom-module id="esc-listquestion">
+
+  <template>
+    <style>
+        :host {
+            width: 100%;
+            display: block;
+        }
+        paper-radio-group{
+            width: 80%;
+            display: block;
+            margin: auto;
+        }
+        paper-radio-button{
+            width: 100%;
+            padding: 7px;
+            margin: auto;
+            position: relative;
+            box-sizing: border-box;
+        }
+        paper-checkbox{
+            width: 80%;
+            padding: 7px;
+            display: block;
+            margin: auto;
+            box-sizing: border-box;
+        }
+        .alternativaEstrangeiro{
+            font-size: 0.8em;
+            color: var(--secondary-text, #424242);
+            font-weight: bold;
+            font-style: italic;
+        }
+    </style>
+
+    <esc-headerquestion questionpt="[[questionpt]]"
+    number="[[number]]" questionen="[[questionen]]"
+    required="{{required}}"></esc-headerquestion>
+
+    <template is="dom-if" if="{{_isRadio(type)}}">
+        <paper-radio-group id="radiogroup" selected="{{selectedRadio}}" required="{{required}}">
+            <template is="dom-repeat" items="{{alternatives}}">
+                <paper-radio-button disabled="{{disabled}}" noink name="{{item}}">
+                    {{item.Descricao}}
+                    <template is="dom-if" if="{{_verificaAlternativaEstrangeira(item)}}">
+                        <span class="alternativaEstrangeiro">
+                            ({{item.DescricaoEstrangeiro}})
+                        </span>
+                    </template>
+                </paper-radio-button>
+            </template>
+        </paper-radio-group>
+    </template>
+
+    <template is="dom-if" if="{{_isCheckbox(type)}}">
+        <template is="dom-repeat" items="{{alternatives}}">
+              <paper-checkbox class="checkbox"disabled="{{disabled}}"
+              noink on-iron-form-element-register="_checkCheckbox" on-click="_checkboxChange">
+                    <span>{{item.Descricao}}<span>
+                    <template is="dom-if" if="{{_verificaAlternativaEstrangeira(item)}}">
+                        <span class="alternativaEstrangeiro">
+                            ({{item.DescricaoEstrangeiro}})
+                        </span>
+                    </template>
+                </paper-checkbox>
+        </template>
+    </template>
+  </template>
+  <script>
+
+    class EscListquestion extends Polymer.Element {
+      static get is() { return "esc-listquestion"; }
+      static get properties() {
+          return {
+              id: {
+                  type: Number
+              },
+              questionpt:{
+                  type: String
+              },
+              questionen:{
+                  type: String
+              },
+              number:{
+                  type: String,
+                  value: "#"
+              },
+              required:{
+                  type: Boolean,
+                  value: false
+              },
+              type:{
+                  type: String,
+                  value: "radio"
+              },
+              alternatives:{
+                  type: Array
+              },
+              selectedRadio:{
+                  type: Number,
+                  observer: "_radioChange"
+              },
+              selectedCheckbox:{
+                  type: Array,
+                  value: []
+              },
+              disabled:{
+                  type: Boolean,
+                  value: false
+              },
+              required: {
+                  type: Boolean,
+                  value: false
+              },
+              response:{
+                  type: String,
+                  notify: true,
+                  value: ""
+              },
+              enum:{
+                  type: Boolean,
+                  value: false
+              },
+              tipoResposta:{
+                  type: String
+              },
+              tipoLista:{
+                  type: String
+              },
+              dadoCadastral:{
+                  type: String
+              }
+          }
+      }
+
+      ready(){
+          super.ready();
+
+          this.response = this.Response(this.id, "", this.tipoResposta, this.dadoCadastral);
+          this.selectedCheckbox = [];
+      }
+
+      Response(id, response, tipoResposta, tipoLista, dadoCadastral){
+
+        let resposta = {
+            id: parseInt(id),
+            response: response,
+            tipoResposta: tipoResposta,
+            tipoLista: tipoLista,
+            dadoCadastral: dadoCadastral
+        }
+
+        if(dadoCadastral)
+              resposta.dadoCadastral = dadoCadastral;
+
+        return resposta
+
+      }
+
+      _isRadio(){
+          return this.type === "radio";
+      }
+
+      _isCheckbox(){
+          return this.type === "checkbox";
+      }
+
+      _verificaAlternativaEstrangeira(item){
+          if(item.DescricaoEstrangeiro !== null && item.DescricaoEstrangeiro !== undefined && item.DescricaoEstrangeiro !== "")
+              return true;
+          else
+              return false;
+      }
+
+      setResponse(response){
+
+          this.response = response;
+
+          console.log(response);
+
+          let filter = this.alternatives.filter((element)=>{
+
+              for (let i = 0; i < response.response.length; i++) {
+                  if(element.Id === response.response[i]){
+                      return element;
+                  }
+              }
+
+              for (let i = 0; i < response.response.length; i++) {
+
+                  if(element.Descricao === response.response[i]){
+                      return element;
+                  }
+              }
+          });
+    console.log(filter)
+
+          if(this._isRadio()){
+              let alternatives = this.shadowRoot.querySelector("#radiogroup");
+            //   console.log(alternatives)
+            // if(alternatives.children[(filter[0].Codigo -1)].checked === false){
+            //     alternatives.children[(filter[0].Codigo -1)].click();
+            //
+            // }
+
+              for (var i = 0; i < alternatives.children.length-1; i++) {
+
+                  if(alternatives.children[i].name.Descricao){
+
+                      let temp = alternatives.children[i].name.Descricao;
+                      let descricao = filter[0].Descricao;
+                      if(temp === descricao){
+                          if(alternatives.children[i].checked === false){
+                              alternatives.children[i]._asyncClick();
+                          }
+                      }
+                  }
+
+              }
+
+          }
+
+          if(this._isCheckbox()){
+
+              let alternatives = this.querySelectorAll(".checkbox");
+              this.selectedCheckbox = [];
+
+              for (var i = 0; i < alternatives.length; i++) {
+
+                  for (var j = 0; j < filter.length; j++) {
+
+                      let temp = alternatives[i].children[1].outerText.replace(/\s*\(.*?\)\s*/g, '');
+                      let descricao = filter[j].Descricao.replace(/\s*\(.*?\)\s*/g, '');
+
+                      if(temp === descricao){
+                          alternatives[i].checked = true;
+
+                          if (this.selectedCheckbox.indexOf(filter[j].Id) === -1) {
+                              this.selectedCheckbox.push(filter[j].Id);
+                          }
+                      }
+                  }
+              }
+          }
+      }
+
+      _checkboxChange(event){
+
+          let item = event.model.get('item');
+          let index = event.model.get('index');
+
+          if (this.selectedCheckbox.indexOf(item.Id) === -1) {
+              this.selectedCheckbox.push(item.Id);
+          }else{
+              this.selectedCheckbox.splice(this.selectedCheckbox.indexOf(item.Id), 1);
+          }
+          console.log(this.selectedCheckbox);
+          this._createResponse();
+      }
+
+      _radioChange(){
+          this._createResponse();
+      }
+
+      _createResponse(){
+          if(this._isRadio()) {
+
+              let temp = [this.selectedRadio.Id || this.selectedRadio.Descricao];
+
+              this.response = this.Response(this.id, temp, this.tipoResposta, this.tipoLista, this.dadoCadastral);
+
+
+          }else if(this._isCheckbox()){
+              this.response = this.Response(this.id, this.selectedCheckbox, this.tipoResposta , this.tipoLista, this.dadoCadastral);
+
+          }
+
+          console.log(this.response);
+
+      }
+
+
+      _checkCheckbox(event){
+          if (this.selectedCheckbox.indexOf(event.model.get("item")) !== -1)
+              event.target.checked = true;
+
+          }
+
+    }
+    customElements.define(EscListquestion.is, EscListquestion);
+  </script>
+
+</dom-module>

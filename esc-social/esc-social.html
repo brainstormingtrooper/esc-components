@@ -1,0 +1,77 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-social">
+	<template>
+		<style>
+			:host {
+				display: block;
+				margin: auto;
+			}
+			a{
+				text-decoration: none;
+				outline: 0;
+			}
+			.image{
+				display: inline-block;
+				margin-right: 20px;
+				margin-left: 20px;
+				box-sizing: border-box;
+    			transition: 0.5s;
+    			width: 25px;
+    			border-radius: 10%;
+			}
+		</style>
+
+			<template is="dom-if" if="{{facebook}}">
+				<a href="[[facebook]]">
+					<img class="image" alt="Facebook" src="../../../images/social/facebook.png">
+				</a>
+			</template>
+
+			<template is="dom-if" if="{{twitter}}">
+				<a href="[[twitter]]">
+					<img class="image" alt="Twitter" src="../../../images/social/twitter-logo-blue.png">
+				</a>
+			</template>
+
+			<template is="dom-if" if="{{linkedin}}">
+				<a href="[[linkedin]]">
+					<img class="image" alt="LinkedIn" src="../../../images/social/linkedin.png">
+				</a>
+			</template>
+
+			<template is="dom-if" if="{{instagram}}">
+				<a href="[[instagram]]">
+					<img class="image" alt="Instagram" src="../../../images/social/logo_insta_2016.png">
+				</a>
+			</template>
+
+	</template>
+	<script>
+	    class EscSocial extends Polymer.Element {
+	      	static get is() { return "esc-social"; }
+	      	static get properties() {
+	          	return {
+					facebook:{
+						type: String
+					},
+					twitter:{
+						type: String
+					},
+					linkedin:{
+						type: String
+					},
+					instagram:{
+						type: String
+					}
+	          	}
+	        }
+			ready(){
+				super.ready();
+			}
+	    }
+
+	    window.customElements.define(EscSocial.is, EscSocial);
+
+	</script>
+</dom-module>

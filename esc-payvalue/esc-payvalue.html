@@ -1,0 +1,116 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../paper-input/paper-input.html">
+
+<dom-module id="esc-payvalue">
+	<template>
+		<style>
+			:host {
+				display: block;
+				width: 100%;
+				padding-top: 5px;
+				padding-bottom: 5px;
+				border-bottom: 1px solid var(--border-color, #BDBDBD);
+			}
+
+			:host:nth-last-child(2){
+				border-bottom: 0px;
+			}
+			.descricao{
+			    height: 55px;
+			    width: calc(100% - 149px);
+			    float: left;
+			    line-height: 55px;
+			    white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			.input-valor{
+				height: 55px;
+				width: 100px;
+				float: left;
+			}
+			.clear{
+				clear: both;
+			}
+			.remove{
+				display: block;
+				float: left;
+				padding-left: 7px;
+				padding-right: 7px;
+				width: 25px;
+				height: 55px;
+			}
+			paper-input{
+			    transform: translateY(-10px);
+			}
+
+		</style>
+
+		<div class="descricao">
+			{{pagamento.Finalizadora}} - {{pagamento.Nome}}
+		</div>
+		<div class="input-valor">
+			<paper-input id="inputValue" label="Valor" type="number" value="{{pagamento.valor}}" on-keyup="_observerValuePagamento"></paper-input>
+		</div>
+		<img class="remove" src="bower_components/esc-components/esc-payvalue/img/ic_clear_gray_24px.svg" on-click="_delete">
+		<div class="clear"></div>
+
+		<template is="dom-if" if={{nsu}}>
+			<paper-input label="NSU" type="number" value="{{pagamento.NSU}}" on-keyup="_propagateChangeEvent"></paper-input>
+		</template>
+
+	</template>
+	<script>
+	    class EscPayvalue extends Polymer.Element {
+	      	static get is() { return "esc-payvalue"; }
+	      	static get properties() {
+	          	return {
+	          		pagamento: {
+						type: Object,
+						observer: '_propagateChangeEvent'
+					},
+					nsu: {
+						type: Boolean,
+						value: false
+					}
+	          	}
+	      	}
+
+	      	ready(){
+	      		super.ready();
+
+				this._updateNsu();
+
+				this.addEventListener('delete',()=>{
+					this._updateNsu();
+				})
+
+			}
+
+			_observerValuePagamento(){
+				this.pagamento.valor = parseFloat(this.pagamento.valor);
+				this._propagateChangeEvent();
+			}
+
+			_updateNsu(){
+				this.nsu = this.pagamento.Finalizadora === "CT" ? true : false;
+			}
+
+			_delete(){
+				let event = new Event('delete');
+				this.dispatchEvent(event);
+
+				event.preventDefault();
+			}
+
+			_propagateChangeEvent(){
+				let event = new Event('change');
+				this.dispatchEvent(event);
+
+				event.preventDefault();
+			}
+	    }
+	    window.customElements.define(EscPayvalue.is, EscPayvalue);
+  	</script>
+
+</dom-module>

@@ -1,0 +1,72 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-footersection">
+
+  <template>
+    <style>
+        :host{
+            display: block;
+        }
+
+        .footerSection{
+            width: 33.3%;
+            display: block;
+            min-height: 50px;
+            padding: 40px 20px 0px 20px;
+            box-sizing: border-box;
+            float: left;
+        }
+
+        @media screen and (min-width: 751px) and (max-width: 900px){
+            .footerSection{
+                padding: 20px 10px 20px 10px;
+            }
+
+        }
+
+        @media screen and (min-width: 650px) and (max-width: 750px) {
+            .footerSection{
+                padding: 20px 9px 20px 8px;
+                box-sizing: border-box;
+            }
+
+        }
+        @media screen and (max-width: 649px) {
+            .footerSection{
+                width: 100%;
+                padding-bottom: 10px;
+                padding-top: 20px;
+                border-bottom: 1px solid #616161 !important;
+                float: none;
+            }
+
+        }
+        .content{
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            color: #FFF;
+        }
+
+    </style>
+
+    <div class="footerSection">
+        <div class="content">
+            <slot></slot>
+        </div>
+    </div>
+
+  </template>
+  <script>
+    class EscFootersection extends Polymer.Element {
+      static get is() { return "esc-footersection"; }
+      static get properties() {
+          return {
+
+          }
+      }
+    }
+    customElements.define(EscFootersection.is, EscFootersection);
+  </script>
+
+</dom-module>

@@ -1,0 +1,110 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-preloader">
+    <template>
+        <style include="shared-styles">
+
+      :host {
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0,0,0,.7);
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation-name: fadein;
+        animation-duration: 0.5s;
+        -webkit-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+      }
+
+      .content-preloader{
+        background: #fff;
+        margin: 20px;
+        box-sizing: border-box;
+        padding: 5px;
+      }
+
+      .content-preloader > .center-preloader{
+        padding: 25px 45px 25px 45px;
+      }
+
+      .content-preloader > .center-preloader > img{
+        width: 35px;
+        display: block;
+        margin: auto;
+        padding-bottom: 20px;
+      }
+
+      .content-preloader ::slotted(button){
+        width: 100% !important;
+        height: 40px !important;
+        background-color: #fff !important;
+        font-size: 1em !important;
+        border: 1px solid #ccc !important;
+        color: #F44 !important;
+        outline: none !important;
+        border-radius: 3px !important;
+      }
+
+    </style>
+
+        <div class="content-preloader">
+          <div class="center-preloader">
+            <img src={{image}}>
+            <div>Carregando</div>
+          </div>
+
+          <slot></slot>
+
+        </div>
+
+  </template>
+
+    <script>
+        class EscPreloader extends Polymer.Element {
+            static get is() {
+                return 'esc-preloader';
+            }
+            static get properties() {
+                return {
+                    opened: {
+                        type: Boolean,
+                        value: false,
+                        observer: "_observerOpened"
+                    },
+                    timeout: {
+                        type: Object
+                    },
+                    image:{
+                        type: String
+                    }
+                }
+            }
+
+            ready() {
+                super.ready();
+                this.style.display = 'none';
+            }
+
+            _observerOpened() {
+                if (this.opened) {
+                    clearTimeout(this.timeout);
+                    this.classList.remove('fadeout');
+                    this.style.display = 'flex';
+                } else {
+                    this.classList.add('fadeout');
+                    this.timeout = setTimeout(() => {
+                        this.classList.remove('fadeout');
+                        this.style.display = 'none';
+                    }, 1000)
+
+                }
+            }
+
+        }
+
+        window.customElements.define(EscPreloader.is, EscPreloader);
+    </script>
+</dom-module>

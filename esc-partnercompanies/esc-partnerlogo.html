@@ -1,0 +1,84 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-partnerlogo">
+	<template>
+		<style>
+			:host{
+				display: none;
+				opacity: 0;
+   				animation-duration: 1s;
+   				-webkit-animation-fill-mode: forwards;
+    			animation-fill-mode: forwards;
+    			-ms-user-select: none;
+				-moz-user-select: none;
+				-webkit-user-select: none;
+				user-select: none;
+			}
+
+			.item{
+				width: 300px;
+				float: left;
+				height: 140px;
+			}
+			
+			@-webkit-keyframes fadein {
+			    from {
+			    	opacity: 0
+			    }
+			    to {
+			    	opacity: 1
+			    }
+			}
+			@keyframes fadein {
+			    from {
+			    	opacity: 0
+			    }
+			    to {
+			    	opacity: 1
+			    }
+			}
+			@-webkit-keyframes fadeout {
+			    from {
+			    	opacity: 1
+			    }
+			    to {
+			    	opacity: 0
+			    }
+			}
+			@keyframes fadeout {
+			    from {
+			    	opacity: 1
+			    }
+			    to {
+			    	opacity: 0
+			    }
+			}
+
+		</style>
+		<div class="item">
+			<slot name='ancora'></slot>
+		</div>
+
+	</template>
+	<script>
+	    class EscPartnerlogo extends Polymer.Element {
+	      	static get is() { return "esc-partnerlogo"; }
+	      	static get properties() {
+	          	return {
+	          		img:{
+						type: String
+					},
+					alt:{
+						type: String
+					},
+					link:{
+						type: String,
+						value: ""
+					}
+	          	}
+	      	}
+	    }
+	    window.customElements.define(EscPartnerlogo.is, EscPartnerlogo);
+  	</script>
+
+</dom-module>

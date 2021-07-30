@@ -1,0 +1,78 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-footer">
+
+  <template>
+    <style>
+        :host {
+            width: 100%;
+            min-height: 50px;
+            border-top: 4px solid #CECECE;
+            display: block;
+            background-color: #021a2d;
+        }
+        .rights{
+            clear: both;
+            width: 100%;
+            border-top: 1px solid #173954;
+            text-align: center;
+            box-sizing: border-box;
+            padding: 25px;
+            color: #a4a4a4;
+            font-size: 0.9em;
+        }
+        .rights ::slotted(.koodme-logo){
+            display: inline-block;
+            transform: translateY(1px);
+            padding-left: 2px;
+        }
+      
+        .privacy{
+            padding-top: 10px;
+            box-sizing: border-box;
+        }
+
+        .privacy ::slotted(a){
+            color: #a4a4a4;
+            text-decoration: none;
+        }
+        
+        .privacy ::slotted(a:hover){
+            color: #fff;
+        }
+
+    </style>
+
+    <div class="footerChilds">
+        <slot></slot>
+    </div>
+
+     <div class="rights">
+         <slot name='info'></slot>
+         <slot name='img'></slot>
+         <div class="privacy">
+            <slot name='privacy'></slot>
+         </div>
+    </div>
+
+  </template>
+  <script>
+    class EscFooter extends Polymer.Element {
+      static get is() { return "esc-footer"; }
+      static get properties() {
+          return {
+              direitos :{
+                  type: String,
+                  value: "Todos os direitos reservados"
+              },
+              desenvolvido :{
+                  type: String,
+                  value: "desenvolvido por"
+              }
+          }
+      }
+    }
+    customElements.define(EscFooter.is, EscFooter);
+  </script>
+
+</dom-module>

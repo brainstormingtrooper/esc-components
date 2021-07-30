@@ -1,0 +1,43 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<link rel="import" href="./esc-compoundtext.html">
+<link rel="import" href="./esc-compoundaction.html">
+
+<dom-module id="esc-compound">
+
+  <template>
+    <style>
+        :host {
+            width: 100%;
+            height: 70px;
+            position: relative;
+            display: block;
+            border-bottom: 1px solid var(--border-color, #BDBDBD);
+            background-color: var(--primary-background);
+        }
+        :host:last-child{
+            border-bottom: 0px;
+        }
+        :host:active{
+            background-color: var(--item-active, #ECEFF1);
+        }
+    </style>
+
+    <slot></slot>
+
+  </template>
+  <script>
+    class EscCompound extends Polymer.Element {
+      static get is() {
+          return "esc-compound";
+      }
+      static get properties() {
+          return {
+
+          }
+      }
+    }
+    customElements.define(EscCompound.is, EscCompound);
+  </script>
+
+</dom-module>

@@ -1,0 +1,401 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<link rel="import" href="../esc-contact/esc-contact.html">
+
+<dom-module id="esc-product">
+	<template>
+		<style>
+			:host{
+				display: block;
+				padding-bottom: 20px;
+			}
+
+			:host > .short > .textPositionLeft{
+				float: none;
+			}
+			:host > .short > .textPositionRight{
+				float: none;
+			}
+
+			:host > .short{
+				display: block;
+				width: 100%;
+				min-height: 400px;
+			}
+
+			:host > .short > .clear {
+				clear: both;
+			}
+			:host > .clear {
+				clear: both;
+			}
+
+			:host > a{
+				text-decoration: none;
+			}
+
+			:host > .short > .texts {
+				min-height: 400px;
+			}
+
+			:host > .short > .texts > .title{
+				font-size: 1.8em;
+			}
+
+			:host > .short > .texts > ::slotted(.description){
+				font-family: Roboto-Light;
+			    font-size: 1.1em;
+			    color: #2E3436;
+			    text-align: justify;
+			    margin-top: 5px;
+			    margin-bottom: 5px;
+			}
+
+			:host > .short > .texts > .more{
+				margin-top: 40px !important;
+				width: 272px;
+				background-color: #164AAF;
+				margin-left: 20px;
+				padding: 10px;
+				box-sizing: border-box;
+				border-radius: 1px;
+				text-align: center;
+				color: #fff;
+				font-size: 1em;
+				-webkit-transition-duration: 0.6s;
+                transition-duration: 0.6s;
+                border: 1px solid;
+                cursor: pointer;
+			}
+
+			:host > .short > .texts > .more:active{
+				background-color: #103882;
+			}
+			:host > .short > .texts > .more:hover{
+				background-color: #FFF;
+				color: #103882;
+				border: 1px solid #164AAF;
+			}
+
+			:host > .long > .less{
+				width: 50px;
+				background-color: #164AAF;
+				margin-left: 20px;
+				padding: 10px;
+				box-sizing: border-box;
+				border-radius: 100%;
+				text-align: center;
+				color: #fff;
+				font-size: 1em;
+				-webkit-transition-duration: 0.6s;
+                transition-duration: 0.6s;
+                border: 2px solid;
+                cursor: pointer;
+			}
+
+			:host > .long > .less:active{
+				background-color: #103882;
+			}
+			:host > .long > .less:hover{
+				background-color: #FFF;
+				color: #103882;
+				border: 2px solid #164AAF;
+			}
+
+			:host > .short > ::slotted(.image) {
+				display: block;
+				position: relative;
+				-moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+			}
+
+			:host > .long {
+				display: none;
+				margin: auto;
+				padding-bottom: 20px;
+				opacity: 0;
+				animation-duration: 2s;
+				-webkit-animation-fill-mode: forwards;
+    			animation-fill-mode: forwards;
+			}
+
+			@media screen and (max-width: 499px){
+				:host{
+					padding-top: 10px;
+				}
+				:host > .short > .texts {
+					width: 100%;
+					min-height: 200px;
+				}
+				:host > .short > .texts > .title{
+					padding: 0px 20px 0px 20px;
+					text-align: left;
+					color: #164AAF;
+					font-family: Roboto-Light;
+				}
+				:host > .short > .texts > ::slotted(.description){
+					padding: 5px 20px 0px 20px;
+					/*margin: 0;*/
+				}
+
+				:host > .short > .texts > .more{
+					padding: 10px;
+					margin: auto;
+				}
+
+				:host > .long > .less{
+					width: 50px;
+					padding: 10px;
+					margin: auto;
+				}
+
+				:host > .short > ::slotted(.image) {
+					width: 90%;
+					padding-top: 20px;
+					padding-bottom: 20px;
+					margin: auto;
+				}
+				:host > .long {
+					width: 100%;
+				}
+			}
+
+			@media screen and (min-width: 500px) and (max-width: 999px){
+				:host{
+					padding-top: 10px;
+				}
+				:host > .short > .texts {
+					width: 100%;
+					min-height: 200px;
+					padding-bottom: 10px;
+				}
+				:host > .short > .texts > .title{
+					padding: 0px 20px 5px 20px;
+					text-align: left;
+					color: #164AAF;
+					font-family: Roboto-Light;
+				}
+				:host > .short > .texts > ::slotted(.description){
+					font-size: 1.2em;
+					padding: 5px 20px 5px 20px;
+				}
+
+				:host > .short > .texts > .more{
+					padding: 10px;
+					margin: auto;
+				}
+
+				:host > .long > .less{
+					width: 50px;
+					padding: 10px;
+					margin: auto;
+				}
+
+				:host > .short > ::slotted(.image) {
+					width: 70%;
+					margin: auto;
+					padding-top: 20px;
+					padding-bottom: 20px;
+				}
+				:host > .long {
+					width: 100%;
+				}
+			}
+
+			@media screen and (min-width: 1000px) {
+				:host > .short{
+					display: flex;
+					align-items: center;
+					justify-content: center;
+				}
+
+				:host > .short > .texts {
+					width: 50%;
+					position: relative;
+
+					padding-right: 30px;
+					padding-left: 30px;
+					box-sizing: border-box;
+				}
+				:host > .short > .texts > .title{
+					padding: 40px 20px 5px 20px;
+					text-align: left;
+					color: #164AAF;
+					font-family: Roboto-Light;
+				}
+				:host > .short > .texts > ::slotted(.description){
+					font-size: 1.2em;
+					padding: 5px 20px 5px 20px;
+				}
+
+				:host > .short > .texts > .more{
+					position: relative;
+					top: 50%;
+					transform: translateY(-50%);
+				}
+				:host > .long > .less{
+					position: relative;
+					margin: auto;
+					margin-top: 20px;
+				}
+
+				:host > .short > ::slotted(.image) {
+					width: 50%;
+				}
+				:host > .short > .textPositionLeft{
+					float: left;
+				}
+				:host > .short > .textPositionRight{
+					float: right;
+				}
+				:host > .long {
+					width: 100%;
+				}
+			}
+
+			@-webkit-keyframes fadein {
+			    from {
+			    	opacity: 0
+			    }
+			    to {
+			    	opacity: 1
+			    }
+			}
+			@keyframes fadein {
+			    from {
+			    	opacity: 0
+			    }
+			    to {
+			    	opacity: 1
+			    }
+			}
+			.container-center{
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
+			}
+
+			.more ::slotted(button){
+				background-color: rgba(0,0,0,0);
+				color: #fff;
+				font-size: 1em;
+			    border-width: 0px;
+				outline: none;
+
+			}
+			.more:active ::slotted(button){
+				background-color: rgba(0,0,0,0);
+			}
+			.more:hover ::slotted(button){
+				background-color: rgba(0,0,0,0);
+				color: #103882;
+				border: 1px solid #164AAF;
+				border-width: 0px;
+
+			}
+
+		</style>
+
+		<div class="short">
+			<slot id='image' name='img'></slot>
+			<div class="texts">
+				<div class="title"><slot name='title'></slot></div>
+				<slot name='description'></slot>
+
+
+				<div class="more"><slot name='more'></slot></div>
+			</div>
+			
+
+			<div class="clear"></div>
+		</div>
+		<div class="long">
+
+			<slot name='esc-title'></slot>
+
+			<div class="container-center"><slot name='container-center'></slot></div>
+
+			<div class="less"><iron-icon icon="icons:expand-less"></iron-icon> </div>
+
+		</div>
+<div class="clear"></div>
+		<slot id="content"></slot>
+
+	</template>
+	<script>
+	    class EscProduct extends Polymer.Element {
+	      	static get is() { return "esc-product"; }
+	      	static get properties() {
+	          	return {
+	          		textPosition: {
+						type: String,
+						value: "left"
+					},
+					image:{
+						type: String
+					},
+					align:{
+						type: String,
+						value: 'center',
+						observer: '_change'
+					}
+	          	}
+	      	}
+
+	      	ready() {
+	      		super.ready();
+
+				let texts = this.querySelector('.texts');
+				let image = this.querySelector('#image');
+
+  				this.shadowRoot.querySelector('.more').addEventListener('click', this._more.bind(this));
+
+  				this.shadowRoot.querySelector('.less').addEventListener('click', this._less.bind(this));
+
+				this.shadowRoot.querySelector('.long').style.display = "none";
+
+				if(this.textPosition === "right"){
+					this.shadowRoot.querySelector('.short').style.flexDirection = 'row-reverse';
+				}else{
+					this.shadowRoot.querySelector('.short').style.flexDirection = 'row';
+
+				}
+
+			}
+
+			_change(){
+				let position = 'center';
+				if(this.align === 'left')
+					position = 'flex-start';
+				if(this.align === 'right')
+					position = 'flex-end';
+
+				this.shadowRoot.querySelector('.container-center').style.justifyContent = position;
+
+			}
+			_more() {
+
+				this.shadowRoot.querySelector('.long').style.display = "block";
+				this.shadowRoot.querySelector('.long').style.animationName = "fadein";
+
+				this._scrollToLong(this.shadowRoot.querySelector('.long'));
+
+			}
+
+			_less(){
+
+				this.shadowRoot.querySelector('.long').style.display = "none";
+
+				this._scrollToLong(this.shadowRoot.querySelector('.short'));
+			}
+
+			_scrollToLong(element){
+				element.scrollIntoView(true);
+				window.scrollBy(0, -110);
+			}
+	    }
+	    window.customElements.define(EscProduct.is, EscProduct);
+  	</script>
+
+</dom-module>

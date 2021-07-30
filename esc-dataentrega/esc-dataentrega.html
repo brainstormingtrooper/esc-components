@@ -1,0 +1,59 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-dataentrega">
+
+  <template>
+    <style>
+    :host {
+        width: 100%;
+        display: block;
+    }
+    :host ::slotted(.inputQuantidade){
+        width: calc(48% - 15px);
+        display: inline-block;
+    }
+    :host ::slotted(.inputData){
+        width: calc(48% - 15px);
+        display: inline-block;
+    }
+    :host ::slotted(.iconRemove){
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        box-sizing: border-box;
+        border-radius: 50%;
+        margin-top: 10px;
+        color: #4d4d4d;
+        background-color: #cecece;
+    }
+
+    @media screen and (max-width: 450px){
+        :host ::slotted(.inputQuantidade){
+            width: calc(35% - 15px);
+            display: inline-block;
+        }
+        :host ::slotted(.inputData){
+            width: calc(55% - 15px);
+            display: inline-block;
+        }
+    }
+    </style>
+
+    <slot></slot>
+    
+  </template>
+  <script>
+    class EscDataentrega extends Polymer.Element {
+      static get is() { return "esc-dataentrega"; }
+      static get properties() {
+          return {
+
+          }
+      }
+    }
+    customElements.define(EscDataentrega.is, EscDataentrega);
+  </script>
+
+</dom-module>

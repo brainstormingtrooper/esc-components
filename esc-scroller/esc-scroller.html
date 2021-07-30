@@ -1,0 +1,283 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-scroller">
+	<template>
+		<style>
+			:host{
+				display: block;
+				width: 100%;
+			}
+			.scroller {
+				display: block;
+				overflow-x: scroll;
+				overflow: -moz-scrollbars-none;
+				position: relative;
+				margin: auto;
+				scroll-behavior: smooth;
+				padding-left: 100px;
+				box-sizing: border-box;
+			}
+
+			.scroller::-webkit-scrollbar {
+			    width: 0;
+			}
+
+			@media screen and (max-width: 620px){
+				.scroller{
+					width: 300px;
+				}
+			}
+
+			@media screen and (min-width: 621px){
+				.scroller{
+					width: 600px;
+				}
+			}
+
+			@media screen and (max-width: 450px){
+				:host{
+					margin-top: 50px;
+				}
+			}
+
+
+			.container{
+				height: 150px;
+			}
+
+		</style>
+
+		<div id="scroll" class="scroller">
+			<div id="container" class="container">
+				<slot id="content"></slot>
+			</div>
+		</div>
+
+	</template>
+
+	<script>
+	    class EscScroller extends Polymer.Element {
+	      	static get is() { return "esc-scroller"; }
+	      	static get properties() {
+	          	return {
+	          		x: {
+						type: Number,
+						notify: true,
+						value: 0
+					},
+					pushed:{
+						type: Boolean,
+						observer: "_observerPushed"
+					},
+					lastClientX:{
+						type: Number,
+						value: 0
+					},
+					intervalAutoScroll:{
+						type: Object
+					},
+					quantidadeFilhos:{
+						type: Number
+					}
+	          	}
+	      	}
+
+	      	ready(){
+	      		super.ready();
+
+				this.quantidadeFilhos = this.querySelectorAll('esc-introproduct').length;
+
+				this._setWidthContainer();
+
+				this.$.scroll.addEventListener("scroll", this._setX.bind(this));
+
+				setTimeout(()=>{
+					this._goInit();
+				},200)
+
+				this._initDragScroll();
+
+				this._autoScroll();
+
+			}
+
+
+	      	_observerPushed(pushed, anteriormente){
+				if(!(this.pushed === undefined)){
+					if(pushed && anteriormente === false){
+						this.inicio = new Date();
+						clearInterval(this.intervalAutoScroll);
+					} else if(!pushed && anteriormente){
+						this.fim = new Date();
+						this._momentumScroll(this.inicio, this.fim);
+						this._returnAnimation();
+					}
+
+					this._pushMoreLeft();
+					this._pushMoreRight();
+				}
+			}
+
+			_momentumScroll(inicio, fim){
+				if(inicio && fim && this.mouseMove){
+					let termino = fim - inicio;
+					if(termino >= 0){
+						termino = termino > 600 ? 600 : termino;
+						termino = this.scrollPositivo ? termino : termino * -1;
+						this._scroll(termino);
+					}
+				}
+			}
+
+			_initDragScroll(){
+
+				this.addEventListener("mouseup", this._mouseUp.bind(this));
+
+				this.addEventListener("mouseenter", this._mouseEnter.bind(this));
+
+				this.addEventListener("mousedown", this._mouseDown.bind(this));
+
+				this.addEventListener("mousemove", this._mouseMove.bind(this));
+
+				this.addEventListener("touchmove", this._mouseMove.bind(this), {passive: true});
+
+				this.addEventListener("touchend", this._mouseUp.bind(this));
+			}
+
+			_autoScroll(){
+				clearInterval(this.intervalAutoScroll);
+				this.intervalAutoScroll = setInterval(()=>{
+					let quantidadeItensMostrados = this._getQuantidadeItemsMostrados();
+					if(quantidadeItensMostrados === this.quantidadeFilhos){
+						this._goInit();
+					} else {
+						this._goNext();
+					}
+				},4500);
+			}
+
+			_getQuantidadeItemsMostrados(){
+				let numeroProdutosMostrados = this._getQuantidadeItemsMostradosPorVez();
+
+	            return parseInt(Math.abs((this.x - 100)/290)) + numeroProdutosMostrados;
+
+			}
+
+			_getQuantidadeItemsMostradosPorVez(){
+				let documentWidth = document.documentElement.clientWidth || window.innerWidth || 0;
+
+	            let numeroProdutosMostrados = 1;
+
+	            if (documentWidth >= 620) {
+	                numeroProdutosMostrados = 2;
+	            }
+
+	            return numeroProdutosMostrados;
+
+			}
+
+			_goInit(){
+				this.$.scroll.scrollLeft = 100;
+			}
+
+			_goNext(){
+
+				let diferenca = this.$.scroll.scrollLeft % 300;
+
+				this.$.scroll.scrollLeft += 300 - diferenca + 100;
+
+			}
+
+			_mouseMove(e){
+				this.mouseMove = true;
+				if(this.pushed){
+
+					this.newScrollX = e.clientX - this.lastClientX;
+					this.lastClientX = e.clientX;
+					this._scroll(this.newScrollX);
+
+					if(this.newScrollX >= 0){
+						this.scrollPositivo = true;
+					} else {
+						this.scrollPositivo = false;
+					}
+
+				}
+
+			}
+
+			_scroll(x){
+				this.$.scroll.scrollLeft -= x;
+				setTimeout(()=>{
+					this.mouseMove = false;
+				}, 30)
+
+			}
+
+			_pushMoreLeft(){
+				if(this.x < 100){
+					clearTimeout(this.timeMoreLeft);
+					this.timeMoreLeft = setTimeout(()=>{
+						this._goInit();
+					},40)
+				}
+			}
+
+			_pushMoreRight(){
+				let quantidadeItensMostradosPorVez = this._getQuantidadeItemsMostradosPorVez();
+
+				if(this.x > ((this.quantidadeFilhos - quantidadeItensMostradosPorVez)* 300)+100){
+					clearTimeout(this.timeMoreRight);
+					this.timeMoreRight = setTimeout(()=>{
+						this.$.scroll.scrollLeft = ((this.quantidadeFilhos - quantidadeItensMostradosPorVez)* 300)+100;
+					},40)
+				}
+			}
+
+			_returnAnimation(){
+				clearTimeout(this.timer);
+				this.timer = setTimeout(()=>{
+					this._pushMoreLeft();
+					this._pushMoreRight();
+					this._animation("smooth", false, this._autoScroll);
+				},500);
+			}
+
+			_mouseDown(e){
+				clearInterval(this.intervalAutoScroll);
+				this._animation("auto", true);
+				this.lastClientX = e.clientX;
+			}
+
+			_mouseEnter(e){
+				this._animation("smooth", false, this._autoScroll);
+			}
+
+			_mouseUp(){
+				this._animation("smooth", false, this._autoScroll);
+				this._pushMoreLeft();
+				this._pushMoreRight();
+			}
+
+			_animation(scrollBehavior, pushed, callback){
+				this.$.scroll.style.scrollBehavior = scrollBehavior;
+				this.pushed = pushed;
+				if(callback)
+					callback.apply(this);
+			}
+
+			_setWidthContainer(){
+				let tamanho = this.quantidadeFilhos * 300;
+				tamanho += 100;
+				this.$.container.style.width = tamanho + "px";
+			}
+
+			_setX(){
+				this.x = this.$.scroll.scrollLeft;
+			}
+
+	    }
+	    window.customElements.define(EscScroller.is, EscScroller);
+  	</script>
+
+</dom-module>

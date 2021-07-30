@@ -1,0 +1,245 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+
+
+<dom-module id="esc-contact">
+
+  <template>
+    <style>
+        :host {
+            display: block;
+            width: 100%;
+            background-color: #FFF;
+        }
+        ::slotted(.title){
+            text-align: center;
+            font-size: 1.6em;
+            font-family: Roboto-Light;
+        }
+        .bold{
+            font-weight: bold;
+        }
+        .erro {
+            color: #D32F2F;
+            text-align: center;
+            padding-top: 10px;
+            height: 19px;
+        }
+
+        @media screen and (max-width: 599px){
+            :host{
+                padding-top: 25px;
+                padding-bottom: 30px;
+            }
+            ::slotted(.title){
+                font-size: 1.3em;
+            }
+
+        }
+        @media screen and (min-width: 600px) and (max-width: 899px) {
+            :host{
+                padding-top: 30px;
+                padding-bottom: 35px;
+            }
+
+        }
+        @media screen and (min-width: 900px) {
+            :host{
+                padding-top: 50px;
+                padding-bottom: 40px;
+            }
+
+        }
+
+        .formulario{
+          min-height: 400px;
+        }
+
+        .formulario ::slotted(#formulario){
+            animation-duration: 1s;
+            -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+        }
+
+        .csspreloader{
+            text-align: center;
+            display: none;
+            min-height: 400px;
+            transform: translateY(calc(50% - 75px));
+        }
+
+        .csspreloader ::slotted(img) {
+            margin-top: 15px;
+            padding: 10px;
+            width: 50px;
+            height: 50px;
+            animation-duration: 1s;
+            -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+        }
+
+        .csspreloader > .text {
+            padding: 10px;
+            font-size: 1.4em;
+            color: #2A5FAF;
+            opacity: 0;
+            animation-duration: 1s;
+            -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+        }
+        #tel ::slotted(.tel){
+            color: #333;
+            text-align: center;
+            display: block;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        @-webkit-keyframes fadein {
+            from {
+                opacity: 0
+            }
+            to {
+                opacity: 1
+            }
+        }
+        @keyframes fadein {
+            from {
+                opacity: 0
+            }
+            to {
+                opacity: 1
+            }
+        }
+        @-webkit-keyframes fadeout {
+            from {
+                opacity: 1
+            }
+            to {
+                opacity: 0
+            }
+        }
+        @keyframes fadeout {
+            from {
+                opacity: 1
+            }
+            to {
+                opacity: 0
+            }
+        }
+        .csspreloader ::slotted(#img){
+            margin: auto;
+        }
+        .csspreloader ::slotted(#ok){
+            display: none;
+            width: 100px;
+            height: 100px;
+            margin: auto;
+        }
+
+    </style>
+
+    <slot name=title></slot>
+    <div class="formulario" id='formulario'><slot name='formulario'></slot></div>
+    <div class="erro">[[erro]]</div>
+
+
+    <div class="csspreloader" id="preloader">
+
+            <slot name='img'></slot>
+            <slot name='ok'></slot>
+
+            <div id="text" class="text">[[mensagemSucessoenviar]]</div>
+    </div>
+    <div id="tel"><slot name='tel'></slot></div>
+
+  </template>
+  <script>
+    class EscContact extends Polymer.Element {
+      static get is() { return "esc-contact"; }
+      static get properties() {
+          return {
+              mensagemSucessoenviar:{
+                  type: String,
+                  value: "Enviado com sucesso!"
+              },
+              bodySendEmail: {
+                  type: Object
+              },
+              erro: {
+                  type: String
+              },
+              erroEnviar:{
+                  type: String,
+                  value: "Tente novamente! Ou mande diretamente para: contato@esolution.inf.br"
+              },
+              erroRecaptcha:{
+                  type: String,
+                  value: "O reCAPTCHA achou que você é um Robô, atualize a página"
+              },
+              erroRecaptchaEmpty:{
+                  type: String,
+                  value: "Se você não é um robô clique no reCAPTCHA"
+              }
+          }
+      }
+      ready(){
+          super.ready();
+
+         }
+
+      initAnimacaoEnvioEmail(){
+
+          this.$.text.style.display = "none";
+          this.$.formulario.style.display = "none";
+          this.$.preloader.style.display = "block";
+          Polymer.FlattenedNodesObserver.getFlattenedNodes(this).filter(n => n.nodeType === Node.ELEMENT_NODE)[0].style.display = "block";
+      }
+
+      finishAnimaçãoEnvioEmail(){
+          this.$.formulario.style.display = "block";
+          this.$.preloader.style.display = "none";
+      }
+
+      initAnimacaoSucessoEnvioEmail(){
+            this.$.text.style.display = "block";
+            Polymer.FlattenedNodesObserver.getFlattenedNodes(this).filter(n => n.nodeType === Node.ELEMENT_NODE)[0].style.display = "none";
+            Polymer.FlattenedNodesObserver.getFlattenedNodes(this).filter(n => n.nodeType === Node.ELEMENT_NODE)[1].style.display = "block";
+            this.$.tel.style.display = "none";
+            this.$.text.style.animationName = "fadein";
+
+
+          setTimeout(() => {
+              try{
+                  document.getElementById('grecaptcha').reset();
+              }catch(e){
+                  window.location.hash = "contato";
+                  window.location.reload();
+              }
+
+             Polymer.FlattenedNodesObserver.getFlattenedNodes(this).filter(n => n.nodeType === Node.ELEMENT_NODE)[1].style.display = "none";
+              this.$.preloader.style.display = "none";
+              this.$.formulario.style.display = "block";
+              this.$.formulario.style.animationName = "fadein";
+              this.$.tel.style.display = "block";
+
+
+          }, 4000);
+      }
+
+      setError(message, time){
+          this.erro = message;
+
+          if(!time){
+              time = 5000;
+          }
+
+          setTimeout(()=> {
+              this.erro = ""
+          }, time);
+      }
+    }
+    customElements.define(EscContact.is, EscContact);
+  </script>
+
+</dom-module>

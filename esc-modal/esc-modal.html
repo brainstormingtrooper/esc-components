@@ -1,0 +1,137 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-modal">
+  <template>
+    <style include="shared-styles">
+
+      :host {
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0,0,0,0.7);
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation-name: fadein;
+        animation-duration: 0.5s;
+        -webkit-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+
+      .content-modal{
+        background: #fff;
+        box-sizing: border-box;
+        padding: 10px;
+        min-width: 50px;
+        min-height: 50px;
+      }
+
+      @media screen and (min-width: 800px){
+      	.content-modal{
+      		max-width: 80%;
+      		max-height: 80vh;
+      	}
+      }
+
+      .content-modal ::slotted(.modal-title){
+        font-size: 1.3em;
+        box-sizing: border-box;
+        margin: 0;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #cecece;
+      }
+
+      .content-modal ::slotted(.modal-content){
+        padding: 15px 10px 15px 10px;
+        box-sizing: border-box;
+        max-height: 60vh;
+        /*overflow-y: scroll;*/
+      }
+
+      .content-modal ::slotted(.modal-actions){
+        width: 100%;
+        /*border-top: 1px solid #cecece;*/
+        padding-top: 10px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+      }
+      .shadow{
+          box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);
+      }
+
+    </style>
+
+        <div class="content-modal" id='contentModal'>
+          <slot></slot>
+        </div>
+
+  </template>
+
+  <script>
+    class EscModal extends Polymer.Element {
+      static get is() { return 'esc-modal'; }
+      static get properties() {
+        return {
+          opened: {
+            type: Boolean,
+            value: false,
+            observer: "_observerOpened"
+          },
+          timeout:{
+          	type: Object
+        },
+        shadow:{
+            type: Boolean,
+            value: false,
+            observer: "_shadow"
+        }
+
+        }
+      }
+
+      ready(){
+        super.ready();
+        this.style.display = 'none';
+      }
+      _shadow(){
+          console.log(this.shadow);
+          if(this.shadow)
+              this.$.contentModal.classList.add('shadow');
+      }
+
+      open(){
+      	this.style.display = 'flex';
+      	this.classList.remove('fadeout');
+        clearTimeout(this.timeout);
+      }
+
+      close(){
+      	this.classList.add('fadeout');
+        this.timeout = setTimeout(()=>{
+            this.classList.remove('fadeout');
+            this.style.display = 'none';
+        },500)
+      }
+
+      _observerOpened(){
+        if(!(this.opened === undefined)){
+            if(this.opened){
+              this.open();
+            } else {
+              this.close();
+            }
+        }
+      }
+
+    }
+
+    window.customElements.define(EscModal.is, EscModal);
+
+  </script>
+</dom-module>

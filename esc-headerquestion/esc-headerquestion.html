@@ -1,0 +1,77 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-headerquestion">
+
+  <template>
+    <style>
+        :host {
+            width: 100%;
+            display: table;
+            position: relative;
+        }
+        .number{
+            min-width: 55px;
+            float: left;
+            text-align: center;
+            font-weight: bold;
+        }
+        .number::after{
+            padding-left: 5px;
+            padding-right: 5px;
+            content: "-";
+        }
+        .question{
+            width: calc(100% - 55px);
+            float: left;
+            text-align: justify;
+        }
+        .questionen{
+            font-size: 0.8em;
+            padding-top: 5px;
+            color: var(--secondary-text, #424242);
+            font-weight: bold;
+            font-style: italic;
+        }
+        .required{
+            color: var(--required, #B71C1C);
+        }
+    </style>
+
+    <div class="number">[[number]]</div>
+    <div class="question">
+        <div class="questionpt">
+            [[questionpt]]
+            <template is="dom-if" if="[[required]]">
+                <span class="required">*</span>
+            </template>
+        </div>
+        <div class="questionen">[[questionen]]</div>
+    </div>
+
+  </template>
+  <script>
+    class EscHeaderquestion extends Polymer.Element {
+      static get is() {
+          return "esc-headerquestion";
+      }
+      static get properties() {
+          return {
+              questionpt:{
+                  type: String
+              },
+              questionen:{
+                  type: String
+              },
+              number:{
+                  type: Number
+              },
+              required:{
+                  type: Boolean
+              }
+          }
+      }
+    }
+    customElements.define(EscHeaderquestion.is, EscHeaderquestion);
+  </script>
+
+</dom-module>

@@ -1,0 +1,127 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../../iron-icons/maps-icons.html">
+<link rel="import" href="../../iron-icons/places-icons.html">
+<link rel="import" href="../../iron-icons/av-icons.html">
+<link rel="import" href="../../iron-icons/editor-icons.html">
+
+<dom-module id="esc-service">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+			.service{
+				width: 350px;
+				box-sizing: border-box;
+				padding: 10px;
+				display: inline-flex;
+			}
+
+			.icon{
+				float: left;
+				padding: 0 20px 0 10px;
+			}
+
+			.iconLarge{
+				--iron-icon-height: 32px;
+			    --iron-icon-width: 32px;
+			    --iron-icon-fill-color:  #164AAF;
+			}
+
+			.text{
+				float: left;
+				width: 250px;
+			}
+
+			.titleService{
+				font-size: 1.2em;
+				padding: 5px 0 5px 0;
+				text-transform: uppercase;
+			}
+
+			.description{
+				text-align: justify;
+				font-size: 0.8em;
+				color: #5c5353;
+				line-height: 17px;
+
+			}
+
+			.clear{
+				clear: both;
+			}
+
+			@media screen and (max-width: 350px){
+				.icon{
+					display: none;
+					padding: 0;
+				}
+				.text{
+					padding: 0 10px 0 10px;
+					width: 100%;
+
+				}
+				.service{
+					width: 100%;
+				}
+			}
+
+			@media screen and (min-width: 351px)  and (max-width: 600px){
+				.service{
+					width: 90%;
+				}
+				.text{
+					width: 100%;
+				}
+			}
+
+			@media screen and (min-width: 601px) and (max-width: 699px){
+				.service{
+					width: 95%;
+				}
+				.text{
+					width: 90%;
+				}
+			}
+			.service > .text > .titleService ::slotted(*){
+				margin: 0px;
+			}
+			.service > .text > .description ::slotted(*){
+				margin: 0px;
+				font-size: 16px;
+			}
+
+		</style>
+
+			<div class="service">
+				<div class="icon">
+					<iron-icon class="iconLarge" icon="{{icon}}"></iron-icon>
+				</div>
+				<div class="text">
+					<div class="titleService">
+						<slot name='name'></slot>
+					</div>
+					<div class="description">
+						<slot name='description'></slot>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+	</template>
+	<script>
+	    class EscService extends Polymer.Element {
+	      	static get is() { return "esc-service"; }
+	      	static get properties() {
+	          	return {
+					icon: {
+						type: String
+					}
+	          	}
+	      	}
+	    }
+	    window.customElements.define(EscService.is, EscService);
+  	</script>
+
+</dom-module>

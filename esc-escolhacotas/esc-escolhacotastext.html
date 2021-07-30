@@ -1,0 +1,68 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-escolhacotastext">
+
+  <template>
+    <style>
+        :host {
+            width: calc(100%);
+            height: 60px;
+            display: block;
+            margin-top: 0px;
+        }
+        .text{
+            text-align: center;
+            font-size: 1.1em;
+            padding-top: 13px;
+            color: var(--primary-text, #212121);
+        }
+        .text-only{
+            padding-top: 25px;
+        }
+        .subtext{
+            text-align: center;
+            font-size: 0.9em;
+            padding-top: 5px;
+            color: var(--secondary-text, #424242);
+        }
+        .baseText{
+            text-indent: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        :host:active{
+            background-color: var(--item-active, #ECEFF1);
+        }
+    </style>
+
+    <div class="text baseText" id="text">[[text]]</div>
+    <div class="subtext baseText">[[subtext]]</div>
+
+  </template>
+  <script>
+    class EscEscolhacotastext extends Polymer.Element {
+      static get is() { return "esc-escolhacotastext"; }
+      static get properties() {
+          return {
+              text: {
+                  type: String
+              },
+              subtext: {
+                  type: String
+              }
+          }
+      }
+
+      ready(){
+          super.ready();
+            if (!this.subtext) {
+                this.$.text.classList.add('text-only');
+            }
+        }
+
+    }
+    customElements.define(EscEscolhacotastext.is, EscEscolhacotastext);
+  </script>
+
+</dom-module>

@@ -1,0 +1,989 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../paper-input/paper-input.html">
+<link rel="import" href="../../paper-dialog/paper-dialog.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../../paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../../paper-input/paper-input.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../../iron-icons/maps-icons.html">
+
+<link rel="import" href="../esc-action/esc-action.html">
+<link rel="import" href="../esc-dataentrega/esc-dataentrega.html">
+
+<dom-module id="esc-itemvenda">
+
+  <template>
+    <style>
+
+        :host {
+            display: block;
+            width: 100%;
+            height: 100px;
+            background-color: var(--primary-background, #FFFFFF);
+            padding-top: 5px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #CECECE;
+            padding-top: 15px;
+            padding-bottom: 15px;
+
+        }
+        :host:last-child, :host:nth-last-child(2){
+            border-bottom: 0px;
+        }
+        .detalhes{
+            width: calc(100% - 110px);
+            height: 100px;
+            display: inline-block;
+            border-right: 1px solid #CECECE;
+        }
+        .field{
+            width: 100%;
+            height: 32px;
+            margin-top: 1px;
+            white-space: nowrap;
+            overflow-y: hidden;
+            overflow-x: scroll;
+        }
+        .fieldVenda{
+            width: 100%;
+            height: 32px;
+            margin-top: 1px;
+            overflow: hidden;
+
+        }
+        .detalhes > .nome{
+            line-height: 32px;
+            text-indent: 5px;
+            font-size: 1.1em;
+        }
+        .detalhes > .descricao{
+            line-height: 32px;
+            text-indent: 5px;
+            font-size: 0.9em;
+        }
+        .detalhes > .acoes{
+        }
+        .noSale{
+            width: 100%;
+            border: 0px;
+        }
+        .acoes > .acao{
+            width: 32px;
+            height: 32px;
+            display: inline-block;
+            border-radius: 50%;
+            margin-left: 5px;
+
+        }
+        .acoes > .acao:active{
+            background-color: #d8d8d8;
+        }
+        .acao > img{
+            width: 23px;
+            height: 23px;
+            display: block;
+            margin: auto;
+            margin-top: 6px;
+            color: #4d4d4d;
+        }
+        .acao > iron-icon{
+            width: 23px;
+            height: 23px;
+            display: block;
+            margin: auto;
+            margin-top: 6px;
+            color: #4d4d4d;
+        }
+        .acoes > .acaoVenda{
+            width: 50%;
+            height: 100%;
+            float: left;
+            background-color: #555753;
+        }
+        .acoes > .adicionar{
+            background-color: #7CB342;
+        }
+        .acoes > .adicionar:active{
+            background-color: #689F38;
+        }
+        .acoes > .remover{
+            background-color: #CECECE;
+        }
+        .acoes > .remover:active{
+            background-color: #BABDB6;
+        }
+        .vendaItem{
+            width: 100px;
+            height: 100px;
+            display: inline-block;
+            margin-left: 2px;
+        }
+        .vendaItem > .preco{
+            line-height: 32px;
+            text-indent: 5px;
+        }
+        .vendaItem > .quantidade{
+            line-height: 32px;
+            text-indent: 5px;
+            font-size: 0.9em;
+        }
+        .vendaItem > .acoes{
+        }
+        .input{
+            width: 75px;
+            height: 24px;
+            float: right;
+            border: 0px;
+            font-size: 1.1em;
+            border-bottom: 1px solid #CECECE;
+
+        }
+        .input:disabled{
+            background-color: #FFF;
+        }
+        .fieldVenda > .icon{
+            width: 20px;
+            margin-top: 2px;
+            margin-left: 0px;
+            float: left;
+        }
+
+        .acaoVenda > .icon{
+            width: 25px;
+            height: 32px;
+            display: block;
+            margin: auto;
+        }
+
+        .paper-radio-button {
+            padding: 6px 12px 6px 12px;
+        }
+
+        .paper-input{
+            padding: 0px 12px 0px 12px;
+        }
+
+
+        /*Css paper dialog*/
+        .paper-dialog{
+            width: 80%;
+            max-height: 70%;
+            margin: auto;
+            z-index: 120 !important;
+        }
+
+
+        .paper-dialog > .header{
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 0px;
+            text-align: center;
+
+        }
+        .header > .title{
+            float: left;
+            text-align: center;
+            width: calc(100% - 24px);
+            font-size: 1.4em;
+            padding-top: 15px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .icon-close{
+            float: right;
+            transform: translateX(10px);
+            color: red;
+            margin-top: 10px;
+        }
+        .clear{
+            clear: both;
+        }
+
+        .paper-dialog > .buttons{
+            color: #FFF;
+            padding: 8px;
+        }
+
+        .paper-dialog > .buttons > .botaoConfirmarModal{
+            background-color: #1976d2;
+            width: 50%;
+        }
+        .paper-dialog > .buttons > .botaoConfirmarModalGrande{
+            background-color: #1976d2;
+            width: 100%;
+        }
+        .paper-dialog > .buttons > .botaoCancelarModal{
+            background-color: #FF5050;
+            width: 50%;
+        }
+
+        @media screen and (min-width: 600px){
+            .paper-dialog{
+                width: 400px;
+            }
+        }
+        .content{
+            width: 100%;
+            height: 40vh;
+            box-sizing: border-box;
+            position: relative;
+            margin: auto;
+            padding: 20px 20px 10px 20px;
+            overflow-y: scroll;
+
+        }
+        .textarea{
+            height: 30vh;
+            width: 98%;
+            resize: none;
+            position: relative;
+            margin: auto;
+        }
+        .textarea:focus{
+            outline: none;
+        }
+        @media screen and (max-height: 500px){
+            .textarea{
+                height: 25vh;
+            }
+            .content{
+                height: 35vh;
+            }
+            .content-maior{
+                height: 40vh !important;
+            }
+        }
+
+        .text{
+            font-size: 1.1em;
+        }
+
+        .info{
+            font-size: 1.1em;
+            color: #444444;
+        }
+
+        .estoques, .lotes{
+            padding: 10px 0px 10px 20px;
+            box-sizing: border-box;
+        }
+
+        .estoques > .text, .lotes > .text{
+            margin-bottom: 0px;
+            color: var(--third-text, #616161);
+        }
+
+        .radio-valor{
+            padding-bottom: 15px;
+        }
+
+        .precoPrincipal{
+            border-bottom: 1px solid #cecece !important;
+            width: -8px;
+            margin-top: 0px;
+            top: 0px;
+            width: 75px;
+            float: right;
+            height: 29px;
+            text-indent: 0px;
+        }
+        .precoUnitario{
+            background-color: #7cb342;
+            color: #FFF;
+            padding: 3px 5px 3px 5px;
+        }
+        .digitacaoManualInfo{
+            background-color: #323232;
+            display: inline-block;
+            transform: translate(-4px, 7px);
+            width: 23px;
+            height: 23px;
+            padding-left: 1px;
+            padding-right: 1px;
+        }
+        .pendencia{
+            color: #d32f2f !important;
+        }
+
+        .addEntrega{
+            display: block;
+            width: 50px;
+            height: 32px;
+            line-height: 32px;
+            text-align: center;
+            box-sizing: border-box;
+            margin-right: 10px;
+            margin-top: 10px;
+            color: #FFFFFF;
+            background-color: #7CB342;
+            float: right;
+        }
+        .entregaDisabilitada{
+            background-color: #cecece;
+        }
+        .contentEntrega{
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+            text-align: justify;
+        }
+    </style>
+
+    <paper-dialog id="modalEntrega" class="paper-dialog">
+        <div class="header">
+            <div class="title">Data de Entrega - [[nome]]</div>
+            <iron-icon class="icon-close" on-click="_closeModalEntrega" icon="icons:close"></iron-icon>
+            <div class="clear"></div>
+        </div>
+
+        <div class="content">
+            <div id="contentEntrega" class="contentEntrega">
+
+                <template is="dom-if" if="{{!_isEntregas(entregas)}}">
+                    Toque no "+" para adicionar a data de entrega do produto
+                </template>
+                <template is="dom-if" if="{{_isEntregas(entregas)}}">
+                    <div class="">Você tem {{quantidade}} produto(s). <span id="informacaoQuantidadeEntrega"></span></div>
+                </template>
+
+                <template id="repeatEntregas" is="dom-repeat" items="{{entregas}}">
+                    <esc-dataentrega>
+                        <paper-input id="quantidadeEntrega" class="inputQuantidade" type="number" label="Quantidade" on-keyup="_validaDataEntrega" required value="{{item.quantidade}}"></paper-input>
+                        <paper-input id="data" min="[[_getDateToday()]]" class="inputData" type="date" label="Data de entrega" on-change="_validaDataEntrega" required value="{{item.data}}"></paper-input>
+                        <div class="iconRemove" on-click="_removeElementoEntrega">
+                            <iron-icon icon="icons:close"></iron-icon>
+                        </div>
+                    </esc-dataentrega>
+                </template>
+
+            </div>
+            <div id="addEntrega" class="addEntrega" on-click="_addElementoEntrega"><iron-icon icon="add"></iron-icon></div>
+        </div>
+
+        <div class="buttons">
+            <paper-button class="botaoConfirmarModalGrande" raised dialog-confirm autofocus>Ok</paper-button>
+        </div>
+    </paper-dialog>
+
+    <paper-dialog id="modalObservacao" class="paper-dialog">
+        <div class="header">
+            <div class="title">Observação - [[nome]]</div>
+            <iron-icon class="icon-close" on-click="_closeModalObservacao" icon="icons:close"></iron-icon>
+            <div class="clear"></div>
+        </div>
+
+        <div class="content">
+            <textarea id="textAreaObservacao" value="{{observacao}}" on-keyup="_setValueObservacao" class="textarea"></textarea>
+        </div>
+
+        <div class="buttons">
+            <paper-button class="botaoCancelarModal" raised on-click="_limparObservacao" >Limpar</paper-button>
+            <paper-button class="botaoConfirmarModal" raised dialog-confirm autofocus>Ok</paper-button>
+        </div>
+    </paper-dialog>
+
+    <paper-dialog id="modalEstoque" class="paper-dialog">
+        <div class="header">
+            <div class="title">[[nome]]</div>
+            <iron-icon class="icon-close" on-click="_closeModalEstoque" icon="icons:close"></iron-icon>
+            <div class="clear"></div>
+        </div>
+
+        <div class="content">
+
+            <div class="text">Estoques do produto:</div>
+
+            <template is="dom-repeat" items="{{estoques}}">
+                <div class="estoques">
+                    <div class="text">Nome: <span class="info">{{item.Nome}}</span></div>
+                    <div class="text">Quantidade: <span class="info">{{item.quantidade}}</span></div>
+                </div>
+            </template>
+
+        </div>
+
+        <div class="buttons">
+            <paper-button class="botaoConfirmarModalGrande" raised dialog-confirm autofocus>Ok</paper-button>
+        </div>
+    </paper-dialog>
+
+    <paper-dialog id="modalLote" class="paper-dialog">
+        <div class="header">
+            <div class="title">[[nome]]</div>
+            <iron-icon class="icon-close" on-click="_closeModalLote" icon="icons:close"></iron-icon>
+            <div class="clear"></div>
+        </div>
+
+        <div class="content">
+
+            <div class="text">Lotes do produto:</div>
+
+            <template is="dom-repeat" items="{{lotes}}">
+                <div class="lotes">
+                    <template is="dom-if" if="[[item.Fabricação]]">
+                        <div class="text">Fabricação: <span class="info">{{item.Fabricacao}}</span></div>
+                    </template>
+
+                    <template is="dom-if" if="[[item.Lote]]">
+                        <div class="text">Lote: <span class="info">{{item.Lote}}</span></div>
+                    </template>
+
+                    <template is="dom-if" if="[[item.Partida]]">
+                        <div class="text">Partida: <span class="info">{{item.Partida}}</span></div>
+                    </template>
+                    <template is="dom-if" if="{{permiteUsuarioAcessarEstoque}}">
+                        <div class="text">Quantidade: <span class="info">{{item.quantidade}}</span></div>
+                    </template>
+                    <template is="dom-if" if="[[item.Vencimento]]">
+                        <div class="text">Vencimento: <span class="info">{{item.Vencimento}}</span></div>
+                    </template>
+
+                </div>
+            </template>
+
+        </div>
+
+        <div class="buttons">
+            <paper-button class="botaoConfirmarModalGrande" raised dialog-confirm autofocus>Ok</paper-button>
+        </div>
+    </paper-dialog>
+
+    <paper-dialog id="modalValor" class="paper-dialog">
+        <div class="header">
+            <div class="title">Valor Produto</div>
+            <iron-icon class="icon-close" on-click="_closeModalValor" icon="icons:close"></iron-icon>
+            <div class="clear"></div>
+        </div>
+
+        <div class="content content-maior">
+
+            <paper-radio-group id="radioGroupValor" on-change="_changeMetodoValor">
+                <paper-radio-button class="paper-radio-button" noink name="precoOriginal">Preco Original (R$ [[_formatarPreco(preco)]] x [[quantidade]] = R$ [[_calculaValorTotalVenda(preco, quantidade)]])</paper-radio-button>
+
+                <template is="dom-if" if={{quantidade}}>
+                    <paper-radio-button class="paper-radio-button" noink name="precoManual">
+                        <span>Preco Manual </span>
+                        <template is="dom-if" if={{isManual}}>
+                            <span>(R$ [[_formatarPreco(precoManual)]] x [[quantidade]] = R$ [[_calculaValorTotalVenda(precoManual, quantidade)]])</span>
+                        </template>
+
+                    </paper-radio-button>
+                    <template is="dom-if" if={{isManual}}>
+                        <paper-input class="paper-input" type="number" label="Valor Total" value={{precoManualTotalDigitado}} on-keyup="_observerDigitacaoManual"></paper-input>
+                        <paper-input class="paper-input" type="number" label="Valor Unitário" value={{precoManualUnitarioDigitado}} on-keyup="_observerDigitacaoManualUnitario"></paper-input>
+                    </template>
+                </template>
+
+            </paper-radio-group>
+
+        </div>
+
+        <div class="buttons">
+            <paper-button class="botaoConfirmarModalGrande" raised dialog-confirm autofocus on-click="_closeModalValor">Ok</paper-button>
+        </div>
+
+    </paper-dialog>
+
+
+    <div id="detalhesItem" class="detalhes">
+        <div class="field nome">[[nome]]</div>
+        <div class="field descricao">
+            <span class="precoUnitario">Und. R$ [[_showValorUnitario(preco, precoManual,isManual)]]</span>
+            <template is="dom-if" if="[[isManual]]">
+                <img  src="./icons/ic_keyboard_white_24px.svg" class="digitacaoManualInfo"></span>
+            </template>
+            <span>[[descricao]] </span>
+
+        </div>
+        <div class="field acoes">
+            <template is="dom-if" if="{{exigeEntrega}}">
+                <esc-action id="entregaItem" pending="{{pendenciaEntrega}}" on-click="_openModalEntrega" icon="./img/icons/ic_local_shipping_black_24px.svg"></esc-action>
+            </template>
+
+            <template is="dom-if" if="{{permiteUsuarioAcessarEstoque}}">
+                <esc-action on-click="_openModalEstoque" icon="./img/icons/ic_store_black_24px.svg"></esc-action>
+            </template>
+
+            <template is="dom-if" if="{{lotes.length}}">
+                <esc-action on-click="_openModalLote" icon="./img/icons/ic_lotes_gray_24px.png"></esc-action>
+            </template>
+
+            <esc-action id="observacaoItem" on-click="_openModalObservacao" icon="./img/icons/ic_assignment_black_24px.svg" filled="[[observacao]]"></esc-action>
+
+        </div>
+    </div>
+    <div id="vendaItem" class="vendaItem">
+
+        <div class="fieldVenda preco">
+            <img class="icon" src="./icons/ic_attach_money_black_24px.svg">
+            <div id="preco" class="precoPrincipal" on-click="_openModalValor">[[_showValorTotalVenda(preco, precoManual, isManual,  quantidade)]]</div>
+        </div>
+        <div class="fieldVenda quantidade">
+            <img class="icon" src="./icons/ic_add_shopping_cart_black_24px.svg">
+            <input id="quantidade" class="input" type="number" name="" on-keyup="_setValuePress" value="{{quantidade}}">
+        </div>
+        <div class="fieldVenda acoes">
+            <div class="acaoVenda remover" on-click="_removerUm">
+                <img class="icon" src="./icons/ic_remove_white_24px.svg">
+            </div>
+            <div class="acaoVenda adicionar" on-click="_adicionarUm">
+                <img class="icon" src="./icons/ic_add_white_24px.svg">
+            </div>
+        </div>
+
+    </div>
+  </template>
+  <script>
+    class EscItemvenda extends Polymer.Element {
+      static get is() { return "esc-itemvenda"; }
+      static get properties() {
+          return {
+              id: {
+                  type: Number,
+                  notify: true,
+              },
+              nome: {
+                  type: String,
+                  value: "Produto"
+              },
+              descricao: {
+                  type: String
+              },
+              preco: {
+                  type: Number,
+                  notify: true,
+                  value: 0,
+                  observer: '_propagateChangeEvent'
+              },
+              precoManual: {
+                  type: Number,
+                  notify: true,
+                  value: 0,
+                  observer: '_propagateChangeEvent'
+              },
+              precoManualTotalDigitado: {
+                  type: Number
+              },
+              precoManualUnitarioDigitado: {
+                  type: Number
+              },
+              isManual: {
+                  type: Boolean,
+                  notify: true,
+                  value: false,
+                  observer: '_propagateChangeEvent'
+              },
+              quantidade: {
+                  type: Number,
+                  notify: true,
+                  value:0,
+                  observer: '_propagateChangeEvent'
+              },
+              estoques:{
+                  type: Array
+              },
+              controlaPeca:{
+                  type: Boolean
+              },
+              lotes:{
+                  type: Array
+              },
+              validarDataEntregaTimeOut:{
+                  type: Object
+              },
+              entregas:{
+                  type: Array,
+                  value: [],
+                  observer: '_propagateChangeEvent',
+                  notify: true
+              },
+              controlaLote:{
+                  type: Boolean
+              },
+              observacao:{
+                  type: String,
+                  notify: true,
+                  observer: '_propagateChangeEvent'
+              },
+              pendencia: {
+                  type: Boolean,
+                  value: false,
+                  notify: true,
+              },
+              permiteUsuarioAcessarEstoque:{
+                  type: Boolean
+              },
+              noSale:{
+                  type: Boolean,
+                  value: false
+              },
+              pendenciaEntrega:{
+                  type: Boolean,
+                  notify: true,
+                  value: false
+              },
+              exigeEntrega:{
+                  type: Boolean,
+                  value: false
+              }
+          }
+      }
+      static get observers() {
+          return [
+              '_observerPendencia(preco, precoManual, isManual, quantidade)',
+              '_observerQuantidade(quantidade)'
+          ]
+        }
+
+      ready(){
+          super.ready();
+          this.permiteUsuarioAcessarEstoque = window.doc.document.GrupoEmpresa.Empresas[$state.params.empresa].PermiteConsultarEstoque;
+
+          if(this.noSale){
+              this.$.vendaItem.hidden = true;
+              this.$.detalhesItem.classList.add('noSale');
+              this.$.observacaoItem.hidden = true;
+              if(this.exigeEntrega){
+                  this.$.entregaItem.hidden = true;
+              }
+          }
+          this._setPrecoManualDigitado();
+
+          this.$.radioGroupValor.selected = this.isManual ? "precoManual" : "precoOriginal";
+
+
+          this._regrasEstoque();
+          this._regrasLote();
+      }
+      _observerQuantidade(){
+          this._setPrecoManualDigitado();
+
+          if(this.quantidade === 0){
+              this.entregas = [];
+          }
+          if(this.quantidade > 0){
+              this.$.addEntrega.classList.remove('entregaDisabilitada');
+          } else {
+              this.$.addEntrega.classList.add('entregaDisabilitada');
+          }
+          this._validaDataEntrega();
+
+      }
+
+      _isEntregas(entregas){
+          if(entregas && entregas.length){
+              return true;
+          }
+          return false;
+      }
+
+      _observerPendencia(preco, precoManual, isManual, quantidade){
+
+          if(!precoManual){
+              precoManual = 0;
+          }
+
+          if(quantidade > 0){
+              if((isManual && precoManual === 0) || (!isManual && preco === 0)){
+                  this.pendencia = true;
+                  this.$.preco.classList.add('pendencia');
+              }else{
+                  this.pendencia = false;
+                  this.$.preco.classList.remove('pendencia');
+              }
+          }else{
+              this.pendencia = false;
+              this.$.preco.classList.remove('pendencia');
+          }
+
+      }
+
+      _validaDataEntrega(){
+
+          if(this.exigeEntrega){
+
+              clearTimeout(this.validarDataEntregaTimeOut);
+
+              this.validarDataEntregaTimeOut = setTimeout(()=>{
+
+                  this._propagateChangeEvent();
+
+                  let quantidadeTotal = 0;
+                  let dataValida = true;
+
+                  if(this.entregas === undefined){
+                      this.entregas = [];
+                  }
+
+                  this.entregas.forEach((item)=>{
+                      if(item.quantidade === undefined || item.quantidade === ""){
+                          item.quantidade = 0;
+                      }
+                      quantidadeTotal += parseInt(item.quantidade);
+
+                      if(!item.data){
+                          dataValida = false;
+                      }
+                  })
+
+                  if(quantidadeTotal !== this.quantidade || !dataValida){
+                      this.pendenciaEntrega = true;
+                  } else{
+                      this.pendenciaEntrega = false;
+                  }
+
+                  if(this._isEntregas(this.entregas)){
+
+                      if(quantidadeTotal <= this.quantidade){
+                          this.querySelector("#informacaoQuantidadeEntrega").innerHTML = "Ainda falta adicionar " + (this.quantidade - quantidadeTotal) + " produto(s).";
+                      } else{
+                          this.querySelector("#informacaoQuantidadeEntrega").innerHTML = "Você adicionou " + (quantidadeTotal - this.quantidade) + " produto(s) a mais.";
+                      }
+                  }
+
+              }, 500);
+          }
+      }
+
+      _addElementoEntrega(){
+          let entrega ={
+              data: undefined,
+              quantidade: undefined
+          }
+
+          if(this.entregas === undefined){
+              this.entregas =[];
+          }
+          if(this.quantidade > 0){
+
+              let entregasCopy = clone(this.entregas);
+              entregasCopy.push(entrega);
+              this.entregas = entregasCopy;
+
+              this._validaDataEntrega();
+          }
+
+
+      }
+
+      _removeElementoEntrega(event){
+          let index = this.$.repeatEntregas.indexForElement(event.currentTarget);
+
+          let entregasCopy = clone(this.entregas);
+          entregasCopy.splice(index, 1);
+          this.entregas = entregasCopy;
+
+          this._validaDataEntrega();
+      }
+
+      _calculaValorTotalVenda(valor, quantidade){
+
+          let resultado = valor * quantidade;
+
+          return this._formatarPreco(isNaN(resultado) ? 0 : resultado);
+
+      }
+
+      _showValorUnitario(preco, precoManual,isManual){
+          valor = isManual ? precoManual : preco;
+
+          return this._formatarPreco(valor);
+      }
+
+      _showValorTotalVenda(preco, precoManual,isManual,  quantidade){
+
+          resultado = isManual ? precoManual * quantidade : preco * quantidade
+
+          return this._formatarPreco(resultado);
+      }
+
+      _observerDigitacaoManual(){
+
+          let temp = this.precoManualTotalDigitado;
+
+          if(typeof temp === 'string')
+              temp = temp.replace(',','.');
+
+          this.precoManual = parseFloat(temp) / this.quantidade;
+          this.precoManualUnitarioDigitado = this.precoManual.toFixed(2);
+
+      }
+
+      _observerDigitacaoManualUnitario(){
+
+          let temp = this.precoManualUnitarioDigitado;
+
+          if(typeof temp === 'string')
+              temp = temp.replace(',','.');
+
+          this.precoManual = parseFloat(temp);
+          this.precoManualTotalDigitado = (this.precoManual * this.quantidade).toFixed(2);
+
+      }
+
+      _changeMetodoValor(){
+
+          setTimeout(()=> {
+              console.log(this.$.radioGroupValor.selected);
+              if(this.$.radioGroupValor.selected === "precoManual"){
+                  this.isManual = true;
+              }else{
+                  this.isManual = false;
+              }
+          }, 300);
+
+      }
+
+      _formatarPreco(valor){
+
+          if(typeof valor === 'string')
+              valor = valor.replace(',','.');
+
+          let valorNumber = parseFloat(valor);
+
+          return VMasker.toMoney(valorNumber.toFixed(2));
+      }
+
+      _getDateToday(){
+          let d = new Date();
+          let month = '' + (d.getMonth() + 1);
+          let day = '' + d.getDate();
+          let year = d.getFullYear();
+
+          if (month.length < 2) month = '0' + month;
+          if (day.length < 2) day = '0' + day;
+
+          return [year, month, day].join('-');
+      }
+
+      _propagateChangeEvent(){
+          if(!(this.preco === undefined || this.precoManual === undefined|| this.isManual=== undefined || this.quantidade=== undefined || this.entregas === undefined|| this.observacao === undefined)){
+              var event = new Event('venda');
+              this.dispatchEvent(event);
+          }
+
+      }
+
+      _setPrecoManualDigitado(){
+          if(this.isManual){
+              this.precoManualUnitarioDigitado = this.precoManual.toFixed(2);
+              this.precoManualTotalDigitado = (this.precoManual * this.quantidade).toFixed(2);
+          }
+      }
+
+      _regrasLote(){
+
+          this.lotes.forEach(item=>{
+              item.quantidade = this.controlaLote ? item.QtdSaldoPeca : item.QtdSaldo;
+          });
+
+      }
+
+      _regrasEstoque(){
+
+          this.estoques.forEach(item => {
+              item.quantidade = this.controlaPeca ? item.QtdSaldoPeca : item.QtdSaldo;
+
+              if(!item.quantidade){
+                  item.quantidade = 0;
+              }
+          });
+
+      }
+
+      _setValuePress(event){
+
+          let value = parseInt(this.$.quantidade.value);
+
+          if(isNaN(value)){
+              this.$.quantidade.value = 0;
+              this.quantidade = 0;
+              return;
+          }
+
+          this.quantidade = value;
+
+      }
+
+      _setValueObservacao(){
+          this.observacao = this.$.textAreaObservacao.value;
+      }
+
+      _limparObservacao(){
+          this.observacao = "";
+
+          setTimeout(()=>{
+              this.$.textAreaObservacao.focus();
+          }, 10)
+      }
+
+      _openModalEntrega(){
+          this.$.modalEntrega.open();
+      }
+
+      _closeModalEntrega(){
+          this.$.modalEntrega.close();
+      }
+
+      _openModalLote(){
+          this.$.modalLote.open();
+      }
+
+      _closeModalLote(){
+          this.$.modalLote.close();
+      }
+
+      _openModalEstoque(){
+          this.$.modalEstoque.open();
+      }
+
+      _closeModalEstoque(){
+          this.$.modalEstoque.close();
+      }
+
+      _openModalObservacao(){
+          this.$.modalObservacao.open();
+          setTimeout(()=>{
+              this.$.textAreaObservacao.focus();
+          }, 10);
+      }
+
+      _openModalValor(){
+          this._setPrecoManualDigitado();
+          this.$.modalValor.open();
+      }
+
+      _closeModalObservacao(){
+          this.$.modalObservacao.close();
+      }
+
+      _closeModalValor(){
+          this.$.modalValor.close();
+      }
+
+      _adicionarUm(){
+          this.quantidade++;
+      }
+
+      _removerUm(){
+
+          if(this.quantidade > 0){
+              this.quantidade--;
+          }
+      }
+
+      getQuantidade(){
+          return this.quantidade;
+      }
+
+      getId(){
+          return this.id;
+      }
+    }
+    customElements.define(EscItemvenda.is, EscItemvenda);
+  </script>
+
+</dom-module>

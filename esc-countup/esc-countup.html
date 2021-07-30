@@ -1,0 +1,141 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-icons/social-icons.html">
+<link rel="import" href="../../iron-icons/device-icons.html">
+<link rel="import" href="../../iron-icons/communication-icons.html">
+
+<script type="text/javascript" src="js/countUp.js"></script>
+
+<dom-module id="esc-countup">
+  <template>
+    <style>
+      :host {
+          display: block;
+
+      }
+
+        .number{
+            letter-spacing: 2px;
+            margin-top: 20px;
+            margin-bottom: 20px !important;
+        }
+
+        .color{
+            color: #2e3436;
+        }
+
+    </style>
+            <div id="divicon"><slot name='icon'></slot></div>
+            <div id="number" class="number">
+                <div class="color" id="myTargetElement"></div>
+                <div class="color">{{suffix}}</div>
+            </div>
+
+  </template>
+
+  <script>
+    class EscCountup extends Polymer.Element {
+      static get is() { return 'esc-countup'; }
+      static get properties() {
+          return {
+              prefixo:{
+                  type: String
+              },
+              suffix: {
+                  type: String
+              },
+              inicio: {
+                  type: Number,
+                  value: 0
+              },
+              fim: {
+                  type: Number
+              },
+              casasdecimais: {
+                  type: Number,
+                  value: 0
+              },
+              separador: {
+                  type: String,
+                  value: '.'
+              },
+              separadordecimal: {
+                  type: String,
+                  valeu: ','
+              },
+              timer: {
+                  type: Number,
+                  value: 2.5
+              },
+              icon: {
+                  type: String
+              },
+              src:{
+                  type: String
+              },
+              font: {
+                  type: String,
+                  value: 2.5
+              },
+              iconsize: {
+                  type: Number,
+                  value: 74
+              },
+              iconcolor: {
+                  type: String,
+                  value:  '#164aaf'
+              }
+
+          };
+
+      }
+
+      ready(){
+          super.ready();
+          this.$.number.style.fontSize = this.font+"em";
+          this._creaticon();
+
+      }
+
+      startcount(){
+          this._countup();
+      }
+
+      _creaticon(){
+          // console.log()
+            if(this.icon){
+             this.$.divicon.appendChild(document.createElement("iron-icon"));
+             this.$.divicon.querySelector('iron-icon').setAttribute('icon',this.icon);
+             this.$.divicon.querySelector('iron-icon').style.width = this.iconsize+"px";
+             this.$.divicon.querySelector('iron-icon').style.height = this.iconsize+"px";
+             this.$.divicon.querySelector('iron-icon').style.color = this.iconcolor;
+            }else{
+                Polymer.FlattenedNodesObserver.getFlattenedNodes(this).filter(n => n.nodeType === Node.ELEMENT_NODE)[0].style.width = this.iconsize+"px";
+                Polymer.FlattenedNodesObserver.getFlattenedNodes(this).filter(n => n.nodeType === Node.ELEMENT_NODE)[0].style.height = this.iconsize+"px";
+            }
+      }
+
+      _countup(){
+            let options = {
+              useEasing: true,
+              useGrouping: true,
+              separator: this.separador,
+              decimal: this.separadordecimal,
+              prefix: this.prefixo,
+
+            };
+
+            let countup = new CountUp(this.shadowRoot.querySelector('#myTargetElement'), this.inicio, this.fim, this.casasdecimais, this.timer, options);
+
+            if (!countup.error) {
+                countup.start();
+
+            } else {
+              console.error(countup.error);
+            }
+        }
+
+     }
+
+    window.customElements.define(EscCountup.is, EscCountup);
+  </script>
+</dom-module>

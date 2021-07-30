@@ -1,0 +1,43 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-simpleitem">
+	<template>
+		<style>
+			:host {
+				width: 100%;
+				height: 60px;
+				line-height: 60px;
+				text-indent: 20px;
+				font-size: 1.1em;
+				border-bottom: 1px solid var(--border-color, #BDBDBD);
+				display: block;
+				background-color: var(--primary-background, #FFFFFF);
+				position: relative;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			:host:active{
+				background-color: var(--item-active, #ECEFF1);
+			}
+			:host:last-child{
+				border-bottom: 0px;
+			}
+		</style>
+
+		<slot></slot>
+
+	</template>
+	<script>
+	    class EscSimpleitem extends Polymer.Element {
+	      	static get is() { return "esc-simpleitem"; }
+	      	static get properties() {
+	          	return {
+
+	          	}
+	      	}
+	    }
+	    window.customElements.define(EscSimpleitem.is, EscSimpleitem);
+  	</script>
+
+</dom-module>

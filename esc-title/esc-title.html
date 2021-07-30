@@ -1,0 +1,61 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-title">
+	<template>
+		<style>
+			:host{
+				display: block;
+			}
+
+			::slotted(.title){
+				text-align: center;
+				padding: 30px 20px 10px 20px;
+				font-family: Roboto-Light;
+				font-size: 1.8em;
+				color: #164AAF;
+				font-weight: normal;
+				margin: 0px;
+			}
+			::slotted(.left){
+				text-align: left;
+			}
+
+			::slotted(.subtitle){
+				text-align: center;
+				padding:  0 10px 30px 10px;
+				font-size: 1.3em;
+				font-family: Roboto-Light;
+				color: #2E3436;
+				font-weight: normal;
+				margin: 0px;
+			}
+
+			@media screen and (max-width: 600px) {
+				::slotted(.subtitle){
+					padding-bottom: 20px;
+				}
+			}
+
+			@media screen and (min-width: 601px) and (max-width: 799px){
+				::slotted(.subtitle){
+					padding-bottom: 30px;
+				}
+			}
+
+		</style>
+
+		<slot></slot>
+
+	</template>
+	<script>
+	    class EscTitle extends Polymer.Element {
+	      	static get is() { return "esc-title"; }
+	      	static get properties() {
+	          	return {
+	          	}
+	      	}
+	    }
+	    window.customElements.define(EscTitle.is, EscTitle);
+	</script>
+
+</dom-module>

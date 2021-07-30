@@ -1,0 +1,64 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../../iron-icons/hardware-icons.html">
+
+<dom-module id="esc-simpleinfo">
+	<template>
+		<style>
+			:host {
+				display: block;
+				width: 100%;
+				color: #CECECE;
+				padding:  5px;
+			}
+
+			.icon {
+			    --iron-icon-height: 23px;
+			    --iron-icon-width: 23px;
+			    display: inline-block;
+			    transform: translateY(-2px);
+			}	
+
+			.info{
+				display: inline;
+				font-weight: bold;
+			}
+
+			.info:after{
+				content: " : ";
+			}
+
+			.text{
+				display: inline;
+			}
+
+		</style>
+	
+		<iron-icon class="icon" icon="{{icon}}"></iron-icon>
+		<div class="info">[[info]]</div> 
+		<div class="text">[[textinfo]]</div>	
+		
+	</template>
+	<script>
+	    class EscSimpleinfo extends Polymer.Element {
+	      	static get is() { return "esc-simpleinfo"; }
+	      	static get properties() {
+	          	return {
+					icon:{
+						type: String
+					},
+					info:{
+						type: String
+					},
+					textinfo:{
+						type: String	
+					} 
+	          	}
+	      	}
+	    }
+	    window.customElements.define(EscSimpleinfo.is, EscSimpleinfo);
+  	</script>
+</dom-module>
+
+
+

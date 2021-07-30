@@ -1,0 +1,203 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<link rel="import" href="../esc-title/esc-title.html">
+
+<dom-module id="esc-solutions">
+	<template>
+		<style>
+			:host{
+				display: block;
+				min-height: calc(100vh - 110px);
+				padding-top: 70px;
+			}
+			.content-primary{
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex-flow: row wrap;
+				margin: 20px;
+			}
+
+			.content-image{
+				display: block;
+				-moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+			}
+
+			.content-image ::slotted(img){
+				display: block;
+				margin: auto;
+			}
+
+			.content-text{
+				display: block;
+				margin-top: 0px;
+				box-sizing: border-box;
+				padding-right: 15px;
+				padding-left: 15px;
+			}
+
+			.content-text ::slotted(p){
+				font-family: Roboto-Light;
+				font-size: 1.1em;
+				color: #2E3436;
+				text-align: justify;
+			}
+
+			.content-text > .descricao{
+				margin: 0;
+				padding-bottom: 10px;
+				padding-top: 0;
+			}
+
+			.content-text ::slotted(ul){
+				font-family: Roboto-Light;
+				font-size: 1.1em;
+				color: #2E3436;
+				text-align: justify;
+				margin: 0;
+				padding-bottom: 5px;
+				padding-top: 0;
+				padding-left: 40px;
+				list-style: url('/images/icones/ic_panorama_fish_eye_black_18px.svg');
+			}
+
+
+
+			.content-text ::slotted(ul) > .list > iron-icon{
+				width: 13px;
+				transform: translateY(-2px);
+				margin-right: 5px;
+			}
+
+			.clear{
+				clear: both;
+			}
+
+			.center{
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				align-items: center;
+				margin-bottom: 20px 
+			}
+
+			@media screen and (max-width: 499px){
+				.content-image{
+					width: 300px;
+					max-height: 300px;
+					margin: 10px;
+					margin-bottom: 10px;
+				}
+
+				.content-image ::slotted(img){
+					width: 90%;
+					display: block;
+					margin: 10px;
+				}
+
+				.content-text{
+					padding: 5px 20px 0px 20px;
+				}
+
+			}
+
+			@media screen and (min-width: 500px) and (max-width: 749px){
+				.content-image{
+					width: 400px;
+					margin: auto;
+					margin-bottom: 15px;
+				}
+
+				.content-image ::slotted(img){
+					width: 90%;
+					display: block;
+					margin: 10px;
+				}
+
+				.content-text{
+					padding: 5px 20px 5px 20px;
+					font-size: 1em;
+					margin: 10px;
+				}
+
+				.content-text ::slotted(p){
+					font-size: 1.2em;
+				}
+			}
+
+			@media screen and (min-width: 750px) {
+				.content-image{
+					width: 50%;
+					float: left;
+					margin-bottom: 20px;
+				}
+
+				.content-image ::slotted(img){
+					width: 375px;
+					margin: auto;
+					display: block;
+					padding: 10px;
+					box-sizing: border-box;
+				}
+
+				.content-text{
+					width: 50%;
+					float: right;
+					padding: 5px 30px 5px 30px;
+					margin-bottom: 20px;
+				}
+
+				.content-text ::slotted(p){
+					font-size: 1.2em;
+					padding: 5px 20px 5px 20px;
+				}
+				.content-text ::slotted(ul){
+					padding-left: 60px;
+				}
+
+			}
+
+		</style>
+
+        <div class="content-primary">
+        	<div class="content-text">
+				<slot name='title'></slot>
+	        	<slot name="textoDireita"></slot>
+	
+		        <slot name="descricaoTopico"></slot>
+	
+		        <slot name="lista"></slot>
+	        </div>
+	
+			<div class="content-image">
+					<slot name="image"></slot>
+			</div>
+        </div>
+
+        <div class="clear"></div>
+
+        <slot name="subtitle"></slot>
+
+        <div class="center">
+        	<slot></slot>
+        </div>
+
+
+	</template>
+	<script>
+	    class EscSolutions extends Polymer.Element {
+	      	static get is() { return "esc-solutions"; }
+	      	static get properties() {
+	          	return {
+
+	          	}
+	        }
+	    }
+
+
+	    window.customElements.define(EscSolutions.is, EscSolutions);
+
+	</script>
+</dom-module>

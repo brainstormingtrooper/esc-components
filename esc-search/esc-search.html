@@ -1,0 +1,65 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-search">
+	<template>
+		<style>
+			:host {
+				width: 100%;
+				height: 69px;
+				display: block;
+				background-color: var(--primary-color, #1976D2);
+				top: 0px;
+			}
+			:host ::slotted(input){
+				-webkit-appearance: none;
+				width: calc(100% - 120px);
+			    height: 40px;
+			    display: block;
+			    float: left;
+			    margin: 12px 0px 12px 12px;
+			    font-size: 1.1em;
+			    border: 0px;
+			    text-indent: 20px;
+			}
+			:host ::slotted(input:focus){
+				outline: none;
+			}
+			:host ::slotted(.clear){
+				width: 40px;
+				height: 40px;
+				float: left;
+				display: block;
+				background-color: #FFF;
+				margin-top: 12px;
+
+			}
+			:host ::slotted(.clear:active){
+				background-color: #CECECE;
+			}
+			:host ::slotted(.search){
+				width: 50px;
+				height: 100%;
+				float: right;
+				display: block;
+				margin-right: 10px;
+			}
+
+
+		</style>
+
+		<slot></slot>
+
+	</template>
+	<script>
+	    class EscSearch extends Polymer.Element {
+	      	static get is() { return "esc-search"; }
+	      	static get properties() {
+	          	return {
+
+	          	}
+	      	}
+	    }
+	    window.customElements.define(EscSearch.is, EscSearch);
+  	</script>
+
+</dom-module>

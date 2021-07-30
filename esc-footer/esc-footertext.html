@@ -1,0 +1,107 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="esc-footertext">
+
+  <template>
+    <style>
+        :host{
+            display: block;
+        }
+
+        .title{
+            width: 100%;
+            height: 100%;
+            padding: 0px 20px 0px 20px;
+            box-sizing: border-box;
+            margin: auto;
+            font-size: 1.3em;
+            color: #FFF;
+        }
+
+        .descricao{
+            width: 100%;
+            height: 100%;
+            padding: 10px 20px 15px 20px;
+            color: #CECECE;
+            text-align: justify;
+            box-sizing: border-box;
+            margin: auto;
+        }
+
+        .content-text{
+            display: block;
+            padding-bottom: 3px;
+            padding-top: 3px;
+        }
+
+         .content-text > ::slotted(.text){
+            width: 100%;
+            height: 100%;
+            padding: 10px 20px 5px 20px;
+            color: #CECECE;
+            text-align: justify;
+            box-sizing: border-box;
+            margin: auto;
+        }
+
+        .content-text > ::slotted(ul){
+            font-family: Roboto-Light;
+            text-align: justify;
+            margin: 0;
+            padding-bottom: 5px;
+            padding-left: 40px;
+            list-style: url('../../../img/icon/ic_panorama_fish_eye_white_18px.svg');
+        }
+
+
+        :host ::slotted(.clear){
+            clear: both;
+        }
+
+    </style>
+
+    <div class="title" id='title'>[[title]]</div>
+
+    <div id='contentText'>
+        <slot name='text' id='text'></slot>
+        <slot name='ul' id='ul'></slot>
+    </div>
+
+
+    <div class="descricao">
+        [[description]]
+    </div>
+
+  </template>
+  <script>
+    class EscFootertext extends Polymer.Element {
+      static get is() { return "esc-footertext"; }
+      static get properties() {
+          return {
+              title:{
+                  type: String
+              },
+              description:{
+                  type: String
+              }
+          }
+      }
+    ready(){
+        super.ready();
+
+        this._addDive();
+        }
+
+    _addDive(){
+        if(this.shadowRoot.querySelector('#ul').assignedNodes({flatten:true}).filter(n => n.nodeType === Node.ELEMENT_NODE).length ||
+           this.shadowRoot.querySelector('#text').assignedNodes({flatten:true}).filter(n => n.nodeType === Node.ELEMENT_NODE).length
+         > 0){
+            this.$.contentText.classList.add('content-text');
+            }
+        }
+
+    }
+    customElements.define(EscFootertext.is, EscFootertext);
+  </script>
+
+</dom-module>

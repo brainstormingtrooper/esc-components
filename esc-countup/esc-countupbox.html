@@ -1,0 +1,225 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../esc-title/esc-title.html">
+
+
+<dom-module id="esc-countupbox">
+    <template>
+    <style>
+      :host {
+          display: block;
+        }
+      .box{
+          position: relative;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-around;
+          align-items: center;
+          flex-wrap: wrap;
+          opacity: 0;
+          width: 100%;
+      }
+
+      .counterbox{
+          text-align: center;
+          width: 400px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          padding: 20px;
+      }
+      .principal{
+          display: flex;
+          text-align: center;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+      }
+      .title{
+          display: flex;
+          position: absolute;
+          width: 100%;
+          height: 70vh;
+          align-items: center;
+          justify-content: center;
+      }
+      .subtitle{
+          display: flex;
+          width: 100%;
+          justify-content: center;
+          align-items: center;
+          opacity: 0;
+          text-align: center;
+          margin-bottom: 20px;
+      }
+    .container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+    @media screen and (max-width: 492px){
+        .title {
+            font-size: 1.6em !important;
+        }
+    }
+    @media screen and (max-width: 384px){
+        .title {
+            font-size: 1.2em !important;
+        }
+    }
+
+    </style>
+
+    <div id="title" class="title">
+        <esc-title>
+            <slot name='title'></slot>
+        </esc-title>
+    </div>
+
+    <div id="subtitle" class="subtitle">
+        <esc-title>
+            <slot name='subtitle'></slot>
+        </esc-title>
+    </div>
+
+    <div class="container">
+        <div id="principal" class="principal">
+            <slot name='one'></slot>
+        </div>
+
+        <div class="box" id='box'>
+            <div class="counterbox">
+                <slot name='two'></slot>
+            </div>
+
+            <div class="counterbox">
+                <slot name='three'></slot>
+            </div>
+
+            <div class="counterbox">
+                <slot name='four'></slot>
+            </div>
+
+            <div class="counterbox">
+                <slot name='five'></slot>
+            </div>
+
+            <div class="counterbox">
+                <slot name='six'></slot>
+            </div>
+
+            <div class="counterbox">
+                <slot name='seven'></slot>
+            </div>
+
+            <div class="counterbox">
+                <slot name='eight'></slot>
+            </div>
+
+            <div class="counterbox">
+                <slot name='nine'></slot>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+  </template>
+
+    <script>
+        class EscCountupbox extends Polymer.Element {
+            static get is() {
+                return 'esc-countupbox';
+            }
+            static get properties() {
+                return {
+                    verificador: {
+                        type: Boolean
+                    },
+                    title: {
+                        type: String
+                    },
+                    size:{
+                        type: Number,
+                        value: 1.1
+                    },
+                    subtitle:{
+                        type: String
+                    }
+                };
+
+            }
+
+            ready() {
+                super.ready();
+                this.$.title.style.fontSize = this.size + 'em';
+                window.addEventListener('scroll', this._findDiv.bind(this));
+            }
+
+            _findDiv() {
+                var div = this.$.principal.offsetTop - window.innerHeight / 2;
+
+                if (window.scrollY > div && !this.verificador) {
+                    this.verificador = true;
+
+                    setTimeout(()=>{
+                        this._fadeOut(this.$.title,1);
+                    },0);
+
+
+                    let children = this.querySelectorAll('esc-countup');
+
+                    setTimeout(()=>{
+                        Polymer.RenderStatus.beforeNextRender(children[0], ()=> {
+
+                            this._fadeIn(this.$.subtitle,5);
+                            this._fadeIn(this.$.principal,5);
+                            children[0].startcount();
+
+                            setTimeout(()=>{
+                                this._fadeIn(this.$.box,5);
+                                for(let i=1; i < children.length; i++)
+                                    children[i].startcount();
+                            },100);
+
+                        });
+                    },100)
+
+                }
+            }
+
+            _fadeIn(element, time) {
+                this._processa(element, time, 0, 100);
+            }
+
+            _fadeOut(element,time){
+                this._processa(element,time,100,0);
+            }
+
+            _processa(element, time, initial, end) {
+                if(initial == 0){
+                     	var increment = 2;
+            	}else {
+                     	increment = -2;
+            	}
+            	let opc = initial;
+            	let intervalo = setInterval(function(){
+                     	if((opc == end)){
+                            clearInterval(intervalo);
+                              }else {
+                                  opc += increment;
+                                  element.style.opacity = opc/100;
+                                  element.style.filter = "alpha(opacity="+opc+")";
+                              }
+                          },time * 10);
+            }
+
+        }
+
+        window.customElements.define(EscCountupbox.is, EscCountupbox);
+    </script>
+</dom-module>
